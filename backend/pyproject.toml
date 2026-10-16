@@ -1,0 +1,20 @@
+[project]
+name = "openshorts"
+version = "0.1.0"
+description = "Turn long videos into vertical short clips with subtitles (YouTube Shorts, TikTok, Reels)"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "python-multipart>=0.0.9", "yt-dlp>=2024.1.0", "httpx>=0.27", "numpy>=1.26", "opencv-python-headless>=4.9,<5"]
+
+[project.optional-dependencies]
+whisper = ["faster-whisper>=1.0"]
+
+[project.scripts]
+openshorts = "openshorts.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["openshorts"]

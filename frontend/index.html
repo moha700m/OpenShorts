@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenShorts — حوّل الفيديوهات الطويلة إلى مقاطع قصيرة</title>
+  <meta name="description" content="أداة مفتوحة المصدر لتحويل البودكاست والمقابلات إلى مقاطع عمودية جاهزة لـ YouTube Shorts وTikTok وReels." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap row">
+      <a class="brand" href="/" aria-label="OpenShorts">
+        <img src="/favicon.svg" alt="" width="28" height="28" /> <span>OpenShorts</span>
+      </a>
+      <nav class="row gap">
+        <span id="status" class="pill" role="status">غير متصل</span>
+        <button id="openSettings" class="btn ghost" type="button" aria-haspopup="dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          <span>الإعدادات</span>
+        </button>
+        <a class="btn ghost" href="https://github.com/moha700m/OpenShorts" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>حوّل الفيديوهات الطويلة إلى <em>مقاطع قصيرة</em> جاهزة للنشر</h1>
+      <p>بودكاست، مقابلة، أو رابط يوتيوب — نكتشف أقوى اللحظات، نقصّها عموديًا 9:16 مع تتبّع الوجه، ونضيف ترجمة عربية أو إنجليزية مدمجة.</p>
+    </section>
+
+    <form id="jobForm" class="card grid" novalidate>
+      <div class="tabs" role="tablist" aria-label="مصدر الفيديو">
+        <button type="button" role="tab" class="tab active" aria-selected="true" data-tab="url">رابط</button>
+        <button type="button" role="tab" class="tab" aria-selected="false" data-tab="file">رفع ملف</button>
+      </div>
+      <div data-panel="url" class="field">
+        <label for="url">رابط الفيديو (YouTube أو أي رابط مباشر)</label>
+        <input id="url" name="url" type="url" dir="ltr" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" />
+      </div>
+      <div data-panel="file" class="field" hidden>
+        <label for="file">ملف الفيديو</label>
+        <label class="drop" for="file">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <span id="fileName">اسحب الملف هنا أو اضغط للاختيار</span>
+        </label>
+        <input id="file" name="file" type="file" accept="video/*" class="sr-only" />
+      </div>
+
+      <div class="cols">
+        <div class="field">
+          <label for="platform">المنصة</label>
+          <select id="platform" name="platform">
+            <option value="youtube_shorts">YouTube Shorts (حتى 60 ث)</option>
+            <option value="tiktok">TikTok (حتى 180 ث)</option>
+            <option value="reels">Instagram Reels (حتى 90 ث)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="num_clips">عدد المقاطع</label>
+          <input id="num_clips" name="num_clips" type="number" min="1" max="10" value="3" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="min_len">أقل مدة (ثانية)</label>
+          <input id="min_len" name="min_len" type="number" min="5" max="170" value="15" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="max_len">أقصى مدة (ثانية)</label>
+          <input id="max_len" name="max_len" type="number" min="10" max="180" value="60" inputmode="numeric" />
+        </div>
+        <div class="field">
+          <label for="language">لغة الفيديو</label>
+          <select id="language" name="language">
+            <option value="">اكتشاف تلقائي</option>
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+      <div class="row gap wrapline">
+        <label class="check"><input type="checkbox" name="subtitles" checked /> ترجمة مدمجة</label>
+        <label class="check"><input type="checkbox" name="face_crop" checked /> قص يتتبّع الوجه</label>
+      </div>
+      <p id="formError" class="error" role="alert" hidden></p>
+      <button id="submit" class="btn primary" type="submit">
+        <span>ابدأ إنشاء المقاطع</span>
+      </button>
+    </form>
+
+    <section id="progress" class="card" hidden aria-live="polite">
+      <div class="row between">
+        <h2>جاري المعالجة</h2>
+        <span id="jobState" class="pill">في الانتظار</span>
+      </div>
+      <div class="bar" aria-hidden="true"><span></span></div>
+      <ol id="log" class="log" dir="ltr"></ol>
+    </section>
+
+    <section id="results" hidden>
+      <div class="row between"><h2>المقاطع الجاهزة</h2><span id="resultMeta" class="muted"></span></div>
+      <div id="clips" class="clips"></div>
+    </section>
+
+    <section class="features">
+      <article><h3>اكتشاف اللحظات الأقوى</h3><p>تفريغ صوتي بـ Whisper ثم تقييم بنموذج لغوي، مع وضع تلقائي بدون مفاتيح API.</p></article>
+      <article><h3>قص عمودي ذكي</h3><p>تحويل إلى 9:16 مع توسيط الوجه تلقائيًا، أو قص من المنتصف.</p></article>
+      <article><h3>ترجمة عربية وإنجليزية</h3><p>ترجمة مدمجة بخط واضح تدعم الاتجاه من اليمين لليسار.</p></article>
+      <article><h3>جاهز للنشر</h3><p>إعدادات لكل منصة، مع عنوان ووصف وهاشتاقات مقترحة.</p></article>
+    </section>
+  </main>
+
+  <footer class="wrap muted foot">مفتوح المصدر برخصة MIT · المعالجة تتم على الخادم الذي تحدده في الإعدادات</footer>
+
+  <dialog id="settings" aria-labelledby="settingsTitle">
+    <form method="dialog" class="grid">
+      <h2 id="settingsTitle">إعدادات الخادم</h2>
+      <p class="muted">معالجة الفيديو (ffmpeg) تعمل على خادم OpenShorts الخاص بك، شغّله محليًا بـ Docker ثم ضع عنوانه هنا.</p>
+      <div class="field">
+        <label for="backendUrl">عنوان الخادم (Backend URL)</label>
+        <input id="backendUrl" type="url" dir="ltr" placeholder="http://localhost:8000" />
+      </div>
+      <div class="row gap">
+        <button class="btn primary" value="save" id="saveSettings">حفظ واختبار</button>
+        <button class="btn ghost" value="cancel" formnovalidate>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
