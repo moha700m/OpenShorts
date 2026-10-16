@@ -4,7 +4,7 @@
 
 Open-source tool that turns long videos (podcasts, interviews, YouTube links or uploaded files) into short vertical clips ready for **YouTube Shorts, TikTok and Instagram Reels**.
 
-Live UI: https://openshorts.pages.dev (connect it to your own backend from Settings)
+Live UI: https://openshorts-aoo.pages.dev (connect it to your own backend from Settings)
 
 ---
 
@@ -57,7 +57,7 @@ Output: `clip_XX_<platform>.mp4`, `.srt`, `.ass`, and `clips.json` (timings, sco
 | `TRANSCRIBER` | `auto` | `local`, `openai`, `none` |
 | `WHISPER_MODEL` | `small` | `tiny`…`large-v3` |
 | `OPENAI_API_KEY` | – | for OpenAI Whisper API |
-| `CORS_ORIGINS` | `*` | e.g. `https://openshorts.pages.dev` |
+| `CORS_ORIGINS` | `*` | e.g. `https://openshorts-aoo.pages.dev` |
 
 ### Frontend
 ```bash
@@ -95,7 +95,7 @@ git clone https://github.com/moha700m/OpenShorts && cd OpenShorts
 cp .env.example .env
 docker compose up --build
 ```
-ثم افتح الواجهة (محليًا `http://localhost:5173` أو https://openshorts.pages.dev) وضع عنوان الخادم `http://localhost:8000` من **الإعدادات**.
+ثم افتح الواجهة (محليًا `http://localhost:5173` أو https://openshorts-aoo.pages.dev) وضع عنوان الخادم `http://localhost:8000` من **الإعدادات**.
 
 ### سطر الأوامر
 ```bash
