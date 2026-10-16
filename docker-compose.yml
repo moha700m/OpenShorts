@@ -1,22 +1,42 @@
 services:
   backend:
-    build: ./backend
-    env_file: .env
+    build: .
+    container_name: openshorts-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./data:/data
-      - whisper-cache:/root/.cache/huggingface
+      - .:/app
+      - /app/__pycache__
+      - ./output:/app/output
     restart: unless-stopped
+
   frontend:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
-    environment:
-      - VITE_BACKEND_URL=http://localhost:8000
+    build:
+      context: ./dashboard
+      target: dev
+    container_name: openshorts-frontend
     ports:
-      - "5173:5173"
-volumes:
-  whisper-cache:
+      - "5175:5173"
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  renderer:
+    build:
+      context: .
+      dockerfile: render-service/Dockerfile
+    container_name: openshorts-renderer
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./output:/output
+    environment:
+      - REMOTION_BUNDLE_PATH=/app/remotion
+      - OUTPUT_DIR=/output
+      - PORT=3100
+    restart: unless-stopped
+    depends_on:
+      - backend

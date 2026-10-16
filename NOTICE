@@ -1,0 +1,24 @@
+OpenShorts
+Copyright (c) 2024 OpenShorts
+
+The OpenShorts core application is licensed under the MIT License (see LICENSE).
+
+EXCEPTION: All content that resides under the "cloud/" directory of this
+repository is licensed under the license defined in "cloud/LICENSE"
+(the OpenShorts Commercial License), not under the MIT License.
+
+
+---------------------------------------------------------------------------
+moha700m/OpenShorts
+---------------------------------------------------------------------------
+This repository is a port of https://github.com/mutonby/openshorts (MIT,
+Copyright (c) 2024 OpenShorts), with additions by moha700m (MIT):
+access-token auth, runtime backend settings + Arabic font in the dashboard,
+key-free heuristic moment picker, Arabic hook rendering, fake-IP DNS opt-in,
+and the earlier lightweight implementation kept under lite/.
+
+The upstream "cloud/" directory (OpenShorts Commercial License) is NOT
+included here; billing / managed keys / hosted-service features are therefore
+unavailable. Self-hosting the core app does not need it.
+
+Bundled fonts: IBM Plex Sans Arabic (SIL OFL 1.1, fonts/IBMPlexSansArabic-OFL.txt).

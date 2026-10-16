@@ -1,9 +1,60 @@
+# Video files
+*.mp4
+*.webm
+*.mov
+*.mkv
+
+# YOLO model
+*.pt
+
+# Python virtual environment
 .venv/
 __pycache__/
-*.egg-info/
-.env
+*.pyc
+
+# Temporary files / runtime dirs
+temp_*
+uploads/
+downloads/
+videos/
 output/
-data/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets
+.env
+
+# Generated metadata
+*_metadata.json
+
+# Cache dirs
+.cache/
+.config/
+# Multi-agent Skills
+.agents/
+.agent/
+.claude/
+# skills/ holds third-party installs (symlinks); our own published skill is versioned
+skills/*
+!skills/openshorts/
+skills-lock.json
+
+
+# Cloud env example kept local only (avoid leaking infra hints)
+.env.cloud.example
+.worktrees
+
+# Instrucciones locales con datos de infra (repo público)
+CLAUDE.local.md
+lite/.venv/
+lite/frontend/node_modules/
+dashboard/node_modules/
 node_modules/
-frontend/dist/
 .wrangler/
+lite/frontend/dist/
+dashboard/dist/
+*.egg-info/
+yolov8n.pt
