@@ -66,7 +66,7 @@ def process(source: str, out_dir: str, *, num_clips: int = 3, min_len: float = 1
             out = os.path.join(out_dir, name + ".mp4")
             cmd = ["ffmpeg", "-y", "-v", "error", "-ss", f"{a:.2f}", "-to", f"{b:.2f}", "-i", video,
                    "-vf", vf, "-r", str(preset["fps"]), "-c:v", "libx264", "-preset", "veryfast",
-                   "-b:v", preset["video_bitrate"], "-pix_fmt", "yuv420p", "-movflags", "+faststart"]
+                   "-crf", "23", "-maxrate", preset["video_bitrate"], "-bufsize", "8M", "-pix_fmt", "yuv420p", "-movflags", "+faststart"]
             cmd += ["-c:a", "aac", "-b:a", "160k"] if info["has_audio"] else ["-an"]
             media.run(cmd + [out])
             meta = {k: c[k] for k in ("title", "description", "hashtags") if c.get(k)}

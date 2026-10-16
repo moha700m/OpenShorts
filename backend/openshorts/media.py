@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import shutil
 import subprocess
 
 
@@ -34,7 +35,11 @@ def download(url: str, workdir: str) -> str:
         "format": "bv*[height<=1080]+ba/b[height<=1080]/b",
         "merge_output_format": "mp4",
         "quiet": True,
+        "noprogress": True,  # keep stdout clean (CLI prints JSON there)
         "noplaylist": True,
+        # YouTube needs a JS runtime for signature solving; allow node/bun/deno if present
+        "js_runtimes": {r: {} for r in ("deno", "node", "bun") if shutil.which(r)},
+        "remote_components": ["ejs:github"],
     }
     with yt_dlp.YoutubeDL(opts) as ydl:
         info = ydl.extract_info(url, download=True)

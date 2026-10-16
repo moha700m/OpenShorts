@@ -16,7 +16,7 @@ class Settings:
 
 
 PRESETS = {
-    "youtube_shorts": {"label": "YouTube Shorts", "width": 1080, "height": 1920, "max_seconds": 60, "fps": 30, "video_bitrate": "8M"},
-    "tiktok": {"label": "TikTok", "width": 1080, "height": 1920, "max_seconds": 180, "fps": 30, "video_bitrate": "6M"},
-    "reels": {"label": "Instagram Reels", "width": 1080, "height": 1920, "max_seconds": 90, "fps": 30, "video_bitrate": "6M"},
+    "youtube_shorts": {"label": "YouTube Shorts", "width": 1080, "height": 1920, "max_seconds": 60, "fps": 30, "video_bitrate": "4M"},
+    "tiktok": {"label": "TikTok", "width": 1080, "height": 1920, "max_seconds": 180, "fps": 30, "video_bitrate": "4M"},
+    "reels": {"label": "Instagram Reels", "width": 1080, "height": 1920, "max_seconds": 90, "fps": 30, "video_bitrate": "4M"},
 }

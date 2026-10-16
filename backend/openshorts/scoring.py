@@ -43,6 +43,16 @@ def _text_in(segments, a, b):
 
 
 def heuristic(segments, energy, duration, n, min_len, max_len, step=0.5):
+    # Shrink the window length until we can fit n non-overlapping clips (long windows overlap a lot).
+    cur = max_len
+    while True:
+        picked = _heuristic(segments, energy, duration, n, min_len, cur, step)
+        if len(picked) >= n or cur <= min_len:
+            return picked
+        cur = max(min_len, cur * 0.75)
+
+
+def _heuristic(segments, energy, duration, n, min_len, max_len, step=0.5):
     wins = build_windows(segments, duration, min_len, max_len)
     emean = (sum(energy) / len(energy)) if energy else 0.0
     scored = []
@@ -123,7 +133,7 @@ def metadata(text: str, lang: str | None, platform: str) -> dict:
     if len(words) > 8:
         title += "…"
     tags_common = {"youtube_shorts": ["#shorts"], "tiktok": ["#fyp", "#tiktok"], "reels": ["#reels"]}[platform]
-    stop = {"the", "and", "that", "this", "with", "you", "for", "are", "was", "they", "them", "what", "have", "will", "your", "from", "makes", "does", "في", "من", "على", "إلى", "عن", "هذا", "التي", "الذي"}
+    stop = {"the", "and", "that", "this", "with", "you", "for", "are", "was", "they", "them", "what", "have", "will", "your", "from", "makes", "does", "في", "من", "على", "إلى", "عن", "هذا", "التي", "الذي", "اللي", "يعني", "صديقي", "وبعدك", "والله", "طبعا", "كذا", "هذه", "إنك", "عشان", "راح", "كان", "لكن", "ولكن"}
     kws = [w.strip(".,!?؟:;\"'").lower() for w in words if len(w) > 3]
     kws = [w for w in dict.fromkeys(kws) if w not in stop][:4]
     tags = tags_common + ["#" + re.sub(r"\W", "", w) for w in kws if re.sub(r"\W", "", w)]
