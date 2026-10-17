@@ -9,18 +9,22 @@
 
 const LS_BACKEND = 'openshorts.backend';
 const LS_TOKEN = 'openshorts.token';
+const LS_GEMINI = 'gemini_key'; // read by App.jsx as the user's Gemini API key
 
 function readLS(k) {
   try { return localStorage.getItem(k) || ''; } catch { return ''; }
 }
 
-// Allow one-tap setup links: https://<pages>/?backend=https://x&token=y
+// Allow one-tap setup links: https://<pages>/?backend=https://x&token=y&gemini=KEY
 try {
   const q = new URLSearchParams(window.location.search);
   if (q.get('backend')) localStorage.setItem(LS_BACKEND, q.get('backend').replace(/\/$/, ''));
   if (q.get('token')) localStorage.setItem(LS_TOKEN, q.get('token'));
-  if (q.get('backend') || q.get('token')) {
-    q.delete('backend'); q.delete('token');
+  // ?gemini=<key> → same storage the Gemini key setting uses (App.jsx 'gemini_key'),
+  // sent to the backend as the X-Gemini-Key header per request.
+  if (q.get('gemini')) localStorage.setItem(LS_GEMINI, q.get('gemini').trim());
+  if (q.has('backend') || q.has('token') || q.has('gemini')) {
+    q.delete('backend'); q.delete('token'); q.delete('gemini');
     const rest = q.toString();
     window.history.replaceState(null, '', window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash);
   }
