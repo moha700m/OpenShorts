@@ -256,6 +256,32 @@ const readableError = (raw) => {
   } catch (_) { /* not JSON */ }
   return text.replace(/^Error:\s*/, '').slice(0, 300) || "صار خطأ، جرّب مرة ثانية.";
 };
+// Explain a failed job from its full log, not just its last line (which is
+// usually "Process failed with exit code 1"). Returns an Arabic message for
+// the known failure modes, or '' when nothing recognisable is found.
+const diagnoseJobFailure = (logs) => {
+  const all = (Array.isArray(logs) ? logs : []).join('\n');
+  if (!all) return '';
+  if (/Sign in to confirm you.?re not a bot|YOUTUBE DOWNLOAD FAILED|LOGIN_REQUIRED/i.test(all)) {
+    return 'يوتيوب حجب السيرفر ("تأكد إنك مو بوت") وما قدر ينزّل الفيديو. هذا من جهة يوتيوب مو من مفتاح Gemini. الحل: نزّل الفيديو على جوالك وارفعه من تبويب "رفع فيديو"، أو أضف كوكيز يوتيوب (YOUTUBE_COOKIES) أو بروكسي (PROXY_URL) للسيرفر.';
+  }
+  if (/API key not valid|API_KEY_INVALID|PERMISSION_DENIED|401 UNAUTHENTICATED/i.test(all)) {
+    return 'مفتاح Gemini مرفوض. تأكد منه في الإعدادات.';
+  }
+  if (/RESOURCE_EXHAUSTED|exceeded your current quota/i.test(all)) {
+    return 'خلصت حصة مفتاح Gemini أو فيه ضغط. جرّب بعد شوي.';
+  }
+  if (/models\/[\w.-]+ is (no longer available|not found)/i.test(all)) {
+    return 'موديل Gemini المستخدم ما عاد متاح لمفتاحك.';
+  }
+  if (/Killed|MemoryError|out of memory|exit code -9|exit code 137/i.test(all)) {
+    return 'السيرفر خلصت ذاكرته أثناء المعالجة. جرّب فيديو أقصر.';
+  }
+  if (/Video unavailable|Private video|members-only/i.test(all)) {
+    return 'الفيديو غير متاح (خاص أو محذوف أو للأعضاء فقط).';
+  }
+  return '';
+};
 // Matches the self-host JOB_RETENTION_SECONDS default. A restore whose job was
 // already purged server-side fails gracefully and clears the saved session.
 const SESSION_MAX_AGE = 86400000; // 24 hours
@@ -846,8 +872,9 @@ function App() {
           } else if (data.status === 'failed') {
             setStatus('error');
             const errorMsg = data.error || (data.logs && data.logs.length > 0 ? data.logs[data.logs.length - 1] : "فشلت المعالجة");
-            setJobError(readableError(errorMsg));
-            setLogs(prev => [...prev, "خطأ: " + errorMsg]);
+            if (data.logs) setLogs(data.logs);
+            setJobError(diagnoseJobFailure(data.logs) || readableError(errorMsg));
+            setLogs(prev => [...prev, "خطأ: " + (diagnoseJobFailure(data.logs) || errorMsg)]);
             clearInterval(interval);
             refreshMe();
           } else {
@@ -2332,8 +2359,18 @@ function App() {
                         </p>
                       </div>
                     ) : status === 'error' ? (
-                      <div className="h-full min-h-[120px] flex flex-col items-center justify-center text-danger space-y-2">
+                      <div className="h-full min-h-[120px] flex flex-col items-center justify-center text-danger space-y-3 text-center px-4">
                         <p>فشل التوليد.</p>
+                        {jobError && (
+                          <p className="text-sm text-ink2 max-w-[48ch] leading-relaxed">{jobError}</p>
+                        )}
+                        <button
+                          type="button"
+                          onClick={handleReset}
+                          className="text-sm underline underline-offset-2 text-brass hover:opacity-80"
+                        >
+                          ابدأ من جديد (رفع فيديو)
+                        </button>
                       </div>
                     ) : null
                   )}
