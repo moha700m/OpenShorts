@@ -228,7 +228,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
             {!canPost && (
                 <div className="mb-4 p-3 bg-warn/10 text-warn text-xs rounded-input flex items-start gap-2">
                     <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                    <div>حط مفتاح Upload-Post من الإعدادات أول.</div>
+                    <div>الجدولة والنشر تحتاج مفتاح Upload-Post — حطه من الإعدادات.</div>
                 </div>
             )}
 

@@ -726,6 +726,26 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId, status, results, activeTab, noSource, projectState]);
 
+  // Re-read gemini_key when the tab regains focus / another tab saved it, so a key
+  // stored by a ?gemini= setup link always wins over a stale empty state.
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const k = localStorage.getItem('gemini_key') || '';
+        if (k) setApiKey((cur) => (cur === k ? cur : k));
+      } catch { /* storage blocked */ }
+    };
+    sync();
+    window.addEventListener('focus', sync);
+    window.addEventListener('storage', sync);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      window.removeEventListener('focus', sync);
+      window.removeEventListener('storage', sync);
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, []);
+
   useEffect(() => {
     // Encrypt Gemini Key too for consistency if desired, but user asked specifically about Social integration not saving well.
     // For now keeping gemini plain for compatibility unless requested.
@@ -872,11 +892,18 @@ function App() {
   };
 
   // Hosted is paid-only (no BYOK core). Self-host uses BYOK keys.
-  // `keysMissing` now means "self-host BYOK keys missing" — it never fires on hosted.
+  // Self-host: no key is required to process (see handleProcess).
   // A self-hosted server running the moment picker on a local LLM
   // (LLM_BASE_URL) does not need a Gemini key for the core pipeline.
   const geminiOk = !!apiKey || !!localLlm;
-  const keysMissing = !billingEnabled && (!geminiOk || !uploadPostKey);
+  // moha700m/OpenShorts: processing never blocks on keys. Upload-Post is only
+  // needed to publish (checked by the publish actions themselves), and Gemini is
+  // optional too — the backend falls back to its heuristic/LLM_PROVIDER picker.
+  // Soft, dismissible hint only (self-host without a Gemini key).
+  const [geminiHintDismissed, setGeminiHintDismissed] = useState(() => {
+    try { return sessionStorage.getItem('os_gemini_hint_dismissed') === '1'; } catch { return false; }
+  });
+  const showGeminiHint = !billingEnabled && !geminiOk && !geminiHintDismissed;
   const needsPlan = billingEnabled && !isManaged;   // hosted, signed-out or no active plan/trial
 
   // Fresh sign-up: Clip Generator tutorial (AuthContext set os_show_clip_tutorial
@@ -1035,10 +1062,8 @@ function App() {
       // fall through the same gates.
       if (!isSignedIn) { stashPendingJob(data); setShowLogin(true); return; }
       if (!isManaged) { window.location.hash = '#/pricing'; return; }
-    } else if (keysMissing) {
-      setShowKeyModal(true);
-      return;
     }
+    // Self-host: no key gate here (Upload-Post is checked only when publishing).
     // Past every gate, so this request is really running: nothing left to resume.
     clearPendingJob();
     setStatus('processing');
@@ -1059,7 +1084,11 @@ function App() {
       let body;
       // BYOK sends the Gemini header; managed users rely on the bearer token
       // that apiFetch attaches automatically.
-      const headers = apiKey ? { 'X-Gemini-Key': apiKey } : {};
+      // Read storage at the moment of the request too (a ?gemini= link may have
+      // saved it after this component's state was initialised).
+      let geminiKey = apiKey;
+      if (!geminiKey) { try { geminiKey = localStorage.getItem('gemini_key') || ''; } catch { /* */ } }
+      const headers = geminiKey ? { 'X-Gemini-Key': geminiKey } : {};
 
       // Advanced generation controls: only sent when the user set them, so the
       // default request stays byte-identical to the pre-feature one.
@@ -1505,48 +1534,26 @@ function App() {
 
             {/* Hidden below sm: the standing banner underneath already says the
                 same thing, and two warnings in a 360px header is just noise. */}
-            {keysMissing && (
-              <button
-                onClick={() => (billingEnabled && !isSignedIn ? setShowLogin(true) : goToTab('settings'))}
-                className="badge-warn hover:brightness-125 transition-all hidden sm:inline-flex"
-                title="اضبط مفاتيح الـ API"
-              >
-                <AlertTriangle size={12} />
-                <span className="hidden md:inline">
-                  {!geminiOk && !uploadPostKey
-                    ? "مفاتيح Gemini و Upload-Post ناقصة"
-                    : !geminiOk
-                      ? "مفتاح Gemini ناقص"
-                      : "مفتاح Upload-Post ناقص"}
-                </span>
-                <span className="md:hidden">مفاتيح ناقصة</span>
-              </button>
-            )}
           </div>
         </header>
 
-        {/* Persistent Missing Keys Banner — visible on every screen */}
-        {keysMissing && activeTab !== 'settings' && (
-          <div className="mx-3 sm:mx-6 mt-3 px-3.5 sm:px-4 py-3 bg-paper2 border border-rule rounded-card flex flex-wrap items-center justify-between gap-2.5 sm:gap-4 shrink-0 animate-fade">
-            <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-sm text-ink2 min-w-0 flex-1">
-              <KeyRound size={16} className="shrink-0 text-warn mt-0.5 sm:mt-0" />
-              <div className="min-w-0">
-                <span className="font-medium text-ink">فيه مفاتيح API مطلوبة ناقصة.</span>{' '}
-                <span className="text-muted">
-                  {!geminiOk && !uploadPostKey
-                    ? "حط مفاتيح Gemini و Upload-Post عشان تستخدم OpenShorts."
-                    : !geminiOk
-                      ? "حط مفتاح Gemini عشان تستخدم OpenShorts."
-                      : "حط مفتاح Upload-Post عشان تستخدم OpenShorts."}
-                </span>
-              </div>
+        {/* Soft hint (not blocking): no Gemini key → backend uses its built-in picker */}
+        {showGeminiHint && activeTab !== 'settings' && (
+          <div className="mx-3 sm:mx-6 mt-3 px-3.5 sm:px-4 py-2.5 bg-paper2 border border-rule rounded-card flex flex-wrap items-center justify-between gap-2 shrink-0 animate-fade">
+            <div className="flex items-start sm:items-center gap-2.5 text-xs sm:text-sm text-muted min-w-0 flex-1">
+              <KeyRound size={15} className="shrink-0 text-brass mt-0.5 sm:mt-0" />
+              <span>تقدر تطلّع مقاطع بدون مفتاح Gemini (بطريقة تلقائية أبسط). لو تبي اختيار أذكى للمقاطع حط المفتاح من الإعدادات.</span>
             </div>
-            <button
-              onClick={() => goToTab('settings')}
-              className="btn-quiet px-3 py-1.5 text-xs shrink-0 w-full sm:w-auto"
-            >
-              روح للإعدادات
-            </button>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={() => goToTab('settings')} className="btn-quiet px-3 py-1.5 text-xs">الإعدادات</button>
+              <button
+                onClick={() => { setGeminiHintDismissed(true); try { sessionStorage.setItem('os_gemini_hint_dismissed', '1'); } catch { /* */ } }}
+                className="btn-ghost px-3 py-1.5 text-xs"
+                aria-label="إخفاء"
+              >
+                تمام
+              </button>
+            </div>
           </div>
         )}
 
@@ -1645,10 +1652,10 @@ function App() {
                     </div>
                     <h2 className="text-base font-medium text-ink lowercase">ربط منصات التواصل</h2>
                   </div>
-                  <span className="badge-warn">مطلوب</span>
+                  <span className="badge-ok">اختياري — للنشر بس</span>
                 </div>
                 <p className="text-xs text-muted mb-6 leading-relaxed">
-                  تحتاجه عشان تنشر مقاطعك على تيك توك وريلز إنستقرام ويوتيوب شورتس عن طريق <strong>Upload-Post</strong>. وفيه <strong>باقة مجانية</strong> (بدون بطاقة).
+                  ما تحتاجه عشان تطلّع المقاطع. تحتاجه بس عشان تنشر مقاطعك على تيك توك وريلز إنستقرام ويوتيوب شورتس عن طريق <strong>Upload-Post</strong>. وفيه <strong>باقة مجانية</strong> (بدون بطاقة).
                 </p>
                 <div className="space-y-4">
                   <label className="block text-sm text-muted">مفتاح Upload-Post API</label>
@@ -2349,11 +2356,7 @@ function App() {
         isOpen={showKeyModal}
         onClose={() => setShowKeyModal(false)}
         eyebrow="الإعداد"
-        title={!geminiOk && !uploadPostKey
-          ? "مفاتيح API مطلوبة ناقصة"
-          : !geminiOk
-            ? "مفتاح Gemini مطلوب"
-            : "مفتاح Upload-Post مطلوب"}
+        title="مفاتيح اختيارية"
         footer={
           <div className="flex gap-3">
             <button
@@ -2373,7 +2376,7 @@ function App() {
       >
         <div className="space-y-4">
           <p className="text-sm text-muted">
-            OpenShorts يحتاج مفتاح <strong className="text-ink2">Gemini</strong> ومفتاح <strong className="text-ink2">Upload-Post</strong> . الاثنين لهم باقة مجانية.
+            تطليع المقاطع ما يحتاج أي مفتاح. مفتاح <strong className="text-ink2">Gemini</strong> يحسّن اختيار المقاطع، ومفتاح <strong className="text-ink2">Upload-Post</strong> تحتاجه بس لما تنشر على منصات التواصل. الاثنين لهم باقة مجانية.
           </p>
 
           {/* Gemini block */}

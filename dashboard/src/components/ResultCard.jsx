@@ -668,7 +668,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
 
     const handlePost = async () => {
         if (!canPost) {
-            setPostResult({ success: false, msg: "مفتاح الـ API أو معرّف المستخدم ناقص." });
+            setPostResult({ success: false, msg: "النشر يحتاج مفتاح Upload-Post ومعرّف المستخدم من الإعدادات." });
             return;
         }
 
@@ -1067,7 +1067,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 {!canPost && (
                     <div className="mb-4 px-3 py-2 rounded-input text-xs text-warn bg-[color-mix(in_oklab,var(--color-warn)_10%,transparent)] flex items-start gap-2">
                         <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                        <div className="lowercase">اضبط مفتاح الـ API من الإعدادات أول.</div>
+                        <div className="lowercase">النشر يحتاج مفتاح Upload-Post ومعرّف المستخدم — حطهم من الإعدادات (تطليع المقاطع ما يحتاجه).</div>
                     </div>
                 )}
 

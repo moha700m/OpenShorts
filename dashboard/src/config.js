@@ -16,19 +16,43 @@ function readLS(k) {
 }
 
 // Allow one-tap setup links: https://<pages>/?backend=https://x&token=y&gemini=KEY
+// Also accepted inside the hash (…/#app?gemini=KEY) because some share sheets /
+// link builders put the query after '#'. Runs synchronously before React mounts,
+// so App.jsx's useState(localStorage.gemini_key) already sees the value.
 try {
   const q = new URLSearchParams(window.location.search);
-  if (q.get('backend')) localStorage.setItem(LS_BACKEND, q.get('backend').replace(/\/$/, ''));
-  if (q.get('token')) localStorage.setItem(LS_TOKEN, q.get('token'));
+  const hash = window.location.hash || '';
+  const hi = hash.indexOf('?');
+  const hq = new URLSearchParams(hi >= 0 ? hash.slice(hi + 1) : '');
+  const pick = (...names) => {
+    for (const n of names) { const v = q.get(n) || hq.get(n); if (v && v.trim()) return v.trim(); }
+    return '';
+  };
+  const backend = pick('backend');
+  const token = pick('token');
+  const gemini = pick('gemini', 'gemini_key');
+  if (backend) localStorage.setItem(LS_BACKEND, backend.replace(/\/$/, ''));
+  if (token) localStorage.setItem(LS_TOKEN, token);
   // ?gemini=<key> → same storage the Gemini key setting uses (App.jsx 'gemini_key'),
   // sent to the backend as the X-Gemini-Key header per request.
-  if (q.get('gemini')) localStorage.setItem(LS_GEMINI, q.get('gemini').trim());
-  if (q.has('backend') || q.has('token') || q.has('gemini')) {
-    q.delete('backend'); q.delete('token'); q.delete('gemini');
+  if (gemini) localStorage.setItem(LS_GEMINI, gemini);
+  const KEYS = ['backend', 'token', 'gemini', 'gemini_key'];
+  if (KEYS.some((k) => q.has(k) || hq.has(k))) {
+    KEYS.forEach((k) => { q.delete(k); hq.delete(k); });
     const rest = q.toString();
-    window.history.replaceState(null, '', window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash);
+    const hrest = hq.toString();
+    const newHash = hi >= 0 ? hash.slice(0, hi) + (hrest ? `?${hrest}` : '') : hash;
+    window.history.replaceState(null, '', window.location.pathname + (rest ? `?${rest}` : '') + newHash);
   }
-} catch { /* non-browser */ }
+} catch { /* non-browser / storage blocked */ }
+
+// This app ships no service worker. Unregister any stale one (e.g. from an older
+// build or another app on this origin) so an old cached index.html can't be served.
+try {
+  if (typeof navigator !== 'undefined' && navigator.serviceWorker?.getRegistrations) {
+    navigator.serviceWorker.getRegistrations().then((rs) => rs.forEach((r) => r.unregister())).catch(() => {});
+  }
+} catch { /* ignore */ }
 
 export const API_BASE_URL = (readLS(LS_BACKEND) || import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 export const ACCESS_TOKEN = readLS(LS_TOKEN);
