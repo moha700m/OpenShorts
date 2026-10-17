@@ -15,9 +15,9 @@ import { renderInBrowser } from '../lib/renderInBrowser';
 const QUIET_BTN = 'group flex flex-col items-center justify-center gap-1 py-2.5 sm:py-2 px-1 rounded-input border border-rule hover:bg-paper3 text-[11px] lowercase text-ink2 whitespace-nowrap transition-colors disabled:opacity-45 disabled:cursor-not-allowed';
 
 const PLATFORM_OPTIONS = [
-    { value: 'tiktok', label: 'tiktok', icon: <Video size={16} /> },
-    { value: 'instagram', label: 'instagram', icon: <Instagram size={16} /> },
-    { value: 'youtube', label: 'youtube', icon: <Youtube size={16} /> },
+    { value: 'tiktok', label: 'TikTok', icon: <Video size={16} /> },
+    { value: 'instagram', label: 'Instagram', icon: <Instagram size={16} /> },
+    { value: 'youtube', label: 'YouTube', icon: <Youtube size={16} /> },
 ];
 
 function clipDurationSeconds(clip) {
@@ -100,7 +100,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
         try {
             setDownloadPct(0);
             const response = await fetch(currentVideoUrl);
-            if (!response.ok) throw new Error('Download failed');
+            if (!response.ok) throw new Error("فشل التنزيل");
             const total = Number(response.headers.get('content-length')) || 0;
             let blob;
             // No body reader (old browser) or no length to measure against: fall
@@ -260,7 +260,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
     const knownConnections = Array.isArray(connectedPlatforms);
     const noAccountsConnected = knownConnections && connectedPlatforms.length === 0;
     const platformOptions = knownConnections
-        ? PLATFORM_OPTIONS.map((o) => (connectedPlatforms.includes(o.value) ? o : { ...o, disabled: true, hint: 'not connected' }))
+        ? PLATFORM_OPTIONS.map((o) => (connectedPlatforms.includes(o.value) ? o : { ...o, disabled: true, hint: "مو مربوط" }))
         : PLATFORM_OPTIONS;
 
     const handleConnectAccounts = () => {
@@ -272,7 +272,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
     // Initialize/Reset form when modal opens
     useEffect(() => {
         if (showModal) {
-            setPostTitle(clip.video_title_for_youtube_short || "Viral Short");
+            setPostTitle(clip.video_title_for_youtube_short || "شورت ينتشر");
             setPostDescription(clip.video_description_for_instagram || clip.video_description_for_tiktok || "");
             setIsScheduling(false);
             setScheduleDate("");
@@ -300,7 +300,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
             // Managed (paid) users get the Gemini key resolved server-side;
             // only BYOK/self-host needs a local key.
             if (!apiKey && !isManaged) {
-                throw new Error("Gemini API Key is missing. Please set it in Settings.");
+                throw new Error("مفتاح Gemini ناقص. حطه من الإعدادات.");
             }
             const geminiHeaders = apiKey ? { 'X-Gemini-Key': apiKey } : {};
 
@@ -608,7 +608,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
             console.log('[Translate] API Key available:', !!apiKey);
 
             if (!apiKey) {
-                throw new Error("ElevenLabs API Key is missing. Please set it in Settings.");
+                throw new Error("مفتاح ElevenLabs ناقص. حطه من الإعدادات.");
             }
 
             const requestBody = {
@@ -668,23 +668,23 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
 
     const handlePost = async () => {
         if (!canPost) {
-            setPostResult({ success: false, msg: "Missing API Key or User ID." });
+            setPostResult({ success: false, msg: "مفتاح الـ API أو معرّف المستخدم ناقص." });
             return;
         }
 
         if (noAccountsConnected) {
-            setPostResult({ success: false, msg: "Connect a social account first." });
+            setPostResult({ success: false, msg: "اربط حساب تواصل أول." });
             return;
         }
 
         const selectedPlatforms = Object.keys(platforms).filter(k => platforms[k]);
         if (selectedPlatforms.length === 0) {
-            setPostResult({ success: false, msg: "Select at least one platform." });
+            setPostResult({ success: false, msg: "اختر منصة وحدة على الأقل." });
             return;
         }
 
         if (isScheduling && !scheduleDate) {
-            setPostResult({ success: false, msg: "Please select a date and time." });
+            setPostResult({ success: false, msg: "اختر التاريخ والوقت." });
             return;
         }
 
@@ -725,14 +725,14 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 }
             }
 
-            setPostResult({ success: true, msg: isScheduling ? "Scheduled successfully!" : "Posted successfully!" });
+            setPostResult({ success: true, msg: isScheduling ? "انجدول بنجاح!" : "انتشر بنجاح!" });
             setTimeout(() => {
                 setShowModal(false);
                 setPostResult(null);
             }, 3000);
 
         } catch (e) {
-            setPostResult({ success: false, msg: `Failed: ${e.message}` });
+            setPostResult({ success: false, msg: `فشل: ${e.message}` });
         } finally {
             setPosting(false);
         }
@@ -790,12 +790,12 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         }
                     }}
                 />
-                <div className="absolute top-3 left-3 flex gap-2">
+                <div className="absolute top-3 start-3 flex gap-2">
                     {/* Stays the clip's own number, not its rank: the cards are
                         ordered by score, but this is what the downloaded file
                         is called (clip-N.mp4) and what every api call indexes. */}
                     <span className="bg-black/70 text-ink font-mono text-micro uppercase px-2 py-1 rounded-full">
-                        Clip {index + 1}
+                        مقطع {index + 1}
                     </span>
                     {/* A bare number on a thumbnail reads as a duration, a
                         position, anything — it has to name itself and carry
@@ -803,10 +803,10 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                     {Number.isFinite(clip.predicted_score) && (
                         <span
                             className="bg-black/70 font-mono text-micro uppercase px-2 py-1 rounded-full flex items-center gap-1"
-                            title="openshorts' prediction of how well this clip will perform, from 0 to 100"
+                            title="توقّع OpenShorts لأداء هالمقطع، من 0 إلى 100"
                         >
                             <TrendingUp size={11} className="shrink-0 text-muted" />
-                            <span className="text-muted">viral</span>
+                            <span className="text-muted">انتشار</span>
                             <b className={
                                 clip.predicted_score >= 80 ? 'text-ok'
                                     : clip.predicted_score >= 65 ? 'text-brass'
@@ -823,8 +823,8 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 {isEditing && (
                     <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-10 p-4 text-center">
                         <Loader2 size={28} className="text-brass animate-spin mb-3" />
-                        <span className="text-xs text-ink lowercase">ai magic in progress…</span>
-                        <span className="readout mt-1.5">APPLYING VIRAL EDITS · ZOOMS</span>
+                        <span className="text-xs text-ink lowercase">سحر الذكاء الاصطناعي شغّال…</span>
+                        <span className="readout mt-1.5">نطبّق تعديلات الانتشار · زووم</span>
                     </div>
                 )}
             </div>
@@ -833,7 +833,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
             <div className="flex-1 p-4 md:p-5 flex flex-col overflow-hidden min-w-0">
                 <div className="mb-4">
                     <h3 className="text-base font-medium text-ink leading-tight line-clamp-2 mb-2 break-words" title={clip.video_title_for_youtube_short}>
-                        {clip.video_title_for_youtube_short || "Viral Clip Generated"}
+                        {clip.video_title_for_youtube_short || "مقطع جاهز"}
                     </h3>
                     {/* The score alone says how much, not why. One line from
                         the selection pass on what this moment has going for it. */}
@@ -847,14 +847,14 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                                 ref={whyRef}
                                 className={`text-xs text-muted leading-snug line-clamp-2 break-words ${whyClamped ? 'cursor-pointer' : ''}`}
                                 onClick={() => whyClamped && setWhyOpen(v => !v)}
-                                aria-label="why openshorts picked this moment"
+                                aria-label="ليش OpenShorts اختار هاللحظة"
                             >
                                 {clip.why}
                             </p>
                             {whyClamped && whyOpen && (
                                 <div
                                     role="tooltip"
-                                    className="absolute left-0 right-0 top-full mt-1 z-20 bg-paper border border-rule rounded-input px-3 py-2 text-xs text-ink leading-snug shadow-lg"
+                                    className="absolute start-0 end-0 top-full mt-1 z-20 bg-paper border border-rule rounded-input px-3 py-2 text-xs text-ink leading-snug shadow-lg"
                                 >
                                     {clip.why}
                                 </div>
@@ -872,13 +872,13 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 {/* Descriptions (compact) — full text lives in the modal */}
                 <div className="flex-1 min-h-0 space-y-2 mb-4">
                     <div className="bg-paper rounded-input px-3 py-2 border border-rule flex items-center gap-2 min-w-0 overflow-hidden">
-                        <span className="eyebrow shrink-0">YOUTUBE</span>
+                        <span className="eyebrow shrink-0">يوتيوب</span>
                         <p className="text-xs text-ink2 truncate flex-1 min-w-0">
-                            {clip.video_title_for_youtube_short || "Viral Short Video"}
+                            {clip.video_title_for_youtube_short || "مقطع شورت"}
                         </p>
                         <button
-                            onClick={() => handleCopy('youtube', clip.video_title_for_youtube_short || "Viral Short Video")}
-                            aria-label="copy youtube title"
+                            onClick={() => handleCopy('youtube', clip.video_title_for_youtube_short || "مقطع شورت")}
+                            aria-label="انسخ عنوان يوتيوب"
                             className="p-1 rounded-full text-muted hover:text-brass transition-colors shrink-0"
                         >
                             {copied === 'youtube' ? <Check size={14} className="text-ok" /> : <Copy size={14} />}
@@ -886,13 +886,13 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                     </div>
 
                     <div className="bg-paper rounded-input px-3 py-2 border border-rule flex items-center gap-2 min-w-0 overflow-hidden">
-                        <span className="eyebrow shrink-0">TIKTOK · IG</span>
+                        <span className="eyebrow shrink-0">تيك توك · إنستقرام</span>
                         <p className="text-xs text-ink2 truncate flex-1 min-w-0">
                             {clip.video_description_for_tiktok || clip.video_description_for_instagram}
                         </p>
                         <button
                             onClick={() => handleCopy('caption', clip.video_description_for_tiktok || clip.video_description_for_instagram)}
-                            aria-label="copy caption"
+                            aria-label="انسخ الوصف"
                             className="p-1 rounded-full text-muted hover:text-brass transition-colors shrink-0"
                         >
                             {copied === 'caption' ? <Check size={14} className="text-ok" /> : <Copy size={14} />}
@@ -903,7 +903,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         onClick={() => setShowDescModal(true)}
                         className="w-full flex items-center justify-center gap-2 py-2 rounded-input border border-dashed border-rule text-xs lowercase text-muted hover:text-brass hover:border-rule2 transition-colors"
                     >
-                        <FileText size={14} /> view descriptions
+                        <FileText size={14} /> اعرض الأوصاف
                     </button>
                 </div>
 
@@ -923,7 +923,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                             className={QUIET_BTN}
                         >
                             <Scissors size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />
-                            edit clip
+                            عدّل المقطع
                         </button>
                     )}
 
@@ -933,7 +933,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                             className={QUIET_BTN}
                         >
                             <Crosshair size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />
-                            reframing
+                            إعادة التأطير
                         </button>
                     )}
 
@@ -943,7 +943,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         className={QUIET_BTN}
                     >
                         {isEditing ? <Loader2 size={16} className="animate-spin text-brass shrink-0" /> : <Wand2 size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />}
-                        {isEditing ? 'editing…' : 'auto edit'}
+                        {isEditing ? "جاري التعديل…" : "تعديل تلقائي"}
                     </button>
 
                     <button
@@ -952,7 +952,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         className={QUIET_BTN}
                     >
                         {isSubtitling ? <Loader2 size={16} className="animate-spin text-brass shrink-0" /> : <Type size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />}
-                        {isSubtitling ? 'adding…' : 'subtitles'}
+                        {isSubtitling ? "جاري الإضافة…" : 'الترجمة'}
                     </button>
 
                     <button
@@ -961,7 +961,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         className={QUIET_BTN}
                     >
                         {isHooking ? <Loader2 size={16} className="animate-spin text-brass shrink-0" /> : <Wand2 size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />}
-                        {isHooking ? 'saving…' : 'edit hook'}
+                        {isHooking ? "جاري الحفظ…" : "عدّل نص الجذب"}
                     </button>
 
                     <button
@@ -970,14 +970,14 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         className={QUIET_BTN}
                     >
                         {isTranslating ? <Loader2 size={16} className="animate-spin text-brass shrink-0" /> : <Languages size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />}
-                        {isTranslating ? 'translating…' : 'dub voice'}
+                        {isTranslating ? "جاري الترجمة…" : "دبلج الصوت"}
                     </button>
 
                     <button
                         onClick={() => setShowModal(true)}
                         className="btn-primary flex-col gap-1 py-2.5 sm:py-2 px-1 text-[11px] leading-none rounded-input whitespace-nowrap"
                     >
-                        <Share2 size={16} className="shrink-0" /> post
+                        <Share2 size={16} className="shrink-0" /> انشر
                     </button>
                     <button
                         onClick={(e) => {
@@ -993,7 +993,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                         className={`${QUIET_BTN}${onEditClip ? ' col-span-2' : ''}`}
                     >
                         <Download size={16} className="text-muted group-hover:text-brass transition-colors shrink-0" />
-                        {downloadPct === null ? 'download' : `downloading ${downloadPct}%`}
+                        {downloadPct === null ? 'تنزيل' : `جاري التنزيل ${downloadPct}%`}
                     </button>
                 </div>
             </div>
@@ -1002,33 +1002,33 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
             <Modal
                 isOpen={showDescModal}
                 onClose={() => setShowDescModal(false)}
-                eyebrow="GENERATED COPY"
-                title="descriptions"
+                eyebrow="النصوص المولّدة"
+                title="الأوصاف"
                 size="md"
             >
                 <div className="space-y-4">
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <label className="eyebrow">YOUTUBE TITLE</label>
+                            <label className="eyebrow">عنوان يوتيوب</label>
                             <button
-                                onClick={() => handleCopy('youtube', clip.video_title_for_youtube_short || "Viral Short Video")}
-                                aria-label="copy youtube title"
+                                onClick={() => handleCopy('youtube', clip.video_title_for_youtube_short || "مقطع شورت")}
+                                aria-label="انسخ عنوان يوتيوب"
                                 className="p-1 rounded-full text-muted hover:text-brass transition-colors shrink-0"
                             >
                                 {copied === 'youtube' ? <Check size={14} className="text-ok" /> : <Copy size={14} />}
                             </button>
                         </div>
                         <p className="text-sm text-ink2 select-all break-words bg-paper rounded-input p-3 border border-rule">
-                            {clip.video_title_for_youtube_short || "Viral Short Video"}
+                            {clip.video_title_for_youtube_short || "مقطع شورت"}
                         </p>
                     </div>
 
                     <div>
                         <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <label className="eyebrow">TIKTOK · IG CAPTION</label>
+                            <label className="eyebrow">وصف تيك توك · إنستقرام</label>
                             <button
                                 onClick={() => handleCopy('caption', clip.video_description_for_tiktok || clip.video_description_for_instagram)}
-                                aria-label="copy caption"
+                                aria-label="انسخ الوصف"
                                 className="p-1 rounded-full text-muted hover:text-brass transition-colors shrink-0"
                             >
                                 {copied === 'caption' ? <Check size={14} className="text-ok" /> : <Copy size={14} />}
@@ -1045,13 +1045,13 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
             <Modal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                eyebrow="PUBLISH"
-                title="post clip"
+                eyebrow="النشر"
+                title="انشر المقطع"
                 size="md"
                 footer={
                     noAccountsConnected ? (
                         <button onClick={handleConnectAccounts} className="btn-primary w-full">
-                            <Link2 size={16} /> connect accounts
+                            <Link2 size={16} /> اربط الحسابات
                         </button>
                     ) : (
                         <button
@@ -1059,7 +1059,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                             disabled={posting || !canPost}
                             className="btn-primary w-full"
                         >
-                            {posting ? <><Loader2 size={16} className="animate-spin" /> {isScheduling ? 'scheduling…' : 'publishing…'}</> : <><Share2 size={16} /> {isScheduling ? 'schedule post' : 'publish now'}</>}
+                            {posting ? <><Loader2 size={16} className="animate-spin" /> {isScheduling ? "جاري الجدولة…" : "جاري النشر…"}</> : <><Share2 size={16} /> {isScheduling ? "جدول المنشور" : "انشر الحين"}</>}
                         </button>
                     )
                 }
@@ -1067,14 +1067,14 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 {!canPost && (
                     <div className="mb-4 px-3 py-2 rounded-input text-xs text-warn bg-[color-mix(in_oklab,var(--color-warn)_10%,transparent)] flex items-start gap-2">
                         <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                        <div className="lowercase">configure api key in settings first.</div>
+                        <div className="lowercase">اضبط مفتاح الـ API من الإعدادات أول.</div>
                     </div>
                 )}
 
                 {noAccountsConnected && (
                     <div className="mb-4 px-3 py-2 rounded-input text-xs text-warn bg-[color-mix(in_oklab,var(--color-warn)_10%,transparent)] flex items-start gap-2">
                         <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                        <div className="lowercase">no social accounts connected yet — link tiktok, instagram or youtube to publish this clip.</div>
+                        <div className="lowercase">ما فيه حسابات تواصل مربوطة للحين — اربط تيك توك أو إنستقرام أو يوتيوب عشان تنشر هالمقطع.</div>
                     </div>
                 )}
 
@@ -1086,24 +1086,24 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                 <div className="space-y-4">
                     {/* Title & Description */}
                     <div>
-                        <label className="eyebrow block mb-1.5">TITLE</label>
+                        <label className="eyebrow block mb-1.5">العنوان</label>
                         <input
                             type="text"
                             value={postTitle}
                             onChange={(e) => setPostTitle(e.target.value)}
                             className="input-field"
-                            placeholder="enter a catchy title…"
+                            placeholder="اكتب عنوان يشد…"
                         />
                     </div>
 
                     <div>
-                        <label className="eyebrow block mb-1.5">CAPTION</label>
+                        <label className="eyebrow block mb-1.5">الوصف</label>
                         <textarea
                             value={postDescription}
                             onChange={(e) => setPostDescription(e.target.value)}
                             rows={4}
                             className="input-field resize-none"
-                            placeholder="write a caption for your post…"
+                            placeholder="اكتب وصف لمنشورك…"
                         />
                     </div>
 
@@ -1111,7 +1111,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
                     <div className="p-3 bg-paper rounded-input border border-rule">
                         <label className="flex items-center justify-between cursor-pointer">
                             <span className="flex items-center gap-2 text-sm text-ink2 lowercase">
-                                <Calendar size={16} className={isScheduling ? 'text-brass' : 'text-muted'} /> schedule post
+                                <Calendar size={16} className={isScheduling ? 'text-brass' : 'text-muted'} /> جدول المنشور
                             </span>
                             <input
                                 type="checkbox"
@@ -1123,7 +1123,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
 
                         {isScheduling && (
                             <div className="mt-3 animate-fade">
-                                <label className="eyebrow block mb-1.5">DATE · TIME</label>
+                                <label className="eyebrow block mb-1.5">التاريخ · الوقت</label>
                                 <input
                                     type="datetime-local"
                                     value={scheduleDate}
@@ -1136,7 +1136,7 @@ export default function ResultCard({ clip, index, jobId, durable, uploadPostKey,
 
                     {/* Platforms */}
                     <div>
-                        <label className="eyebrow block mb-2">PLATFORMS</label>
+                        <label className="eyebrow block mb-2">المنصات</label>
                         <SegmentedControl
                             multi
                             columns={3}

@@ -12,26 +12,26 @@ import { track } from '../lib/analytics';
 // the app already uses for posting (GET /api/uploadposts/media under the hood),
 // so there is nothing to paste: connect once, switch it on.
 
-const PLATFORM_LABELS = { tiktok: 'TikTok', instagram: 'Instagram', youtube: 'YouTube Shorts' };
+const PLATFORM_LABELS = { tiktok: 'TikTok', instagram: 'Instagram', youtube: "يوتيوب شورتس" };
 
 const ERROR_TEXT = {
-  plan_required: 'Autopilot is paused: it needs an active Starter, Creator or Pro plan.',
-  youtube_not_connected: 'Connect your YouTube channel so Autopilot can see your new videos.',
-  youtube_reauth_required: 'YouTube asked to reconnect your channel. Reconnect it to keep Autopilot running.',
-  channel_unavailable: 'We could not read your channel on the last check. We will try again shortly.',
+  plan_required: "الطيّار الآلي واقف: يحتاج باقة مفعّلة.",
+  youtube_not_connected: "اربط قناتك في يوتيوب عشان الطيّار الآلي يشوف فيديوهاتك الجديدة.",
+  youtube_reauth_required: "يوتيوب طلب تعيد ربط قناتك. اربطها من جديد عشان يكمّل الطيّار الآلي شغله.",
+  channel_unavailable: "ما قدرنا نقرأ قناتك في آخر فحص. بنجرب مرة ثانية بعد شوي.",
 };
 
 const REASON_TEXT = {
-  youtube_short: 'already a short',
-  private_video: 'private on YouTube — set it to Unlisted to clip it',
-  out_of_minutes: 'out of minutes',
-  too_short: 'too short to clip',
-  unavailable: 'not available yet (private or processing)',
-  low_quality: 'only low quality available',
-  timeout: 'did not finish',
-  processing_failed: 'processing failed',
-  publish_partial: 'some clips could not be scheduled',
-  url_ingest_disabled: 'links are disabled on this server',
+  youtube_short: "هو أصلًا شورت",
+  private_video: "خاص في يوتيوب — خلّه \"غير مدرج\" عشان نقدر نقصه",
+  out_of_minutes: "خلصت الدقايق",
+  too_short: "قصير مرة وما ينفع يتقص",
+  unavailable: "مو متاح للحين (خاص أو قيد المعالجة)",
+  low_quality: "متوفر بجودة ضعيفة بس",
+  timeout: "ما خلص",
+  processing_failed: "فشلت المعالجة",
+  publish_partial: "بعض المقاطع ما انجدولت",
+  url_ingest_disabled: "الروابط موقّفة على هالسيرفر",
 };
 
 const fmtDate = (iso) => (iso
@@ -62,27 +62,27 @@ function Switch({ checked, onChange, disabled, label }) {
         onChange={(e) => onChange(e.target.checked)}
         className="sr-only peer"
       />
-      <span className="w-11 h-6 rounded-full bg-paper3 border border-rule2 peer-checked:bg-brass peer-disabled:opacity-40 transition-colors after:content-[''] after:absolute after:left-1 after:top-1 after:w-4 after:h-4 after:rounded-full after:bg-ink after:transition-transform peer-checked:after:translate-x-5" />
+      <span className="w-11 h-6 rounded-full bg-paper3 border border-rule2 peer-checked:bg-brass peer-disabled:opacity-40 transition-colors after:content-[''] after:absolute after:start-1 after:top-1 after:w-4 after:h-4 after:rounded-full after:bg-ink after:transition-transform peer-checked:after:translate-x-5 rtl:peer-checked:after:-translate-x-5" />
     </span>
   );
 }
 
 function StatusBadge({ run }) {
-  if (!run) return <span className="readout">not clipped</span>;
+  if (!run) return <span className="readout">ما انقص</span>;
   const { status } = run;
   if (status === 'completed') {
     return (
       <span className="badge-ok inline-flex items-center gap-1">
-        <CheckCircle2 size={11} /> {run.clips_count || 0} clips
-        {run.posted_count ? ` · ${run.posted_count} scheduled` : ''}
+        <CheckCircle2 size={11} /> {run.clips_count || 0} مقاطع
+        {run.posted_count ? ` · ${run.posted_count} مجدول` : ''}
       </span>
     );
   }
   if (status === 'processing' || status === 'queued') {
-    return <span className="badge-brass inline-flex items-center gap-1"><Loader2 size={11} className="animate-spin" /> clipping</span>;
+    return <span className="badge-brass inline-flex items-center gap-1"><Loader2 size={11} className="animate-spin" /> جاري القص</span>;
   }
-  if (status === 'skipped') return <span className="badge-warn">{REASON_TEXT[run.reason] || 'skipped'}</span>;
-  return <span className="badge-danger">{REASON_TEXT[run.reason] || 'failed'}</span>;
+  if (status === 'skipped') return <span className="badge-warn">{REASON_TEXT[run.reason] || 'انتجاهل'}</span>;
+  return <span className="badge-danger">{REASON_TEXT[run.reason] || 'فشل'}</span>;
 }
 
 export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }) {
@@ -112,7 +112,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
         setVideos([]);
       }
     } catch (e) {
-      setLoadError(errText(e, 'Could not load Autopilot. Please try again.'));
+      setLoadError(errText(e, "ما قدرنا نحمّل الطيّار الآلي. جرّب مرة ثانية."));
     }
   }, []);
 
@@ -121,7 +121,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
   // Coming back from the connect page (#app?tab=autopilot&connected=1).
   useEffect(() => {
     if (justConnected) {
-      setNotice('Accounts connected.');
+      setNotice("انربطت الحسابات.");
       track('AutopilotChannelConnected');
     }
   }, [justConnected]);
@@ -146,7 +146,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       setData((prev) => ({ ...prev, settings: d.settings }));
       return d.settings;
     } catch (e) {
-      setNotice(errText(e, 'Could not save. Please try again.'));
+      setNotice(errText(e, "ما قدرنا نحفظ. جرّب مرة ثانية."));
       return null;
     } finally {
       setSaving(false);
@@ -159,7 +159,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       const { access_url } = await apiJson('/api/social/connect?return_to=autopilot', { method: 'POST' });
       if (access_url) window.location.href = access_url;
     } catch (e) {
-      setNotice(errText(e, 'Could not open the connection page. Please try again.'));
+      setNotice(errText(e, "ما قدرنا نفتح صفحة الربط. جرّب مرة ثانية."));
     }
   }, []);
 
@@ -167,7 +167,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
     const s = await save(on ? { enabled: true, rights_ack: true } : { enabled: false });
     if (s) {
       track(on ? 'AutopilotEnabled' : 'AutopilotDisabled', { props: { autopublish: String(!!s.autopublish) } });
-      setNotice(on ? 'Autopilot is on. Your next video will be clipped automatically.' : 'Autopilot paused.');
+      setNotice(on ? "الطيّار الآلي شغّال. فيديوك الجاي بيتقص تلقائيًا." : "الطيّار الآلي واقف.");
     }
   }, [save]);
 
@@ -187,14 +187,14 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
         body: JSON.stringify({ video_id: video.id }),
       });
       track('AutopilotManualRun', { props: { status: r.status } });
-      if (r.status === 'processing') setListNotice(`Clipping “${video.title || 'your video'}”. We will email you when the clips are ready.`);
-      else setListNotice(`Not clipped: ${REASON_TEXT[r.reason] || r.reason || r.status}.`);
+      if (r.status === 'processing') setListNotice(`جاري قص “${video.title || "فيديوك"}”. بنرسل لك إيميل أول ما تجهز المقاطع.`);
+      else setListNotice(`ما انقص: ${REASON_TEXT[r.reason] || r.reason || r.status}.`);
     } catch (e) {
       if (e?.name === 'QuotaError') {
-        setListNotice('You are out of minutes for this period.');
+        setListNotice("خلصت دقايقك لهالفترة.");
         openQuotaWall(e, 'autopilot_run');
       }
-      else setListNotice(errText(e, 'Could not start the job.'));
+      else setListNotice(errText(e, "ما قدرنا نبدأ المهمة."));
     } finally {
       setRunning(null);
       load();
@@ -204,7 +204,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
   const openProject = useCallback(async (jobId) => {
     if (!onOpenProject || opening) return;
     setOpening(jobId);
-    try { await onOpenProject(jobId); } catch { setNotice('Could not open this project yet. Find it in History.'); }
+    try { await onOpenProject(jobId); } catch { setNotice("ما قدرنا نفتح المشروع للحين. تلقاه في السجل."); }
     setOpening(null);
   }, [onOpenProject, opening]);
 
@@ -222,12 +222,10 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
 
   return (
     <div className="max-w-4xl mx-auto animate-fade">
-      <p className="eyebrow mb-1.5">02 · AUTOPILOT</p>
-      <h1 className="font-display lowercase text-3xl text-ink mb-2">your channel, clipped on its own</h1>
+      <p className="eyebrow mb-1.5">02 · الطيّار الآلي</p>
+      <h1 className="font-display lowercase text-3xl text-ink mb-2">قناتك تتقص لحالها</h1>
       <p className="text-muted text-sm mb-8 max-w-2xl">
-        Publish on YouTube as usual. Autopilot notices every new video, turns it into shorts
-        and emails you when they are ready. Switch on autopublish and the best ones go out on
-        TikTok, Instagram and YouTube Shorts, one a day.
+        انشر في يوتيوب مثل العادة. الطيّار الآلي ينتبه لكل فيديو جديد، يحوّله لشورتس ويرسل لك إيميل أول ما تجهز. شغّل النشر التلقائي وأفضلها ينزل على تيك توك وإنستقرام ويوتيوب شورتس، مقطع كل يوم.
       </p>
 
       {loadError && <p className="text-danger text-sm mb-4">{loadError}</p>}
@@ -239,14 +237,13 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       {!eligible && (
         <div className="card p-6 mb-6">
           <h3 className="font-display lowercase text-lg text-ink mb-1 flex items-center gap-2">
-            <Lock size={16} className="text-brass" /> included in paid plans
+            <Lock size={16} className="text-brass" /> متاح في هالنسخة
           </h3>
           <p className="text-muted text-sm mb-4">
-            Autopilot runs on your plan&apos;s minutes, so it comes with Starter, Creator and Pro.
-            Every new upload turns into shorts without you opening OpenShorts.
+            الطيّار الآلي يحوّل كل فيديو جديد ترفعه لشورتس بدون ما تفتح OpenShorts.
           </p>
           <button onClick={() => { track('AutopilotUpgradeClick'); onUpgrade?.(); }} className="btn-primary">
-            <Rocket size={16} /> choose a plan
+            <Rocket size={16} /> اختر باقة
           </button>
         </div>
       )}
@@ -259,25 +256,25 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
               <Youtube size={18} className={yt ? 'text-brass' : 'text-muted'} />
             </div>
             <div className="min-w-0">
-              <p className="eyebrow">01 · CHANNEL</p>
+              <p className="eyebrow">01 · القناة</p>
               {yt ? (
-                <p className="text-ink truncate">{yt.display_name || yt.handle} <span className="readout ml-1">{yt.handle}</span></p>
+                <p className="text-ink truncate">{yt.display_name || yt.handle} <span className="readout ms-1">{yt.handle}</span></p>
               ) : (
-                <p className="text-muted text-sm">no YouTube channel connected yet</p>
+                <p className="text-muted text-sm">ما فيه قناة يوتيوب مربوطة للحين</p>
               )}
             </div>
           </div>
           {(!yt || yt.reauth_required) && (
             <button onClick={connect} className="btn-primary" disabled={!eligible}>
-              <Youtube size={16} /> {yt ? 'reconnect youtube' : 'connect youtube'}
+              <Youtube size={16} /> {yt ? "أعد ربط يوتيوب" : "اربط يوتيوب"}
             </button>
           )}
           {yt && !yt.reauth_required && (
-            <button onClick={connect} className="btn-quiet text-xs">manage accounts</button>
+            <button onClick={connect} className="btn-quiet text-xs">أدِر الحسابات</button>
           )}
         </div>
         {yt?.reauth_required && (
-          <p className="text-warn text-sm mt-3 flex items-center gap-2"><AlertTriangle size={14} /> YouTube needs you to reconnect this channel.</p>
+          <p className="text-warn text-sm mt-3 flex items-center gap-2"><AlertTriangle size={14} /> يوتيوب يبيك تعيد ربط هالقناة.</p>
         )}
       </div>
 
@@ -285,14 +282,14 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       <div className="card p-6 mb-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="eyebrow mb-1">02 · AUTOPILOT</p>
-            <p className="text-ink">{s.enabled ? 'on: new videos are clipped automatically' : 'off'}</p>
+            <p className="eyebrow mb-1">02 · الطيّار الآلي</p>
+            <p className="text-ink">{s.enabled ? "شغّال: الفيديوهات الجديدة تتقص تلقائيًا" : 'مطفي'}</p>
             <p className="text-muted text-sm mt-1">
-              Only videos you publish from now on. Up to {limits.daily_auto || 1} video a day, the first
-              {' '}{s.max_minutes || 30} minutes of each. Shorts are skipped.
+              بس الفيديوهات اللي تنشرها من الحين وطالع. لين {limits.daily_auto || 1} فيديو باليوم، أول
+              {' '}{s.max_minutes || 30} دقيقة من كل واحد. الشورتس نتجاهلها.
             </p>
             {s.enabled && s.last_checked_at && (
-              <p className="readout mt-2 flex items-center gap-1"><Clock size={11} /> last check {fmtDate(s.last_checked_at)} · every hour</p>
+              <p className="readout mt-2 flex items-center gap-1"><Clock size={11} /> آخر فحص {fmtDate(s.last_checked_at)} · كل ساعة</p>
             )}
           </div>
           <Switch
@@ -309,14 +306,14 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
 
         <div className="grid sm:grid-cols-2 gap-4 mt-6">
           <label className="block">
-            <span className="eyebrow block mb-2">minutes per video</span>
+            <span className="eyebrow block mb-2">دقيقة لكل فيديو</span>
             <select
               className="input-field"
               value={s.max_minutes || 30}
               disabled={saving || !eligible}
               onChange={(e) => save({ max_minutes: Number(e.target.value) })}
             >
-              {limits.max_minutes_choices.map((m) => <option key={m} value={m}>first {m} min</option>)}
+              {limits.max_minutes_choices.map((m) => <option key={m} value={m}>أول {m} دقيقة</option>)}
             </select>
           </label>
         </div>
@@ -326,11 +323,10 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       <div className="card p-6 mb-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="eyebrow mb-1">03 · AUTOPUBLISH</p>
-            <p className="text-ink">{s.autopublish ? 'the best clips are scheduled for you' : 'off: you review and post the clips yourself'}</p>
+            <p className="eyebrow mb-1">03 · النشر التلقائي</p>
+            <p className="text-ink">{s.autopublish ? "أفضل المقاطع تنجدول لك" : "مطفي: أنت تراجع المقاطع وتنشرها بنفسك"}</p>
             <p className="text-muted text-sm mt-1">
-              Picks the {s.clips_to_publish || 3} highest-scoring clips of each video and schedules
-              them one a day at {String(s.publish_hour ?? 17).padStart(2, '0')}:00 ({s.timezone || browserTimezone()}).
+              ياخذ أعلى {s.clips_to_publish || 3} مقاطع تقييمًا من كل فيديو ويجدولها مقطع كل يوم الساعة {String(s.publish_hour ?? 17).padStart(2, '0')}:00 ({s.timezone || browserTimezone()}).
             </p>
           </div>
           <Switch
@@ -344,7 +340,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
         {s.autopublish && (
           <>
             <div className="mt-5">
-              <span className="eyebrow block mb-2">publish to</span>
+              <span className="eyebrow block mb-2">انشر على</span>
               <div className="flex flex-wrap gap-2">
                 {limits.platforms.map((p) => {
                   const connected = !!accounts[p];
@@ -357,25 +353,25 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
                       aria-pressed={on}
                       className={`px-4 py-2 rounded-full text-sm lowercase border transition-colors ${on ? 'border-brass bg-brass/10 text-ink' : 'border-rule2 text-muted hover:text-ink2'}`}
                     >
-                      {on && <CheckCircle2 size={13} className="inline mr-1.5 -mt-0.5 text-brass" />}{PLATFORM_LABELS[p]}
+                      {on && <CheckCircle2 size={13} className="inline me-1.5 -mt-0.5 text-brass" />}{PLATFORM_LABELS[p]}
                     </button>
                   ) : (
                     <button key={p} onClick={connect} className="px-4 py-2 rounded-full text-sm lowercase border border-dashed border-rule2 text-muted hover:text-ink2">
-                      + connect {PLATFORM_LABELS[p]}
+                      + اربط {PLATFORM_LABELS[p]}
                     </button>
                   );
                 })}
               </div>
               {(s.publish_platforms || []).length === 0 && (
-                <p className="text-warn text-sm mt-3">Pick at least one account, or nothing gets published.</p>
+                <p className="text-warn text-sm mt-3">اختر حساب واحد على الأقل، وإلا ما بينشر شي.</p>
               )}
               {(s.publish_platforms || []).includes('tiktok') && (
-                <p className="text-muted text-xs mt-3">TikTok clips arrive as drafts in your TikTok inbox: open the app to post them.</p>
+                <p className="text-muted text-xs mt-3">مقاطع تيك توك توصل كمسودات في صندوق تيك توك: افتح التطبيق وانشرها.</p>
               )}
             </div>
             <div className="grid sm:grid-cols-2 gap-4 mt-5">
               <label className="block">
-                <span className="eyebrow block mb-2">clips per video</span>
+                <span className="eyebrow block mb-2">مقاطع لكل فيديو</span>
                 <select
                   className="input-field"
                   value={s.clips_to_publish || 3}
@@ -383,12 +379,12 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
                   onChange={(e) => save({ clips_to_publish: Number(e.target.value) })}
                 >
                   {Array.from({ length: limits.max_clips_to_publish || 5 }, (_, i) => i + 1).map((n) => (
-                    <option key={n} value={n}>{n} {n === 1 ? 'clip' : 'clips'} (one a day)</option>
+                    <option key={n} value={n}>{n} {n === 1 ? 'مقطع' : 'مقاطع'} (مقطع كل يوم)</option>
                   ))}
                 </select>
               </label>
               <label className="block">
-                <span className="eyebrow block mb-2">time of day</span>
+                <span className="eyebrow block mb-2">الوقت</span>
                 <select
                   className="input-field"
                   value={s.publish_hour ?? 17}
@@ -410,18 +406,18 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
         <div className="card p-6 mb-6">
           <div className="flex items-center justify-between gap-3 mb-4">
             <div>
-              <p className="eyebrow mb-1">04 · YOUR LATEST VIDEOS</p>
-              <p className="text-muted text-sm">Clip any of them now, or let Autopilot handle the next one.</p>
+              <p className="eyebrow mb-1">04 · آخر فيديوهاتك</p>
+              <p className="text-muted text-sm">قص أي واحد منها الحين، أو خلّ الطيّار الآلي يتكفّل بالجاي.</p>
             </div>
-            <button onClick={load} className="btn-quiet text-xs" aria-label="refresh"><RefreshCw size={13} /> refresh</button>
+            <button onClick={load} className="btn-quiet text-xs" aria-label="تحديث"><RefreshCw size={13} /> تحديث</button>
           </div>
           {listNotice && (
             <div className="mb-4 rounded-card border border-brass/40 bg-brass/5 px-4 py-3 text-sm text-ink2" role="status">{listNotice}</div>
           )}
-          {videosError && <p className="text-warn text-sm mb-3">{ERROR_TEXT[videosError] || 'Could not read your channel.'}</p>}
+          {videosError && <p className="text-warn text-sm mb-3">{ERROR_TEXT[videosError] || "ما قدرنا نقرأ قناتك."}</p>}
           {videos === null && <div className="flex justify-center py-6"><Loader2 className="animate-spin text-brass" size={18} /></div>}
           {videos && videos.length === 0 && !videosError && (
-            <p className="text-muted text-sm">No videos on this channel yet.</p>
+            <p className="text-muted text-sm">ما فيه فيديوهات في هالقناة للحين.</p>
           )}
 
           <div className="divide-y divide-rule">
@@ -448,11 +444,11 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
                   </div>
                   {run?.status === 'completed' && run.job_id ? (
                     <button onClick={() => openProject(run.job_id)} className="btn-quiet text-xs shrink-0" disabled={opening === run.job_id}>
-                      {opening === run.job_id ? <Loader2 size={13} className="animate-spin" /> : <FolderOpen size={13} />} open
+                      {opening === run.job_id ? <Loader2 size={13} className="animate-spin" /> : <FolderOpen size={13} />} افتح
                     </button>
                   ) : canRun ? (
                     <button onClick={() => runNow(v)} className="btn-ghost px-4 py-2 text-xs shrink-0" disabled={!!running}>
-                      {running === v.id ? <Loader2 size={13} className="animate-spin" /> : <Scissors size={13} />} clip it
+                      {running === v.id ? <Loader2 size={13} className="animate-spin" /> : <Scissors size={13} />} قصّه
                     </button>
                   ) : null}
                 </div>
@@ -465,7 +461,7 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
       {/* 5 · activity */}
       {runs.length > 0 && (
         <div className="card p-6 mb-10">
-          <p className="eyebrow mb-4">05 · ACTIVITY</p>
+          <p className="eyebrow mb-4">05 · النشاط</p>
           <div className="space-y-3">
             {runs.map((r) => (
               <div key={r.id} className="flex items-center gap-3 text-sm">
@@ -474,8 +470,8 @@ export default function AutopilotTab({ onOpenProject, onUpgrade, justConnected }
                     : r.status === 'skipped' ? <Play size={15} className="text-muted shrink-0" />
                       : <AlertTriangle size={15} className="text-danger shrink-0" />}
                 <span className="text-ink2 truncate flex-1">{r.video_title || r.video_id}</span>
-                {r.posted_count ? <span className="readout hidden sm:inline-flex items-center gap-1"><Send size={11} /> {r.posted_count} scheduled</span> : null}
-                <span className="readout shrink-0">{r.trigger === 'manual' ? 'manual' : 'auto'} · {fmtDate(r.created_at)}</span>
+                {r.posted_count ? <span className="readout hidden sm:inline-flex items-center gap-1"><Send size={11} /> {r.posted_count} مجدول</span> : null}
+                <span className="readout shrink-0">{r.trigger === 'manual' ? 'يدوي' : 'تلقائي'} · {fmtDate(r.created_at)}</span>
               </div>
             ))}
           </div>

@@ -5,39 +5,40 @@ import Modal from './ui/Modal';
 import SegmentedControl from './ui/SegmentedControl';
 import TikTokDraftNotice from './TikTokDraftNotice';
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+const MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
 
 const TIMEZONES = [
-    { value: 'Pacific/Midway', label: '(GMT-11:00) Midway' },
-    { value: 'Pacific/Honolulu', label: '(GMT-10:00) Honolulu' },
-    { value: 'America/Anchorage', label: '(GMT-09:00) Alaska' },
-    { value: 'America/Los_Angeles', label: '(GMT-08:00) Los Angeles' },
-    { value: 'America/Denver', label: '(GMT-07:00) Denver' },
-    { value: 'America/Mexico_City', label: '(GMT-06:00) Mexico City' },
-    { value: 'America/Chicago', label: '(GMT-06:00) Chicago' },
-    { value: 'America/New_York', label: '(GMT-05:00) New York' },
-    { value: 'America/Bogota', label: '(GMT-05:00) Bogota' },
-    { value: 'America/Caracas', label: '(GMT-04:00) Caracas' },
-    { value: 'America/Santiago', label: '(GMT-04:00) Santiago' },
-    { value: 'America/Argentina/Buenos_Aires', label: '(GMT-03:00) Buenos Aires' },
-    { value: 'America/Sao_Paulo', label: '(GMT-03:00) Sao Paulo' },
-    { value: 'Atlantic/Azores', label: '(GMT-01:00) Azores' },
-    { value: 'UTC', label: '(GMT+00:00) UTC' },
-    { value: 'Europe/London', label: '(GMT+00:00) London' },
-    { value: 'Europe/Madrid', label: '(GMT+01:00) Madrid' },
-    { value: 'Europe/Paris', label: '(GMT+01:00) Paris' },
-    { value: 'Europe/Berlin', label: '(GMT+01:00) Berlin' },
-    { value: 'Europe/Rome', label: '(GMT+01:00) Rome' },
-    { value: 'Africa/Lagos', label: '(GMT+01:00) Lagos' },
-    { value: 'Europe/Istanbul', label: '(GMT+03:00) Istanbul' },
-    { value: 'Asia/Dubai', label: '(GMT+04:00) Dubai' },
-    { value: 'Asia/Kolkata', label: '(GMT+05:30) India' },
-    { value: 'Asia/Bangkok', label: '(GMT+07:00) Bangkok' },
-    { value: 'Asia/Shanghai', label: '(GMT+08:00) Shanghai' },
-    { value: 'Asia/Tokyo', label: '(GMT+09:00) Tokyo' },
-    { value: 'Australia/Sydney', label: '(GMT+10:00) Sydney' },
-    { value: 'Pacific/Auckland', label: '(GMT+12:00) Auckland' },
+    { value: 'Pacific/Midway', label: "(GMT-11:00) ميدواي" },
+    { value: 'Pacific/Honolulu', label: "(GMT-10:00) هونولولو" },
+    { value: 'America/Anchorage', label: "(GMT-09:00) ألاسكا" },
+    { value: 'America/Los_Angeles', label: "(GMT-08:00) لوس أنجلوس" },
+    { value: 'America/Denver', label: "(GMT-07:00) دنفر" },
+    { value: 'America/Mexico_City', label: "(GMT-06:00) مكسيكو سيتي" },
+    { value: 'America/Chicago', label: "(GMT-06:00) شيكاغو" },
+    { value: 'America/New_York', label: "(GMT-05:00) نيويورك" },
+    { value: 'America/Bogota', label: "(GMT-05:00) بوغوتا" },
+    { value: 'America/Caracas', label: "(GMT-04:00) كاراكاس" },
+    { value: 'America/Santiago', label: "(GMT-04:00) سانتياغو" },
+    { value: 'America/Argentina/Buenos_Aires', label: "(GMT-03:00) بوينس آيرس" },
+    { value: 'America/Sao_Paulo', label: "(GMT-03:00) ساو باولو" },
+    { value: 'Atlantic/Azores', label: "(GMT-01:00) الأزور" },
+    { value: 'UTC', label: "(GMT+00:00) UTC" },
+    { value: 'Europe/London', label: "(GMT+00:00) لندن" },
+    { value: 'Europe/Madrid', label: "(GMT+01:00) مدريد" },
+    { value: 'Europe/Paris', label: "(GMT+01:00) باريس" },
+    { value: 'Europe/Berlin', label: "(GMT+01:00) برلين" },
+    { value: 'Europe/Rome', label: "(GMT+01:00) روما" },
+    { value: 'Africa/Lagos', label: "(GMT+01:00) لاغوس" },
+    { value: 'Europe/Istanbul', label: "(GMT+03:00) إسطنبول" },
+    { value: 'Asia/Riyadh', label: '(GMT+03:00) الرياض' },
+    { value: 'Asia/Dubai', label: "(GMT+04:00) دبي" },
+    { value: 'Asia/Kolkata', label: "(GMT+05:30) الهند" },
+    { value: 'Asia/Bangkok', label: "(GMT+07:00) بانكوك" },
+    { value: 'Asia/Shanghai', label: "(GMT+08:00) شنغهاي" },
+    { value: 'Asia/Tokyo', label: "(GMT+09:00) طوكيو" },
+    { value: 'Australia/Sydney', label: "(GMT+10:00) سيدني" },
+    { value: 'Pacific/Auckland', label: "(GMT+12:00) أوكلاند" },
 ];
 
 const PLATFORM_OPTIONS = [
@@ -54,8 +55,8 @@ function getDayLabel(date) {
     const target = new Date(date);
     target.setHours(0, 0, 0, 0);
 
-    if (target.getTime() === today.getTime()) return 'Today';
-    if (target.getTime() === tomorrow.getTime()) return 'Tomorrow';
+    if (target.getTime() === today.getTime()) return "اليوم";
+    if (target.getTime() === tomorrow.getTime()) return "بكرة";
     return DAYS[target.getDay()];
 }
 
@@ -139,7 +140,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                 api_key: uploadPostKey,
                 user_id: uploadUserId,
                 platforms: selectedPlatforms,
-                title: clip.video_title_for_youtube_short || 'Viral Short',
+                title: clip.video_title_for_youtube_short || "شورت ينتشر",
                 description: clip.video_description_for_instagram || clip.video_description_for_tiktok || '',
                 scheduled_date: scheduledDate,
                 timezone
@@ -179,7 +180,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                 disabled={scheduling}
                 className="btn-ghost flex-1"
             >
-                {done ? 'close' : 'cancel'}
+                {done ? 'سكّر' : 'إلغاء'}
             </button>
             {!done ? (
                 <button
@@ -190,12 +191,12 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                     {scheduling ? (
                         <>
                             <Loader2 size={16} className="animate-spin" />
-                            scheduling...
+                            جاري الجدولة...
                         </>
                     ) : (
                         <>
                             <Calendar size={16} />
-                            schedule {clips?.length || 0} clips
+                            جدول {clips?.length || 0} مقاطع
                         </>
                     )}
                 </button>
@@ -207,7 +208,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                     className="btn-primary flex-1 no-underline"
                 >
                     <ExternalLink size={16} />
-                    view calendar
+                    اعرض التقويم
                 </a>
             )}
         </div>
@@ -217,24 +218,24 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
         <Modal
             isOpen={isOpen}
             onClose={scheduling ? undefined : onClose}
-            eyebrow="PUBLISH · WEEK"
-            title="schedule week"
+            eyebrow="النشر · الأسبوع"
+            title="جدول الأسبوع"
             size="md"
             footer={footer}
         >
-            <p className="readout mb-4">{clips?.length || 0} CLIPS · 1/DAY</p>
+            <p className="readout mb-4">{clips?.length || 0} المقاطع · 1/يوم</p>
 
             {!canPost && (
                 <div className="mb-4 p-3 bg-warn/10 text-warn text-xs rounded-input flex items-start gap-2">
                     <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                    <div>Set your Upload-Post API key in Settings first.</div>
+                    <div>حط مفتاح Upload-Post من الإعدادات أول.</div>
                 </div>
             )}
 
             {/* Time + Timezone */}
             <div className="mb-5 grid grid-cols-2 gap-3">
                 <div>
-                    <label className="eyebrow block mb-2">time</label>
+                    <label className="eyebrow block mb-2">الوقت</label>
                     <input
                         type="time"
                         value={time}
@@ -244,7 +245,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                     />
                 </div>
                 <div>
-                    <label className="eyebrow block mb-2">timezone</label>
+                    <label className="eyebrow block mb-2">المنطقة الزمنية</label>
                     <select
                         value={timezone}
                         onChange={(e) => setTimezone(e.target.value)}
@@ -260,7 +261,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
 
             {/* Start day offset */}
             <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
-                <span className="eyebrow">start from</span>
+                <span className="eyebrow">ابدأ من</span>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setStartOffset(Math.max(1, startOffset - 1))}
@@ -296,7 +297,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
 
                         <div className="flex-1 min-w-0">
                             <div className="text-xs text-ink truncate">
-                                {clip.video_title_for_youtube_short || 'Viral Short'}
+                                {clip.video_title_for_youtube_short || "شورت ينتشر"}
                             </div>
                             <div className="readout mt-0.5 truncate">
                                 {time} · {TIMEZONES.find(t => t.value === timezone)?.label || timezone}
@@ -323,7 +324,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
 
             {/* Platforms */}
             <div className="mb-5">
-                <label className="eyebrow block mb-2">platforms</label>
+                <label className="eyebrow block mb-2">المنصات</label>
                 <SegmentedControl
                     multi
                     options={PLATFORM_OPTIONS.map(opt => ({ ...opt, disabled: scheduling }))}
@@ -346,7 +347,7 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
             {(scheduling || done) && (
                 <div className="mb-1">
                     <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-muted lowercase">{scheduling ? 'scheduling...' : 'complete'}</span>
+                        <span className="text-xs text-muted lowercase">{scheduling ? 'جاري الجدولة...' : 'خلص'}</span>
                         <span className="readout">{progress.current}/{progress.total}</span>
                     </div>
                     <div className="w-full h-1.5 bg-paper3 rounded-full overflow-hidden">
@@ -358,9 +359,9 @@ export default function ScheduleWeekModal({ isOpen, onClose, clips, jobId, uploa
                     {done && (
                         <div className="mt-3 text-xs text-center lowercase">
                             {failCount === 0 ? (
-                                <span className="text-ok">all clips scheduled</span>
+                                <span className="text-ok">كل المقاطع انجدولت</span>
                             ) : (
-                                <span className="text-danger">{successCount} scheduled, {failCount} failed</span>
+                                <span className="text-danger">{successCount} انجدول، {failCount} فشل</span>
                             )}
                         </div>
                     )}

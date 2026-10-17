@@ -193,7 +193,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                 setReapplyCaptions(true);
                 setPreviewUrl(getApiUrl(`/videos/${jobId}/${data.current_file}`));
             } catch (e) {
-                if (!cancelled) setLoadError(e.detail || e.message || 'could not load the clip recipe');
+                if (!cancelled) setLoadError(e.detail || e.message || "ما قدرنا نحمّل وصفة المقطع");
             }
         })();
         return () => { cancelled = true; };
@@ -857,7 +857,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                 }),
             });
             if (!res.ok) {
-                let detail = `re-render failed (HTTP ${res.status})`;
+                let detail = `فشلت إعادة التصدير (HTTP ${res.status})`;
                 try { detail = (await res.json()).detail || detail; } catch { /* keep fallback */ }
                 throw new Error(detail);
             }
@@ -872,10 +872,10 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
         } catch (e) {
             if (e instanceof QuotaError) {
                 refreshMe();
-                setRenderError(`not enough minutes left (needs ${e.minutesRequired ?? '?'}, ${e.minutesRemaining ?? 0} remaining)`);
+                setRenderError(`الدقايق المتبقية ما تكفي (يحتاج ${e.minutesRequired ?? '?'}، باقي ${e.minutesRemaining ?? 0})`);
                 openQuotaWall(e, 'clip_editor');
             } else {
-                setRenderError(e.message || 're-render failed');
+                setRenderError(e.message || "فشلت إعادة التصدير");
             }
         } finally {
             setRendering(false);
@@ -954,9 +954,9 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
         return (
             <div className="fixed inset-0 z-[110] bg-black/70 flex items-center justify-center p-4 animate-fade" onMouseDown={onClose}>
                 <div className="card p-6 max-w-md" onMouseDown={(e) => e.stopPropagation()}>
-                    <p className="eyebrow mb-2">EDITOR · CLIP {clipIndex + 1}</p>
+                    <p className="eyebrow mb-2">المحرر · مقطع {clipIndex + 1}</p>
                     <div className="flex items-center gap-2 text-danger text-sm"><AlertCircle size={16} /> {loadError}</div>
-                    <button className="btn-ghost mt-5" onClick={onClose}>close</button>
+                    <button className="btn-ghost mt-5" onClick={onClose}>سكّر</button>
                 </div>
             </div>
         );
@@ -966,7 +966,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
         return (
             <div className="fixed inset-0 z-[110] bg-paper/90 flex items-center justify-center animate-fade">
                 <div className="flex items-center gap-3 text-muted text-sm lowercase">
-                    <Loader2 size={18} className="animate-spin text-brass" /> loading clip recipe…
+                    <Loader2 size={18} className="animate-spin text-brass" /> جاري تحميل وصفة المقطع…
                 </div>
             </div>
         );
@@ -993,12 +993,12 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
         <div className="shrink-0 select-none">
             <div className="flex items-center justify-between mb-1.5 gap-3">
                 <p className="readout">
-                    SOURCE · {fmt(sourceDuration)}{edl.source.duration_estimated ? ' (EST.)' : ''}
-                    {!sourceAvailable && ' · EXPIRED — TRIMS LIMITED TO THE ORIGINAL RANGE'}
+                    المصدر · {fmt(sourceDuration)}{edl.source.duration_estimated ? " (تقريبي)" : ''}
+                    {!sourceAvailable && " · انتهى — القص محصور في النطاق الأصلي"}
                 </p>
                 {sourceAvailable && (
                     <p className="readout hidden xl:block truncate">
-                        DRAG EMPTY SPACE TO MARK IN/OUT · BLOCK TO MOVE · EDGES TO TRIM
+                        اسحب في المساحة الفاضية عشان تحدد البداية/النهاية · اسحب المقطع عشان تحركه · الأطراف عشان تقص
                     </p>
                 )}
             </div>
@@ -1096,47 +1096,47 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
             {/* header */}
             <div className="px-4 sm:px-6 pt-4 pb-3 border-b border-rule flex items-start justify-between gap-4 shrink-0">
                 <div className="min-w-0">
-                    <p className="eyebrow mb-1">EDITOR · CLIP {clipIndex + 1}</p>
-                    <h2 className="font-display lowercase text-xl sm:text-2xl text-ink truncate">edit clip</h2>
+                    <p className="eyebrow mb-1">المحرر · مقطع {clipIndex + 1}</p>
+                    <h2 className="font-display lowercase text-xl sm:text-2xl text-ink truncate">عدّل المقطع</h2>
                     {clipTitle && <p className="text-xs text-muted truncate mt-0.5">{clipTitle}</p>}
                     {/* Phone: the readouts move under the title — as a third
                         column they squeezed the title to two characters. */}
                     <p className="readout sm:hidden mt-1 truncate">
-                        {fmt(total)} · {needsSourcePath ? 'FULL RE-FRAME' : 'FAST RECUT'}
+                        {fmt(total)} · {needsSourcePath ? "إعادة تأطير كاملة" : "قص سريع"}
                     </p>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <div className="text-right hidden sm:block">
-                        <p className="readout">DURATION · {fmt(total)}</p>
+                        <p className="readout">المدة · {fmt(total)}</p>
                         <p className="readout mt-1">
-                            {needsSourcePath ? 'PATH · FULL RE-FRAME' : 'PATH · FAST RECUT'}
-                            {edl.rerender_minutes > 0 && ` · ≈${Math.max(1, Math.ceil(total / 60))} MIN`}
+                            {needsSourcePath ? "المسار · إعادة تأطير كاملة" : "المسار · قص سريع"}
+                            {edl.rerender_minutes > 0 && ` · ≈${Math.max(1, Math.ceil(total / 60))} دقيقة`}
                         </p>
                     </div>
                     {sourceAvailable && (
                         <button
                             onClick={() => setShowSource((v) => !v)}
                             title={showSource
-                                ? 'put the source monitor away and edit the clip on its own'
-                                : 'bring back the source monitor, its transcript and in/out marking'}
-                            aria-label={showSource ? 'hide source' : 'show source'}
+                                ? "خبّ شاشة المصدر وعدّل المقطع لحاله"
+                                : "رجّع شاشة المصدر مع التفريغ وتحديد البداية/النهاية"}
+                            aria-label={showSource ? "خبّ المصدر" : "اعرض المصدر"}
                             className="btn-quiet text-xs py-1.5 px-2.5 sm:px-3 flex items-center gap-1.5 lowercase"
                         >
                             {showSource ? <PanelLeftClose size={14} /> : <PanelLeft size={14} />}
-                            <span className="hidden sm:inline">{showSource ? 'hide source' : 'show source'}</span>
+                            <span className="hidden sm:inline">{showSource ? "خبّ المصدر" : "اعرض المصدر"}</span>
                         </button>
                     )}
                     {confirmClose ? (
                         <div className="flex flex-wrap items-center justify-end gap-2">
-                            <span className="text-xs text-warn lowercase hidden sm:inline">discard changes?</span>
-                            <button className="btn-danger text-xs py-1.5 px-3" onClick={onClose}>discard</button>
-                            <button className="btn-ghost text-xs py-1.5 px-3" onClick={() => setConfirmClose(false)}>keep editing</button>
+                            <span className="text-xs text-warn lowercase hidden sm:inline">تتجاهل التعديلات؟</span>
+                            <button className="btn-danger text-xs py-1.5 px-3" onClick={onClose}>تجاهل</button>
+                            <button className="btn-ghost text-xs py-1.5 px-3" onClick={() => setConfirmClose(false)}>كمّل التعديل</button>
                         </div>
                     ) : (
                         <button
                             onClick={() => (rendering ? onClose() : dirty ? setConfirmClose(true) : onClose())}
                             className="p-2 rounded-input text-muted hover:text-ink hover:bg-paper3 transition-colors"
-                            aria-label="close editor"
+                            aria-label="سكّر المحرر"
                         >
                             <X size={18} />
                         </button>
@@ -1152,7 +1152,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                 {/* ---- column 1 · source ---- */}
                 {sourceOpen && (
                     <div className="flex-1 min-w-0 flex flex-col min-h-0 gap-2">
-                        <p className="eyebrow shrink-0">Source</p>
+                        <p className="eyebrow shrink-0">المصدر</p>
                         {/* The black hugs the picture instead of the column: a wide
                             box around a short 16:9 frame is exactly the dead space
                             this layout set out to remove. */}
@@ -1176,25 +1176,25 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                             row read as six unrelated buttons. */}
                         <div className="shrink-0 rounded-input border border-rule bg-paper2 p-2 flex items-stretch gap-3">
                             <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                <span className="readout shrink-0 text-muted">1 · MARK</span>
+                                <span className="readout shrink-0 text-muted">1 · حدّد</span>
                                 <button onClick={() => markHere('in')} className="btn-quiet text-[11px] py-1 px-2 flex items-center gap-1 shrink-0">
-                                    <ChevronsRight size={12} /> in <span className="text-muted">i</span>
+                                    <ChevronsRight size={12} /> بداية <span className="text-muted">i</span>
                                 </button>
                                 <button onClick={() => markHere('out')} className="btn-quiet text-[11px] py-1 px-2 flex items-center gap-1 shrink-0">
-                                    <ChevronsLeft size={12} /> out <span className="text-muted">o</span>
+                                    <ChevronsLeft size={12} /> نهاية <span className="text-muted">o</span>
                                 </button>
                                 <p className={`readout px-1 truncate ${markRange ? 'text-ink' : ''}`}>
                                     {markIn === null ? '—:——' : fmt(markIn)}
                                     {' → '}{markOut === null ? '—:——' : fmt(markOut)}
                                     {markRange && ` · ${fmt(markRange.end - markRange.start)}`}
                                     {markIn !== null && markOut !== null && !markRange
-                                        && ` · UNDER ${minSeg}S`}
+                                        && ` · أقل من ${minSeg} ث`}
                                 </p>
                                 <button
                                     onClick={clearMarks}
                                     disabled={markIn === null && markOut === null}
                                     className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper3 disabled:opacity-40 shrink-0"
-                                    aria-label="clear in and out marks"
+                                    aria-label="امسح علامات البداية والنهاية"
                                 >
                                     <X size={13} />
                                 </button>
@@ -1203,22 +1203,22 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                             <div className="w-px bg-[color:var(--color-rule-2)] shrink-0" />
 
                             <div className="flex items-center gap-1.5 shrink-0">
-                                <span className="readout text-muted">2 · SEND</span>
+                                <span className="readout text-muted">2 · أرسل</span>
                                 <button
                                     onClick={() => sendToClip('replace')}
                                     disabled={!markRange}
-                                    title="the selected segment becomes this range (.)"
+                                    title="الجزء المحدد يصير هالنطاق (.)"
                                     className="btn-primary text-[11px] py-1.5 px-2 disabled:opacity-40"
                                 >
-                                    replace #{selected + 1}
+                                    استبدل #{selected + 1}
                                 </button>
                                 <button
                                     onClick={() => sendToClip('insert')}
                                     disabled={!markRange || segments.length >= limits.max_segments}
-                                    title="add this range as a new segment after the selected one (,)"
+                                    title="أضف هالنطاق كجزء جديد بعد المحدد (,)"
                                     className="btn-quiet text-[11px] py-1.5 px-2 disabled:opacity-40"
                                 >
-                                    insert after #{selected + 1}
+                                    أضف بعد #{selected + 1}
                                 </button>
                             </div>
                         </div>
@@ -1226,7 +1226,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                         {/* transcript of the whole source */}
                         <div className="shrink-0 h-[30%] min-h-[9rem] flex flex-col">
                             <div className="flex items-center justify-between mb-1.5 gap-2 shrink-0">
-                                <p className="eyebrow">Transcript · full source</p>
+                                <p className="eyebrow">التفريغ · المصدر كامل</p>
                                 {/* Boundary actions live HERE, above the words they
                                     act on, because this is where the eye is when
                                     picking a cut point from the text (issue #73). */}
@@ -1234,25 +1234,25 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                     <div className="flex items-center gap-1.5 shrink-0">
                                         <button
                                             onClick={() => setSegment(selected, { start: selectedWord.s }, { snap: false })}
-                                            title={`segment #${selected + 1} starts at "${selectedWord.w}" (${fmt(selectedWord.s)})`}
+                                            title={`الجزء #${selected + 1} يبدأ عند "${selectedWord.w}" (${fmt(selectedWord.s)})`}
                                             className="btn-quiet text-[11px] py-1 px-2"
                                         >
-                                            #{selected + 1} starts here
+                                            #{selected + 1} يبدأ هنا
                                         </button>
                                         <button
                                             onClick={() => setSegment(selected, { end: selectedWord.e }, { snap: false })}
-                                            title={`segment #${selected + 1} ends after "${selectedWord.w}" (${fmt(selectedWord.e)})`}
+                                            title={`الجزء #${selected + 1} ينتهي بعد "${selectedWord.w}" (${fmt(selectedWord.e)})`}
                                             className="btn-quiet text-[11px] py-1 px-2"
                                         >
-                                            #{selected + 1} ends here
+                                            #{selected + 1} ينتهي هنا
                                         </button>
                                     </div>
                                 ) : words.length > 0 ? (
-                                    <span className="readout shrink-0">CLICK A WORD, THEN SET A BOUNDARY</span>
+                                    <span className="readout shrink-0">اضغط على كلمة، وبعدين حدّد الحد</span>
                                 ) : null}
                             </div>
                             {words.length === 0 ? (
-                                <p className="text-xs text-muted lowercase">this job kept no transcript</p>
+                                <p className="text-xs text-muted lowercase">هالمهمة ما حفظت تفريغ</p>
                             ) : (
                                 <div
                                     ref={transcriptRef}
@@ -1299,12 +1299,12 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                     the clip track its full precision back. */}
                 <div className={`flex flex-col min-h-0 gap-2 ${sourceOpen ? 'xl:w-[26rem] 2xl:w-[30rem] xl:shrink-0' : 'flex-1'}`}>
                     <div className="flex items-center justify-between gap-2 shrink-0">
-                        <p className="eyebrow">Program</p>
+                        <p className="eyebrow">النتيجة</p>
                         {dirty && (
                             <span className="badge-warn">
                                 {missingSeconds > COVERAGE_EPSILON
-                                    ? `${fmt(missingSeconds)} needs rendering`
-                                    : 'previewing the edit · re-render to keep it'}
+                                    ? `${fmt(missingSeconds)} يحتاج تصدير`
+                                    : "معاينة التعديل · صدّر عشان تحفظه"}
                             </span>
                         )}
                     </div>
@@ -1327,12 +1327,12 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                     {/* clip track */}
                     <div className="shrink-0 select-none">
                         <div className="flex items-center justify-between mb-1.5 gap-3">
-                            <p className="readout">CLIP · {fmt(total)}</p>
+                            <p className="readout">المقطع · {fmt(total)}</p>
                             {dirty && (
                                 <p className="readout truncate">
                                     {missingSeconds > COVERAGE_EPSILON
-                                        ? `RED · ${fmt(missingSeconds)} NOT RENDERED YET`
-                                        : 'PREVIEWING THE EDIT'}
+                                        ? `الأحمر · ${fmt(missingSeconds)} ما انصدّر للحين`
+                                        : "معاينة التعديل"}
                                 </p>
                             )}
                         </div>
@@ -1386,7 +1386,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                 pointerdown bubbles to the track, which already
                                 scrubs from the pointer position. */}
                             <div
-                                title="drag to move through the clip"
+                                title="اسحب عشان تتنقل في المقطع"
                                 className="absolute top-1 bottom-1 w-2.5 -ml-[5px] rounded-[4px] bg-ink border border-paper cursor-grab active:cursor-grabbing"
                                 style={{ left: `${(Math.min(playhead, clipTrackSeconds) / clipTrackSeconds) * 100}%` }}
                             />
@@ -1402,10 +1402,10 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                         {/* segments */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <p className="eyebrow">Segments · {segments.length}/{limits.max_segments}</p>
+                                <p className="eyebrow">الأجزاء · {segments.length}/{limits.max_segments}</p>
                                 <div className="flex items-center gap-1">
-                                    <button className="p-1.5 rounded-input text-muted hover:text-ink hover:bg-paper3 disabled:opacity-45" disabled={!state.past.length} onClick={() => dispatch({ type: 'undo' })} aria-label="undo"><Undo2 size={14} /></button>
-                                    <button className="p-1.5 rounded-input text-muted hover:text-ink hover:bg-paper3 disabled:opacity-45" disabled={!state.future.length} onClick={() => dispatch({ type: 'redo' })} aria-label="redo"><Redo2 size={14} /></button>
+                                    <button className="p-1.5 rounded-input text-muted hover:text-ink hover:bg-paper3 disabled:opacity-45" disabled={!state.past.length} onClick={() => dispatch({ type: 'undo' })} aria-label="تراجع"><Undo2 size={14} /></button>
+                                    <button className="p-1.5 rounded-input text-muted hover:text-ink hover:bg-paper3 disabled:opacity-45" disabled={!state.future.length} onClick={() => dispatch({ type: 'redo' })} aria-label="إعادة"><Redo2 size={14} /></button>
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -1425,7 +1425,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => setSegment(i, { start: parseFloat(e.target.value) || 0 }, { snap: false })}
                                                 className="input-field w-20 py-1 px-1.5 text-xs text-center"
-                                                aria-label={`segment ${i + 1} start`}
+                                                aria-label={`بداية الجزء ${i + 1}`}
                                             />
                                             <span className="text-muted text-xs">→</span>
                                             <input
@@ -1435,21 +1435,21 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => setSegment(i, { end: parseFloat(e.target.value) || 0 }, { snap: false })}
                                                 className="input-field w-20 py-1 px-1.5 text-xs text-center"
-                                                aria-label={`segment ${i + 1} end`}
+                                                aria-label={`نهاية الجزء ${i + 1}`}
                                             />
                                             <span className="readout ml-auto">{fmt(seg.end - seg.start)}</span>
                                         </div>
                                         <div className="flex items-center gap-1 mt-2">
                                             {sourceOpen && (
-                                                <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper" onClick={(e) => { e.stopPropagation(); dispatch({ type: 'select', index: i }); seekSource(seg.start); }} aria-label="show this segment in the source monitor"><Film size={13} /></button>
+                                                <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper" onClick={(e) => { e.stopPropagation(); dispatch({ type: 'select', index: i }); seekSource(seg.start); }} aria-label="اعرض هالجزء في شاشة المصدر"><Film size={13} /></button>
                                             )}
-                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={i === 0} onClick={(e) => { e.stopPropagation(); moveSegment(i, -1); }} aria-label="move up"><ChevronUp size={13} /></button>
-                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={i === segments.length - 1} onClick={(e) => { e.stopPropagation(); moveSegment(i, 1); }} aria-label="move down"><ChevronDown size={13} /></button>
-                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={seg.end - seg.start < minSeg * 2 || segments.length >= limits.max_segments} onClick={(e) => { e.stopPropagation(); splitSegment(i); }} aria-label="split segment"><Scissors size={13} /></button>
-                                            <button className="p-1 rounded-input text-muted hover:text-danger hover:bg-paper disabled:opacity-45 ml-auto" disabled={segments.length <= 1} onClick={(e) => { e.stopPropagation(); deleteSegment(i); }} aria-label="delete segment"><Trash2 size={13} /></button>
+                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={i === 0} onClick={(e) => { e.stopPropagation(); moveSegment(i, -1); }} aria-label="لفوق"><ChevronUp size={13} /></button>
+                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={i === segments.length - 1} onClick={(e) => { e.stopPropagation(); moveSegment(i, 1); }} aria-label="لتحت"><ChevronDown size={13} /></button>
+                                            <button className="p-1 rounded-input text-muted hover:text-ink hover:bg-paper disabled:opacity-45" disabled={seg.end - seg.start < minSeg * 2 || segments.length >= limits.max_segments} onClick={(e) => { e.stopPropagation(); splitSegment(i); }} aria-label="قسّم الجزء"><Scissors size={13} /></button>
+                                            <button className="p-1 rounded-input text-muted hover:text-danger hover:bg-paper disabled:opacity-45 ml-auto" disabled={segments.length <= 1} onClick={(e) => { e.stopPropagation(); deleteSegment(i); }} aria-label="احذف الجزء"><Trash2 size={13} /></button>
                                         </div>
                                         {outOfRange(seg) && (
-                                            <p className="text-[11px] text-danger mt-1.5 lowercase">outside the original range — the source video is gone</p>
+                                            <p className="text-[11px] text-danger mt-1.5 lowercase">برّا النطاق الأصلي — فيديو المصدر انحذف</p>
                                         )}
                                     </div>
                                 ))}
@@ -1459,25 +1459,23 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                 disabled={segments.length >= limits.max_segments}
                                 className="mt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-input border border-dashed border-rule2 text-xs lowercase text-ink2 hover:bg-paper3 transition-colors disabled:opacity-45"
                             >
-                                <Plus size={14} /> add segment
+                                <Plus size={14} /> أضف جزء
                             </button>
                             {!sourceAvailable && (
                                 <p className="text-[11px] text-muted mt-2 leading-relaxed">
-                                    the source video is no longer on the server, so cuts are
-                                    limited to the original clip range (extending or reframing
-                                    needs it; newly processed videos keep theirs)
+                                    فيديو المصدر ما عاد موجود على السيرفر، فالقص محصور في نطاق المقطع الأصلي (التمديد أو إعادة التأطير يحتاجونه؛ الفيديوهات الجديدة تحتفظ بمصدرها)
                                 </p>
                             )}
                         </div>
 
                         {/* framing override */}
                         <div>
-                            <p className="eyebrow mb-2">Framing</p>
+                            <p className="eyebrow mb-2">التأطير</p>
                             <div className="grid grid-cols-3 gap-1.5">
                                 {[
-                                    { value: 'auto', label: 'auto', hint: 'AI decides per scene' },
-                                    { value: 'full', label: 'full frame', hint: 'whole shot, no side-crop' },
-                                    { value: 'track', label: 'track subject', hint: 'crop follows the person' },
+                                    { value: 'auto', label: 'تلقائي', hint: "الذكاء الاصطناعي يقرر لكل مشهد" },
+                                    { value: 'full', label: "الإطار كامل", hint: "اللقطة كاملة، بدون قص جانبي" },
+                                    { value: 'track', label: "تتبّع الشخص", hint: "القص يلحق الشخص" },
                                 ].map((f) => (
                                     <button
                                         key={f.value}
@@ -1497,12 +1495,12 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                             </div>
                             {!sourceAvailable && (
                                 <p className="text-[11px] text-muted mt-1.5 leading-relaxed">
-                                    framing changes need the source video, which is no longer on the server
+                                    تغيير التأطير يحتاج فيديو المصدر، وهو ما عاد موجود على السيرفر
                                 </p>
                             )}
                             {framing !== renderedFraming && (
                                 <p className="text-[11px] text-muted mt-1.5 leading-relaxed">
-                                    changing the framing re-runs the reframe engine (slower than a fast recut)
+                                    تغيير التأطير يعيد تشغيل محرك التأطير (أبطأ من القص السريع)
                                 </p>
                             )}
                         </div>
@@ -1510,14 +1508,14 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                         {/* toggles */}
                         <div className="space-y-2.5">
                             <label className="flex items-center justify-between cursor-pointer">
-                                <span className="text-xs lowercase text-ink2">snap cuts to words</span>
+                                <span className="text-xs lowercase text-ink2">ثبّت القص على الكلمات</span>
                                 <span className="relative inline-flex items-center">
                                     <input type="checkbox" checked={snapToWords} onChange={(e) => setSnapToWords(e.target.checked)} className="sr-only peer" />
                                     <span className="w-8 h-4 rounded-full bg-paper3 peer-checked:bg-brass transition-colors after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:w-3 after:h-3 after:rounded-full after:bg-ink after:transition-transform peer-checked:after:translate-x-4" />
                                 </span>
                             </label>
                             <label className="flex items-center justify-between cursor-pointer">
-                                <span className="text-xs lowercase text-ink2">re-apply captions after recut</span>
+                                <span className="text-xs lowercase text-ink2">أعد تطبيق الترجمة بعد القص</span>
                                 <span className="relative inline-flex items-center">
                                     <input type="checkbox" checked={reapplyCaptions} onChange={(e) => setReapplyCaptions(e.target.checked)} className="sr-only peer" />
                                     <span className="w-8 h-4 rounded-full bg-paper3 peer-checked:bg-brass transition-colors after:content-[''] after:absolute after:left-0.5 after:top-0.5 after:w-3 after:h-3 after:rounded-full after:bg-ink after:transition-transform peer-checked:after:translate-x-4" />
@@ -1528,10 +1526,10 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                         {/* keyboard legend — moved off the clip track, which no longer
                             has the width for it */}
                         <div>
-                            <p className="eyebrow mb-2">Shortcuts</p>
+                            <p className="eyebrow mb-2">الاختصارات</p>
                             <p className="readout leading-relaxed">
-                                SPACE PLAY · S SPLIT · ⌫ DELETE · ⌘Z UNDO
-                                {sourceOpen && ' · I MARK IN · O MARK OUT · , INSERT · . REPLACE'}
+                                مسافة تشغيل · S تقسيم · ⌫ حذف · ⌘Z تراجع
+                                {sourceOpen && " · I بداية · O نهاية · , إضافة · . استبدال"}
                             </p>
                         </div>
                     </div>
@@ -1545,7 +1543,7 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                         )}
                         {overCaps && (
                             <p className="mb-3 text-[11px] text-warn lowercase">
-                                {total > limits.max_total_seconds ? `clip is over ${Math.round(limits.max_total_seconds)}s` : `more than ${limits.max_segments} segments`}
+                                {total > limits.max_total_seconds ? `المقطع أطول من ${Math.round(limits.max_total_seconds)} ث` : `أكثر من ${limits.max_segments} أجزاء`}
                             </p>
                         )}
                         <div className="flex gap-2">
@@ -1553,17 +1551,17 @@ export default function ClipEditor({ jobId, clipIndex, clipTitle, onClose, onRer
                                 className="btn-ghost"
                                 onClick={() => (rendering ? onClose() : dirty ? setConfirmClose(true) : onClose())}
                             >
-                                {rendering ? 'close' : dirty ? 'cancel' : 'close'}
+                                {rendering ? 'سكّر' : dirty ? 'إلغاء' : 'سكّر'}
                             </button>
                             <button className="btn-primary flex-1 flex items-center justify-center gap-2" disabled={!canRender || !dirty} onClick={doRender}>
                                 {rendering
-                                    ? (<><Loader2 size={16} className="animate-spin text-brassink" /> re-rendering… {renderSeconds}s</>)
-                                    : (needsSourcePath ? 're-render from source' : 're-render clip')}
+                                    ? (<><Loader2 size={16} className="animate-spin text-brassink" /> جاري إعادة التصدير… {renderSeconds}s</>)
+                                    : (needsSourcePath ? "صدّر من المصدر" : "صدّر المقطع")}
                             </button>
                         </div>
                         {rendering && (
                             <p className="text-[11px] text-muted mt-2 lowercase">
-                                you can close this editor; the render keeps going and the clip card updates when it finishes
+                                تقدر تسكّر المحرر؛ التصدير يكمّل وبطاقة المقطع تتحدث أول ما يخلص
                             </p>
                         )}
                     </div>

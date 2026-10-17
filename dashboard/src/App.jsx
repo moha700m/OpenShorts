@@ -165,7 +165,7 @@ const UserProfileSelector = ({ profiles, selectedUserId, onSelect, onConnect }) 
     <div className="relative z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="social profile"
+        aria-label="حساب التواصل"
         /* Phone: avatar + chevron only. A 180px pill next to the menu button,
            the section title and the minutes meter overflowed a 360px header. */
         className="flex items-center justify-between gap-1 bg-paper2 border border-rule2 rounded-input px-2 sm:px-3 py-2 text-sm text-ink2 hover:bg-paper3 transition-colors sm:min-w-[180px]"
@@ -177,14 +177,14 @@ const UserProfileSelector = ({ profiles, selectedUserId, onSelect, onConnect }) 
           {autoId ? (
             <span className="hidden sm:flex"><ProfileNetworkIcons profile={selectedProfile} size={13} /></span>
           ) : (
-            <span className="hidden sm:block font-medium text-ink truncate max-w-[100px]">{selectedProfile?.username || "Select User"}</span>
+            <span className="hidden sm:block font-medium text-ink truncate max-w-[100px]">{selectedProfile?.username || "اختر مستخدم"}</span>
           )}
         </span>
         <ChevronDown size={14} className={`text-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 right-0 w-64 card overflow-hidden">
+        <div className="absolute top-full mt-2 end-0 w-64 card overflow-hidden">
           <div className="max-h-60 overflow-y-auto custom-scrollbar">
             {profiles.map((profile) => (
               <button
@@ -193,7 +193,7 @@ const UserProfileSelector = ({ profiles, selectedUserId, onSelect, onConnect }) 
                   onSelect(profile.username);
                   setIsOpen(false);
                 }}
-                className="w-full flex items-center justify-between px-4 py-3 hover:bg-paper3 transition-colors text-left group border-b border-rule last:border-0"
+                className="w-full flex items-center justify-between px-4 py-3 hover:bg-paper3 transition-colors text-start group border-b border-rule last:border-0"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-paper3 flex items-center justify-center font-mono text-micro text-ink border border-rule shrink-0">
@@ -202,7 +202,7 @@ const UserProfileSelector = ({ profiles, selectedUserId, onSelect, onConnect }) 
                   <div className="min-w-0">
                     <div className="text-sm font-medium text-ink2 group-hover:text-ink transition-colors truncate">
                       {isAutoProfileId(profile.username)
-                        ? `Social profile ${profiles.indexOf(profile) + 1}`
+                        ? `حساب تواصل ${profiles.indexOf(profile) + 1}`
                         : profile.username}
                     </div>
                     <div className="flex gap-2 mt-0.5">
@@ -229,9 +229,9 @@ const UserProfileSelector = ({ profiles, selectedUserId, onSelect, onConnect }) 
           {onConnect && (
             <button
               onClick={() => { setIsOpen(false); onConnect(); }}
-              className="w-full flex items-center gap-2 px-4 py-3 text-sm text-brass hover:bg-paper3 transition-colors text-left border-t border-rule"
+              className="w-full flex items-center gap-2 px-4 py-3 text-sm text-brass hover:bg-paper3 transition-colors text-start border-t border-rule"
             >
-              <Share2 size={14} /> Connect / manage accounts
+              <Share2 size={14} /> اربط / أدِر الحسابات
             </button>
           )}
         </div>
@@ -254,7 +254,7 @@ const readableError = (raw) => {
     if (typeof d === 'string' && d) return d.slice(0, 300);
     if (d && typeof d.message === 'string') return d.message.slice(0, 300);
   } catch (_) { /* not JSON */ }
-  return text.replace(/^Error:\s*/, '').slice(0, 300) || 'Something went wrong.';
+  return text.replace(/^Error:\s*/, '').slice(0, 300) || "صار خطأ، جرّب مرة ثانية.";
 };
 // Matches the self-host JOB_RETENTION_SECONDS default. A restore whose job was
 // already purged server-side fails gracefully and clears the saved session.
@@ -584,7 +584,7 @@ function App() {
     setNoSource(true);
     setJobId(data.job_id);
     setResults(data.result || null);
-    setLogs(['♻️ Project restored from your library.']);
+    setLogs(["♻️ رجّعنا المشروع من مكتبتك."]);
     setLogTimes([Date.now() / 1000]);
     setProcessingMedia(null);
     setQualityGate(null);
@@ -659,7 +659,7 @@ function App() {
       a.remove();
       URL.revokeObjectURL(url);
     } catch (e) {
-      alert(`Download failed: ${e.message}`);
+      alert(`فشل التنزيل: ${e.message}`);
     } finally {
       setDownloadingAll(false);
     }
@@ -825,9 +825,9 @@ function App() {
             refreshMe();
           } else if (data.status === 'failed') {
             setStatus('error');
-            const errorMsg = data.error || (data.logs && data.logs.length > 0 ? data.logs[data.logs.length - 1] : "Process failed");
+            const errorMsg = data.error || (data.logs && data.logs.length > 0 ? data.logs[data.logs.length - 1] : "فشلت المعالجة");
             setJobError(readableError(errorMsg));
-            setLogs(prev => [...prev, "Error: " + errorMsg]);
+            setLogs(prev => [...prev, "خطأ: " + errorMsg]);
             clearInterval(interval);
             refreshMe();
           } else {
@@ -863,10 +863,10 @@ function App() {
           setUploadUserId(data.profiles[0].username);
         }
       } else if (!silent) {
-        alert("No profiles found for this API Key.");
+        alert("ما لقينا حسابات مرتبطة بمفتاح الـ API هذا.");
       }
     } catch (e) {
-      if (!silent) alert("Error fetching User Profiles. Please check key.");
+      if (!silent) alert("صار خطأ وحنا نجيب الحسابات. تأكد من المفتاح.");
       console.error(e);
     }
   };
@@ -984,7 +984,7 @@ function App() {
   // Advanced (bring your own fal.ai + ElevenLabs keys): AI Shorts + AI Agent.
   const INCLUDED_TOOL_TABS = ['dashboard', 'thumbnails'];
   const ADVANCED_TOOL_TABS = ['saasshorts', 'ai-agent'];
-  const TOOL_NAMES = { dashboard: 'the Clip Generator', thumbnails: 'the YouTube Studio' };
+  const TOOL_NAMES = { dashboard: "مولّد المقاطع", thumbnails: "استوديو يوتيوب" };
   const gateThisTab = needsPlan && INCLUDED_TOOL_TABS.includes(activeTab);      // included tool, no plan yet
   const advancedThisTab = billingEnabled && ADVANCED_TOOL_TABS.includes(activeTab); // BYOK-notice tools
 
@@ -1010,7 +1010,7 @@ function App() {
       // Same tab so the connect page's redirectUrl brings the user back into the app.
       if (access_url) window.location.href = access_url;
     } catch (e) {
-      alert('Could not open the connection page. Please try again.');
+      alert("ما قدرنا نفتح صفحة الربط. جرّب مرة ثانية.");
     }
   };
 
@@ -1021,7 +1021,7 @@ function App() {
       const { access_url } = await apiJson('/api/social/connect', { method: 'POST' });
       if (access_url) window.open(access_url, '_blank', 'noopener');
     } catch (e) {
-      alert('Could not open the calendar. Please try again.');
+      alert("ما قدرنا نفتح التقويم. جرّب مرة ثانية.");
     }
   };
 
@@ -1043,7 +1043,7 @@ function App() {
     clearPendingJob();
     setStatus('processing');
     setJobError('');
-    setLogs(["Starting process..."]);
+    setLogs(["بدينا المعالجة..."]);
     setLogTimes([Date.now() / 1000]);
     setResults(null);
     // Studio handovers have no local media object; the preview switches to the
@@ -1167,7 +1167,7 @@ function App() {
       const reason = readableError(e.message);
       setJobError(reason);
       setStatus('error');
-      setLogs(l => [...l, `Error starting job: ${reason}`]);
+      setLogs(l => [...l, `صار خطأ وحنا نبدأ المهمة: ${reason}`]);
     }
   };
 
@@ -1217,15 +1217,15 @@ function App() {
   // drawer, and the bottom tab bar. `short` is the tab-bar label — the full one
   // wraps to two lines in a 5-up bar on a 360px phone.
   const navItems = [
-    { id: 'dashboard', ord: '01', icon: LayoutDashboard, label: 'Clip Generator', short: 'clips', primary: true },
+    { id: 'dashboard', ord: '01', icon: LayoutDashboard, label: "مولّد المقاطع", short: 'المقاطع', primary: true },
     // Cloud only: it runs on the managed pipeline and the Upload-Post connection.
-    ...(billingEnabled ? [{ id: 'autopilot', ord: '02', icon: Rocket, label: 'Autopilot', short: 'autopilot', isNew: true }] : []),
-    { id: 'saasshorts', ord: '03', icon: Sparkles, label: 'AI Shorts', short: 'ai shorts', byok: true, primary: true },
-    { id: 'ai-agent', ord: '04', icon: Bot, label: 'AI Agent', short: 'agent', byok: true },
-    { id: 'ugc-gallery', ord: '05', icon: LayoutGrid, label: 'UGC Gallery', short: 'gallery', primary: true },
-    { id: 'thumbnails', ord: '06', icon: Image, label: 'YouTube Studio', short: 'studio', primary: true },
-    ...(billingEnabled && isSignedIn ? [{ id: 'history', ord: '07', icon: History, label: 'History', short: 'history' }] : []),
-    { id: 'settings', ord: '08', icon: Settings, label: 'Settings', short: 'settings' },
+    ...(billingEnabled ? [{ id: 'autopilot', ord: '02', icon: Rocket, label: "الطيّار الآلي", short: 'الطيّار', isNew: true }] : []),
+    { id: 'saasshorts', ord: '03', icon: Sparkles, label: "شورتس بالذكاء الاصطناعي", short: "شورتس AI", byok: true, primary: true },
+    { id: 'ai-agent', ord: '04', icon: Bot, label: "وكيل الذكاء الاصطناعي", short: 'الوكيل', byok: true },
+    { id: 'ugc-gallery', ord: '05', icon: LayoutGrid, label: "معرض UGC", short: 'المعرض', primary: true },
+    { id: 'thumbnails', ord: '06', icon: Image, label: "استوديو يوتيوب", short: 'الاستوديو', primary: true },
+    ...(billingEnabled && isSignedIn ? [{ id: 'history', ord: '07', icon: History, label: "السجل", short: 'السجل' }] : []),
+    { id: 'settings', ord: '08', icon: Settings, label: "الإعدادات", short: 'الإعدادات' },
   ];
   const activeNav = navItems.find((n) => n.id === activeTab);
 
@@ -1254,16 +1254,16 @@ function App() {
         className="flex items-center gap-2 px-3 py-2 text-xs lowercase text-muted hover:text-ink2 transition-colors"
       >
         <Globe size={14} className="shrink-0" />
-        <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>landing page</span>
+        <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>الصفحة الرئيسية</span>
       </a>
       <a
-        href="https://github.com/mutonby/openshorts"
+        href="https://github.com/moha700m/OpenShorts"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2 px-3 py-2 text-xs lowercase text-muted hover:text-ink2 transition-colors"
       >
         <svg height="14" viewBox="0 0 16 16" version="1.1" width="14" aria-hidden="true" fill="currentColor" className="shrink-0"><path fillRule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-        <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>open source</span>
+        <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>مفتوح المصدر</span>
       </a>
       {billingEnabled && (
         <a
@@ -1271,26 +1271,26 @@ function App() {
           className="flex items-center gap-2 px-3 py-2 text-xs lowercase text-muted hover:text-ink2 transition-colors"
         >
           <Sparkles size={14} className="shrink-0" />
-          <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>plans &amp; pricing</span>
+          <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>الباقات والأسعار</span>
         </a>
       )}
-      <a
+      {billingEnabled && <a
         href="mailto:info@openshorts.app"
         className="flex items-center gap-2 px-3 py-2 text-xs lowercase text-muted hover:text-ink2 transition-colors"
       >
         <Mail size={14} className="shrink-0" />
         <span className={collapsed ? 'hidden lg:block truncate' : 'truncate'}>info@openshorts.app</span>
-      </a>
+      </a>}
     </>
   );
 
   // Desktop rail: icon-only from md, labelled from lg. Below md it is gone
   // entirely — an unlabelled 80px rail ate a fifth of a phone screen.
   const Sidebar = () => (
-    <div className="hidden md:flex w-20 lg:w-64 bg-paper2 border-r border-rule flex-col h-full shrink-0 transition-all duration-300">
-      <a href="#landing" className="p-6 flex items-center gap-3" title="go to landing page">
+    <div className="hidden md:flex w-20 lg:w-64 bg-paper2 border-e border-rule flex-col h-full shrink-0 transition-all duration-300">
+      <a href="#landing" className="p-6 flex items-center gap-3" title="ارجع للصفحة الرئيسية">
         <div className="w-8 h-8 bg-paper3 rounded-input flex items-center justify-center shrink-0 overflow-hidden border border-rule">
-          <img src="/logo-openshorts.png" alt="Logo" className="w-full h-full object-cover" />
+          <img src="/logo-openshorts.png" alt="الشعار" className="w-full h-full object-cover" />
         </div>
         <span className="font-display lowercase text-lg text-ink hidden lg:block">openshorts</span>
       </a>
@@ -1304,19 +1304,19 @@ function App() {
               key={item.id}
               data-tutorial={item.id === 'dashboard' ? 'nav-clips' : undefined}
               onClick={() => goToTab(item.id)}
-              title={tabLocked(item.id) ? 'Finish your first clips to unlock' : item.label}
+              title={tabLocked(item.id) ? "خلّص أول مقاطعك عشان يفتح" : item.label}
               disabled={tabLocked(item.id)}
               className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-input transition-colors ${isActive ? 'bg-paper3 text-ink' : 'text-muted hover:text-ink2 hover:bg-paper3/50'} ${tabLocked(item.id) ? 'opacity-40 cursor-not-allowed hover:bg-transparent hover:text-muted' : ''}`}
             >
               {isActive && (
-                <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-brass rounded-full" aria-hidden="true" />
+                <span className="absolute start-0 top-1.5 bottom-1.5 w-0.5 bg-brass rounded-full" aria-hidden="true" />
               )}
               <NavIcon size={18} className={`shrink-0 ${isActive ? 'text-brass' : ''}`} />
-              <span className="text-sm lowercase hidden lg:block flex-1 text-left truncate">{item.label}</span>
+              <span className="text-sm lowercase hidden lg:block flex-1 text-start truncate">{item.label}</span>
               {tabLocked(item.id)
                 ? <Lock size={12} className="shrink-0 hidden lg:block" />
-                : item.byok ? <span className="readout hidden lg:block">BYOK</span>
-                  : item.isNew ? <span className="badge-brass hidden lg:block">new</span> : null}
+                : item.byok ? <span className="readout hidden lg:block">مفتاحك</span>
+                  : item.isNew ? <span className="badge-brass hidden lg:block">جديد</span> : null}
               <span className="readout hidden lg:block">{item.ord}</span>
             </button>
           );
@@ -1335,14 +1335,14 @@ function App() {
       className="md:hidden fixed inset-0 z-[90] flex"
       role="dialog"
       aria-modal="true"
-      aria-label="Navigation"
+      aria-label="التنقل"
     >
       <div
         className="absolute inset-0 bg-black/60 animate-fade"
         onClick={() => setNavOpen(false)}
         aria-hidden="true"
       />
-      <div className="relative w-[17rem] max-w-[82vw] h-full bg-paper2 border-r border-rule flex flex-col animate-slide-in-left">
+      <div className="relative w-[17rem] max-w-[82vw] h-full bg-paper2 border-e border-rule flex flex-col animate-slide-in-left">
         <div className="flex items-center justify-between px-5 h-14 border-b border-rule shrink-0">
           <a href="#landing" className="flex items-center gap-2.5" onClick={() => setNavOpen(false)}>
             <div className="w-7 h-7 bg-paper3 rounded-input overflow-hidden border border-rule shrink-0">
@@ -1352,8 +1352,8 @@ function App() {
           </a>
           <button
             onClick={() => setNavOpen(false)}
-            aria-label="close navigation"
-            className="p-2 -mr-2 text-muted hover:text-ink transition-colors"
+            aria-label="سكّر القائمة"
+            className="p-2 -me-2 text-muted hover:text-ink transition-colors"
           >
             <X size={18} />
           </button>
@@ -1369,18 +1369,18 @@ function App() {
                 onClick={() => goToTab(item.id)}
                 disabled={tabLocked(item.id)}
                 aria-current={isActive ? 'page' : undefined}
-                title={tabLocked(item.id) ? 'Finish your first clips to unlock' : undefined}
+                title={tabLocked(item.id) ? "خلّص أول مقاطعك عشان يفتح" : undefined}
                 className={`relative w-full flex items-center gap-3 px-3 py-3 rounded-input transition-colors ${isActive ? 'bg-paper3 text-ink' : 'text-muted active:bg-paper3/60'} ${tabLocked(item.id) ? 'opacity-40 cursor-not-allowed' : ''}`}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-brass rounded-full" aria-hidden="true" />
+                  <span className="absolute start-0 top-2 bottom-2 w-0.5 bg-brass rounded-full" aria-hidden="true" />
                 )}
                 <NavIcon size={18} className={`shrink-0 ${isActive ? 'text-brass' : ''}`} />
-                <span className="text-[0.95rem] lowercase flex-1 text-left truncate">{item.label}</span>
+                <span className="text-[0.95rem] lowercase flex-1 text-start truncate">{item.label}</span>
                 {tabLocked(item.id)
                   ? <Lock size={12} className="shrink-0" />
-                  : item.byok ? <span className="readout shrink-0">BYOK</span>
-                    : item.isNew ? <span className="badge-brass shrink-0">new</span> : null}
+                  : item.byok ? <span className="readout shrink-0">مفتاحك</span>
+                    : item.isNew ? <span className="badge-brass shrink-0">جديد</span> : null}
               </button>
             );
           })}
@@ -1412,7 +1412,7 @@ function App() {
                 onClick={() => goToTab(item.id)}
                 disabled={tabLocked(item.id)}
                 aria-current={isActive ? 'page' : undefined}
-                title={tabLocked(item.id) ? 'Finish your first clips to unlock' : undefined}
+                title={tabLocked(item.id) ? "خلّص أول مقاطعك عشان يفتح" : undefined}
                 className={`flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 min-h-[56px] transition-colors ${isActive ? 'text-ink' : 'text-muted active:text-ink2'} ${tabLocked(item.id) ? 'opacity-40 cursor-not-allowed' : ''}`}
               >
                 <NavIcon size={19} className={isActive ? 'text-brass' : ''} />
@@ -1422,12 +1422,12 @@ function App() {
           })}
           <button
             onClick={() => setNavOpen(true)}
-            aria-label="more sections"
+            aria-label="أقسام ثانية"
             aria-expanded={navOpen}
             className={`flex-1 min-w-0 flex flex-col items-center justify-center gap-1 py-2 min-h-[56px] transition-colors ${moreActive ? 'text-ink' : 'text-muted active:text-ink2'}`}
           >
             <Menu size={19} className={moreActive ? 'text-brass' : ''} />
-            <span className="text-[10.5px] lowercase leading-none">more</span>
+            <span className="text-[10.5px] lowercase leading-none">المزيد</span>
           </button>
         </div>
       </nav>
@@ -1450,22 +1450,22 @@ function App() {
                 used to carry. Without it a phone has no "where am I". */}
             <button
               onClick={() => setNavOpen(true)}
-              aria-label="open navigation"
-              className="md:hidden -ml-1 p-2 rounded-input text-muted active:bg-paper3 transition-colors shrink-0"
+              aria-label="افتح القائمة"
+              className="md:hidden -ms-1 p-2 rounded-input text-muted active:bg-paper3 transition-colors shrink-0"
             >
               <Menu size={20} />
             </button>
             <span data-tutorial="nav-clips" className="md:hidden font-display lowercase text-base text-ink truncate">
-              {activeNav?.label || 'openshorts'}
+              {activeNav?.label || 'OpenShorts'}
             </span>
             {status !== 'idle' && (
               <button
                 onClick={handleReset}
                 className="btn-quiet px-3 py-1.5 text-xs shrink-0"
-                aria-label="New Project"
+                aria-label="مشروع جديد"
               >
                 <Plus size={14} />
-                <span className="hidden sm:inline">New Project</span>
+                <span className="hidden sm:inline">مشروع جديد</span>
               </button>
             )}
           </div>
@@ -1492,13 +1492,13 @@ function App() {
             {billingEnabled && isSignedIn && !isManaged && (
               <button onClick={() => setShowPlanChoice(true)}
                 className="btn-primary px-4 py-2 text-xs">
-                Choose a plan
+                اختر باقة
               </button>
             )}
             {billingEnabled && !isSignedIn && (
               <button onClick={() => setShowLogin(true)}
                 className="btn-ghost px-4 py-2 text-xs">
-                Sign in
+                سجّل دخول
               </button>
             )}
             {billingEnabled && isSignedIn && <ProfileMenu onUpgrade={isManaged ? openUpsell : null} />}
@@ -1509,17 +1509,17 @@ function App() {
               <button
                 onClick={() => (billingEnabled && !isSignedIn ? setShowLogin(true) : goToTab('settings'))}
                 className="badge-warn hover:brightness-125 transition-all hidden sm:inline-flex"
-                title="Configure API keys or choose a plan"
+                title="اضبط مفاتيح الـ API"
               >
                 <AlertTriangle size={12} />
                 <span className="hidden md:inline">
                   {!geminiOk && !uploadPostKey
-                    ? 'Gemini & Upload-Post keys missing'
+                    ? "مفاتيح Gemini و Upload-Post ناقصة"
                     : !geminiOk
-                      ? 'Gemini API Key Missing'
-                      : 'Upload-Post API Key Missing'}
+                      ? "مفتاح Gemini ناقص"
+                      : "مفتاح Upload-Post ناقص"}
                 </span>
-                <span className="md:hidden">keys missing</span>
+                <span className="md:hidden">مفاتيح ناقصة</span>
               </button>
             )}
           </div>
@@ -1531,13 +1531,13 @@ function App() {
             <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-sm text-ink2 min-w-0 flex-1">
               <KeyRound size={16} className="shrink-0 text-warn mt-0.5 sm:mt-0" />
               <div className="min-w-0">
-                <span className="font-medium text-ink">Required API keys missing.</span>{' '}
+                <span className="font-medium text-ink">فيه مفاتيح API مطلوبة ناقصة.</span>{' '}
                 <span className="text-muted">
                   {!geminiOk && !uploadPostKey
-                    ? 'Set your Gemini and Upload-Post API keys to use OpenShorts.'
+                    ? "حط مفاتيح Gemini و Upload-Post عشان تستخدم OpenShorts."
                     : !geminiOk
-                      ? 'Set your Gemini API key to use OpenShorts.'
-                      : 'Set your Upload-Post API key to use OpenShorts.'}
+                      ? "حط مفتاح Gemini عشان تستخدم OpenShorts."
+                      : "حط مفتاح Upload-Post عشان تستخدم OpenShorts."}
                 </span>
               </div>
             </div>
@@ -1545,7 +1545,7 @@ function App() {
               onClick={() => goToTab('settings')}
               className="btn-quiet px-3 py-1.5 text-xs shrink-0 w-full sm:w-auto"
             >
-              Go to Settings
+              روح للإعدادات
             </button>
           </div>
         )}
@@ -1555,12 +1555,12 @@ function App() {
           <div className="mx-3 sm:mx-6 mt-2 px-3.5 sm:px-4 py-3 bg-paper2 border border-rule rounded-card flex items-start justify-between gap-3 animate-fade shrink-0">
             <div className="flex items-start sm:items-center gap-2 text-sm text-ink2 flex-wrap min-w-0">
               <RotateCcw size={16} className="text-brass shrink-0 mt-0.5 sm:mt-0" />
-              <span className="font-medium">Session recovered</span>
-              <span className="text-muted text-xs">Your previous work has been restored.</span>
+              <span className="font-medium">رجّعنا جلستك</span>
+              <span className="text-muted text-xs">شغلك السابق رجع مثل ما كان.</span>
             </div>
             <button
               onClick={() => setSessionRecovered(false)}
-              aria-label="dismiss"
+              aria-label="إخفاء"
               className="text-muted hover:text-ink transition-colors shrink-0 -m-1 p-1"
             >
               <X size={16} />
@@ -1582,11 +1582,11 @@ function App() {
             <div className="h-full overflow-y-auto p-4 sm:p-8 max-w-2xl mx-auto animate-fade">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
                 <div>
-                  <p className="eyebrow mb-1.5">08 · SETTINGS</p>
-                  <h1 className="font-display lowercase text-2xl text-ink">Settings</h1>
+                  <p className="eyebrow mb-1.5">08 · الإعدادات</p>
+                  <h1 className="font-display lowercase text-2xl text-ink">الإعدادات</h1>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted mt-1">
-                  <Shield size={12} className="text-ok shrink-0" /> Privacy: keys only live in your browser (sent to backend just to process)
+                  <Shield size={12} className="text-ok shrink-0" /> الخصوصية: المفاتيح محفوظة في متصفحك بس (تنرسل للسيرفر وقت المعالجة فقط)
                 </div>
               </div>
               {/* Self-hosted installs have no account page, so the agent
@@ -1599,21 +1599,19 @@ function App() {
                       <div className="w-9 h-9 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                         <Shield size={16} className="text-brass" />
                       </div>
-                      <h2 className="text-base font-medium text-ink lowercase">Included in your plan</h2>
+                      <h2 className="text-base font-medium text-ink lowercase">داخل في باقتك</h2>
                     </div>
-                    <span className="badge-ok">Managed</span>
+                    <span className="badge-ok">مُدار</span>
                   </div>
                   <p className="text-xs text-muted mb-5 leading-relaxed">
-                    Your plan includes the <strong>Clip Generator</strong> and <strong>YouTube Studio</strong>,
-                    fully managed — no API keys required. AI Shorts &amp; dubbing use your own fal.ai / ElevenLabs
-                    keys (below). Connect your social accounts to publish directly.
+                    باقتك فيها <strong>مولّد المقاطع</strong> و <strong>استوديو يوتيوب</strong>، وكل شي مُدار عنك — بدون مفاتيح API. شورتس AI والدبلجة تحتاج مفاتيحك في fal.ai و ElevenLabs (تحت). اربط حساباتك عشان تنشر على طول.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <button onClick={handleConnectSocials} className="btn-primary py-2 px-4 text-sm">
-                      <Share2 size={16} /> Connect social accounts
+                      <Share2 size={16} /> اربط حسابات التواصل
                     </button>
                     <button onClick={handleOpenCalendar} className="btn-quiet py-2 px-4 text-sm">
-                      <Calendar size={16} /> Content calendar
+                      <Calendar size={16} /> تقويم المحتوى
                     </button>
                   </div>
                 </div>
@@ -1624,15 +1622,15 @@ function App() {
                       <div className="w-9 h-9 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                         <Sparkles size={16} className="text-brass" />
                       </div>
-                      <h2 className="text-base font-medium text-ink lowercase">Choose your plan</h2>
+                      <h2 className="text-base font-medium text-ink lowercase">اختر باقتك</h2>
                     </div>
-                    <span className="badge-ok">Free plan available</span>
+                    <span className="badge-ok">فيه باقة مجانية</span>
                   </div>
                   <p className="text-xs text-muted mb-5 leading-relaxed">
-                    Generate shorts with zero setup — no API keys needed. Start free with 20 min/month, or go paid from $12/mo. Cancel anytime.
+                    طلّع شورتس بدون أي إعداد. كل شي مجاني بالكامل على سيرفرك.
                   </p>
                   <button onClick={() => setShowPlanChoice(true)} className="btn-primary py-2 px-4 text-sm">
-                    <Sparkles size={16} /> Choose a plan
+                    <Sparkles size={16} /> اختر باقة
                   </button>
                 </div>
               ) : (
@@ -1645,16 +1643,15 @@ function App() {
                     <div className="w-9 h-9 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                       <Share2 size={16} className="text-brass" />
                     </div>
-                    <h2 className="text-base font-medium text-ink lowercase">Social Integration</h2>
+                    <h2 className="text-base font-medium text-ink lowercase">ربط منصات التواصل</h2>
                   </div>
-                  <span className="badge-warn">Required</span>
+                  <span className="badge-warn">مطلوب</span>
                 </div>
                 <p className="text-xs text-muted mb-6 leading-relaxed">
-                  Required to publish your clips to TikTok, Instagram Reels, and YouTube Shorts via <strong>Upload-Post</strong>.
-                  Includes a <strong>free tier</strong> (no credit card required).
+                  تحتاجه عشان تنشر مقاطعك على تيك توك وريلز إنستقرام ويوتيوب شورتس عن طريق <strong>Upload-Post</strong>. وفيه <strong>باقة مجانية</strong> (بدون بطاقة).
                 </p>
                 <div className="space-y-4">
-                  <label className="block text-sm text-muted">Upload-Post API Key</label>
+                  <label className="block text-sm text-muted">مفتاح Upload-Post API</label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="password"
@@ -1664,28 +1661,28 @@ function App() {
                       placeholder="ey..."
                     />
                     <button onClick={fetchUserProfiles} className="btn-quiet py-2 px-4 text-sm">
-                      Connect
+                      اربط
                     </button>
                   </div>
                   <div className="text-xs text-muted leading-relaxed">
-                    Connect your Upload-Post account to enable one-click publishing.
+                    اربط حسابك في Upload-Post عشان تنشر بضغطة وحدة.
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <a href="https://app.upload-post.com/login" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">1. Login</span>
-                        <span className="text-xs text-muted">Register account</span>
+                        <span className="text-ink2 font-medium">1. سجّل دخول</span>
+                        <span className="text-xs text-muted">سوّ حساب</span>
                       </a>
                       <a href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">2. Profiles</span>
-                        <span className="text-xs text-muted">Create & Connect</span>
+                        <span className="text-ink2 font-medium">2. الحسابات</span>
+                        <span className="text-xs text-muted">أنشئ واربط</span>
                       </a>
                       <a href="https://app.upload-post.com/api-keys" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">3. API Key</span>
-                        <span className="text-xs text-muted">Generate key</span>
+                        <span className="text-ink2 font-medium">3. مفتاح API</span>
+                        <span className="text-xs text-muted">طلّع مفتاح</span>
                       </a>
                     </div>
                     <br />
                     <span className="text-muted">
-                      Keys are only stored in your browser. They are sent to the backend only to process your request, never stored server-side.
+                      المفاتيح محفوظة في متصفحك بس. تنرسل للسيرفر وقت معالجة طلبك فقط، وما تنحفظ عنده.
                     </span>
                   </div>
                 </div>
@@ -1700,16 +1697,15 @@ function App() {
                     <div className="w-9 h-9 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                       <Globe size={16} className="text-brass" />
                     </div>
-                    <h2 className="text-base font-medium text-ink lowercase">Video Translation</h2>
+                    <h2 className="text-base font-medium text-ink lowercase">ترجمة الفيديو</h2>
                   </div>
-                  <span className="readout">BYOK</span>
+                  <span className="readout">مفتاحك</span>
                 </div>
                 <p className="text-xs text-muted mb-6 leading-relaxed">
-                  For <strong>AI Shorts &amp; dubbing</strong> — bring your own key. Translate your clips to different
-                  languages using <strong>ElevenLabs</strong> AI dubbing (billed by ElevenLabs). Not covered by your plan.
+                  لـ <strong>شورتس AI والدبلجة</strong> — استخدم مفتاحك. ترجم مقاطعك للغات ثانية باستخدام دبلجة <strong>ElevenLabs</strong> بالذكاء الاصطناعي (التكلفة على حسابك في ElevenLabs).
                 </p>
                 <div className="space-y-4">
-                  <label className="block text-sm text-muted">ElevenLabs API Key</label>
+                  <label className="block text-sm text-muted">مفتاح ElevenLabs API</label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="password"
@@ -1728,24 +1724,24 @@ function App() {
                       }}
                       className={elevenLabsSaved ? 'badge-ok px-4' : 'btn-quiet py-2 px-4 text-sm'}
                     >
-                      {elevenLabsSaved ? <><Check size={12} /> saved</> : 'Save'}
+                      {elevenLabsSaved ? <><Check size={12} /> انحفظ</> : "حفظ"}
                     </button>
                   </div>
                   <div className="text-xs text-muted leading-relaxed">
-                    Get your API key from ElevenLabs to enable video translation.
+                    خذ مفتاحك من ElevenLabs عشان تشغّل ترجمة الفيديو.
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <a href="https://elevenlabs.io/sign-up" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">1. Sign Up</span>
-                        <span className="text-xs text-muted">Create account</span>
+                        <span className="text-ink2 font-medium">1. سجّل</span>
+                        <span className="text-xs text-muted">سوّ حساب</span>
                       </a>
                       <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">2. API Key</span>
-                        <span className="text-xs text-muted">Generate key</span>
+                        <span className="text-ink2 font-medium">2. مفتاح API</span>
+                        <span className="text-xs text-muted">طلّع مفتاح</span>
                       </a>
                     </div>
                     <br />
                     <span className="text-muted">
-                      Keys are only stored in your browser. They are sent to the backend only to process your request, never stored server-side.
+                      المفاتيح محفوظة في متصفحك بس. تنرسل للسيرفر وقت معالجة طلبك فقط، وما تنحفظ عنده.
                     </span>
                   </div>
                 </div>
@@ -1757,17 +1753,16 @@ function App() {
                     <div className="w-9 h-9 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                       <Sparkles size={16} className="text-brass" />
                     </div>
-                    <h2 className="text-base font-medium text-ink lowercase">AI Shorts (UGC Videos)</h2>
+                    <h2 className="text-base font-medium text-ink lowercase">شورتس AI (فيديوهات UGC)</h2>
                   </div>
-                  <span className="readout">BYOK</span>
+                  <span className="readout">مفتاحك</span>
                 </div>
                 <p className="text-xs text-muted mb-6 leading-relaxed">
-                  Generate UGC-style videos with AI actors for any product or business using <strong>fal.ai</strong>.
-                  <strong> Not covered by your plan</strong> — bring your own fal.ai + ElevenLabs keys (billed by those
-                  providers, ~$0.65-2 per video). Your plan still covers the AI script &amp; orchestration.
+                  سوّ فيديوهات بأسلوب UGC بممثلين AI لأي منتج أو مشروع باستخدام <strong>fal.ai</strong>.
+                  <strong> التكلفة على مزوّد الخدمة</strong> — استخدم مفاتيحك في fal.ai و ElevenLabs (التكلفة عليهم مباشرة، تقريبًا 0.65–2$ للفيديو).
                 </p>
                 <div className="space-y-4">
-                  <label className="block text-sm text-muted">fal.ai API Key</label>
+                  <label className="block text-sm text-muted">مفتاح fal.ai API</label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <input
                       type="password"
@@ -1786,24 +1781,24 @@ function App() {
                       }}
                       className={falSaved ? 'badge-ok px-4' : 'btn-quiet py-2 px-4 text-sm'}
                     >
-                      {falSaved ? <><Check size={12} /> saved</> : 'Save'}
+                      {falSaved ? <><Check size={12} /> انحفظ</> : "حفظ"}
                     </button>
                   </div>
                   <div className="text-xs text-muted leading-relaxed">
-                    Get your API key from fal.ai to enable AI actor video generation.
+                    خذ مفتاحك من fal.ai عشان تشغّل فيديوهات الممثلين AI.
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <a href="https://fal.ai/dashboard/keys" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">1. Sign Up</span>
-                        <span className="text-xs text-muted">Create fal.ai account</span>
+                        <span className="text-ink2 font-medium">1. سجّل</span>
+                        <span className="text-xs text-muted">سوّ حساب في fal.ai</span>
                       </a>
                       <a href="https://fal.ai/dashboard/keys" target="_blank" rel="noopener noreferrer" className="p-2 border border-rule rounded-input hover:bg-paper3 transition-colors flex flex-col gap-1">
-                        <span className="text-ink2 font-medium">2. API Key</span>
-                        <span className="text-xs text-muted">Generate key</span>
+                        <span className="text-ink2 font-medium">2. مفتاح API</span>
+                        <span className="text-xs text-muted">طلّع مفتاح</span>
                       </a>
                     </div>
                     <br />
                     <span className="text-muted">
-                      Keys are only stored in your browser. Sent to backend only to process requests.
+                      المفاتيح محفوظة في متصفحك بس. تنرسل للسيرفر وقت المعالجة فقط.
                     </span>
                   </div>
                 </div>
@@ -1824,13 +1819,13 @@ function App() {
                 {/* Header */}
                 <div className="space-y-3">
                   <p className="eyebrow flex items-center gap-2">
-                    <Bot size={12} /> 03 · AI AGENT · AUTONOMOUS SKILL
+                    <Bot size={12} /> 03 · وكيل AI · مهارة ذاتية
                   </p>
                   <h1 className="font-display lowercase text-3xl md:text-4xl text-ink">
-                    Your Personal Clipping Team
+                    فريق القص الخاص فيك
                   </h1>
                   <p className="text-muted text-base md:text-lg leading-relaxed max-w-2xl">
-                    Drop your videos in a folder and a team of AI clippers picks the viral moments, edits them, and queues them for your approval — like having a 24/7 short-form editing crew on autopilot.
+                    حط فيديوهاتك في مجلد، وفريق من وكلاء الذكاء الاصطناعي يختار اللحظات اللي بتنتشر، يقصّها، ويحطها بانتظار موافقتك — كأن عندك فريق مونتاج شغّال 24/7.
                   </p>
                 </div>
 
@@ -1838,9 +1833,9 @@ function App() {
                 <div className="px-4 py-3 rounded-card border border-rule bg-paper2 flex items-start gap-3">
                   <Smartphone size={18} className="text-warn shrink-0 mt-0.5" />
                   <div className="text-sm text-ink2">
-                    <p className="font-medium text-ink mb-1">Upload videos already in vertical (9:16) mobile format.</p>
+                    <p className="font-medium text-ink mb-1">ارفع فيديوهات طولية جاهزة (9:16) بمقاس الجوال.</p>
                     <p className="text-muted leading-relaxed">
-                      The agent does not reframe horizontal footage. Make sure every source video is shot or pre-cropped to mobile/portrait format before dropping it into the input folder.
+                      الوكيل ما يعيد تأطير المقاطع العرضية. تأكد إن كل فيديو مصوّر أو مقصوص طولي قبل ما تحطه في مجلد الإدخال.
                     </p>
                   </div>
                 </div>
@@ -1851,9 +1846,9 @@ function App() {
                     <div className="w-10 h-10 rounded-input bg-paper3 flex items-center justify-center">
                       <Upload size={18} className="text-brass" />
                     </div>
-                    <h3 className="font-medium text-ink lowercase">1. Drop your videos</h3>
+                    <h3 className="font-medium text-ink lowercase">1. حط فيديوهاتك</h3>
                     <p className="text-xs text-muted leading-relaxed">
-                      Put your long-form vertical footage in the watched folder. The skill picks one video per run.
+                      حط فيديوهاتك الطويلة الطولية في المجلد المراقَب. المهارة تاخذ فيديو واحد كل مرة.
                     </p>
                   </div>
 
@@ -1861,9 +1856,9 @@ function App() {
                     <div className="w-10 h-10 rounded-input bg-paper3 flex items-center justify-center">
                       <Users size={18} className="text-brass" />
                     </div>
-                    <h3 className="font-medium text-ink lowercase">2. AI clippers work</h3>
+                    <h3 className="font-medium text-ink lowercase">2. وكلاء القص يشتغلون</h3>
                     <p className="text-xs text-muted leading-relaxed">
-                      Whisper transcribes, Gemini 3 Flash spots viral beats, FFmpeg cuts each clip and adds a hook overlay.
+                      Whisper يفرّغ الكلام، و Gemini 3 Flash يلقط اللحظات القوية، و FFmpeg يقص كل مقطع ويحط عليه نص الجذب.
                     </p>
                   </div>
 
@@ -1871,9 +1866,9 @@ function App() {
                     <div className="w-10 h-10 rounded-input bg-paper3 flex items-center justify-center">
                       <CheckCircle2 size={18} className="text-brass" />
                     </div>
-                    <h3 className="font-medium text-ink lowercase">3. You validate, it ships</h3>
+                    <h3 className="font-medium text-ink lowercase">3. توافق أنت، وهو ينشر</h3>
                     <p className="text-xs text-muted leading-relaxed">
-                      Approve the candidates you like and the skill auto-publishes them to TikTok, Reels and YouTube Shorts via Upload-Post.
+                      وافق على المقاطع اللي تعجبك والمهارة تنشرها تلقائيًا على تيك توك وريلز ويوتيوب شورتس عن طريق Upload-Post.
                     </p>
                   </div>
                 </div>
@@ -1884,7 +1879,7 @@ function App() {
                     <div>
                       <h2 className="font-display lowercase text-xl text-ink mb-1">skill-autoshorts</h2>
                       <p className="text-sm text-muted">
-                        The Claude Code skill that powers this workflow. Install it once and trigger it whenever you want a fresh batch of clips.
+                        مهارة Claude Code اللي تشغّل هالسير. ركّبها مرة وحدة وشغّلها متى ما بغيت دفعة مقاطع جديدة.
                       </p>
                     </div>
                     <a
@@ -1893,7 +1888,7 @@ function App() {
                       rel="noopener noreferrer"
                       className="btn-primary py-2 px-4 text-sm shrink-0"
                     >
-                      View on GitHub <ExternalLink size={14} />
+                      شوفه على GitHub <ExternalLink size={14} />
                     </a>
                   </div>
 
@@ -1902,7 +1897,7 @@ function App() {
                     <button
                       onClick={() => navigator.clipboard.writeText('git clone https://github.com/mutonby/skill-autoshorts')}
                       className="text-muted hover:text-ink transition-colors shrink-0"
-                      title="Copy"
+                      title="نسخ"
                     >
                       <Copy size={14} />
                     </button>
@@ -1911,19 +1906,19 @@ function App() {
                   <div className="grid sm:grid-cols-2 gap-3 text-sm">
                     <div className="flex items-start gap-2 text-ink2">
                       <Check size={16} className="text-brass shrink-0 mt-0.5" />
-                      <span>Daily batch — picks one long video per run</span>
+                      <span>دفعة يومية — فيديو طويل واحد كل مرة</span>
                     </div>
                     <div className="flex items-start gap-2 text-ink2">
                       <Check size={16} className="text-brass shrink-0 mt-0.5" />
-                      <span>Whisper transcription with word-level timing</span>
+                      <span>تفريغ Whisper بتوقيت لكل كلمة</span>
                     </div>
                     <div className="flex items-start gap-2 text-ink2">
                       <Check size={16} className="text-brass shrink-0 mt-0.5" />
-                      <span>Gemini 3 Flash multimodal moment detection</span>
+                      <span>كشف اللحظات بـ Gemini 3 Flash متعدد الوسائط</span>
                     </div>
                     <div className="flex items-start gap-2 text-ink2">
                       <Check size={16} className="text-brass shrink-0 mt-0.5" />
-                      <span>Auto-publish to TikTok, Reels & YouTube Shorts</span>
+                      <span>نشر تلقائي على تيك توك وريلز ويوتيوب شورتس</span>
                     </div>
                   </div>
                 </div>
@@ -1954,12 +1949,11 @@ function App() {
                 ) : (
                   <div className="max-w-2xl mx-auto card p-8 text-center">
                     <Rocket size={28} className="mx-auto mb-4 text-brass" />
-                    <h1 className="font-display lowercase text-2xl text-ink mb-2">your channel, clipped on its own</h1>
+                    <h1 className="font-display lowercase text-2xl text-ink mb-2">قناتك تتقص لحالها</h1>
                     <p className="text-muted text-sm mb-6">
-                      Connect your YouTube channel and every new video turns into shorts automatically.
-                      Sign in to set it up.
+                      اربط قناتك في يوتيوب وكل فيديو جديد يتحول لشورتس تلقائيًا. سجّل دخول عشان تضبطه.
                     </p>
-                    <button onClick={() => setShowLogin(true)} className="btn-primary">sign in</button>
+                    <button onClick={() => setShowLogin(true)} className="btn-primary">سجّل دخول</button>
                   </div>
                 )}
               </div>
@@ -2004,24 +1998,24 @@ function App() {
                   eyebrow, the display size and the gaps all shrink first. */}
               <div className="max-w-xl w-full text-center space-y-5 sm:space-y-8">
                 <div className="space-y-2.5 sm:space-y-4">
-                  <p className="eyebrow hidden sm:block">01 · CLIP GENERATOR</p>
+                  <p className="eyebrow hidden sm:block">01 · مولّد المقاطع</p>
                   <h1 className="font-display lowercase text-3xl sm:text-4xl md:text-5xl text-ink">
-                    Create Viral Shorts
+                    طلّع شورتس تنتشر
                   </h1>
                   <p className="text-muted text-[15px] sm:text-lg leading-snug sm:leading-normal max-w-sm sm:max-w-none mx-auto">
-                    Drop your long-form video below to instantly generate viral clips with AI.
+                    حط فيديوك الطويل تحت وطلّع منه مقاطع جاهزة بالذكاء الاصطناعي.
                   </p>
                   {/* The same pipeline is an MCP server: point people at the
                       one place that explains how to drive it from an agent. */}
                   {!tutorialLock && (
                   <p className="text-xs text-muted">
-                    Or let an agent do it:{' '}
+                    أو خلّ وكيل يسويها عنك:{' '}
                     <a
                       href={billingEnabled ? '#/account' : '#app'}
                       onClick={(e) => { if (!billingEnabled) { e.preventDefault(); goToTab('settings'); } }}
                       className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors"
                     >
-                      connect Claude, ChatGPT or n8n →
+                      اربط Claude أو ChatGPT أو n8n ←
                     </a>
                   </p>
                   )}
@@ -2048,7 +2042,7 @@ function App() {
                 <div className="mb-4 sm:mb-6 flex items-center justify-between gap-2">
                   <h2 className="text-sm font-medium text-ink lowercase flex items-center gap-2">
                     <Activity className={`text-brass ${status === 'processing' ? 'animate-pulse' : ''}`} size={18} />
-                    Live Analysis
+                    تحليل مباشر
                   </h2>
                   <span className={status === 'processing' ? 'badge-brass' :
                     status === 'complete' ? 'badge-ok' :
@@ -2063,10 +2057,10 @@ function App() {
                 {status === 'processing' && partialJob && plan === 'free' && isManaged && (
                   <button
                     onClick={() => openUpsell({ source: 'partial_processing', partialJob })}
-                    className="mb-4 w-full text-left rounded-card border border-brass/40 bg-brass/5 px-4 py-3 text-sm hover:border-brass transition-colors"
+                    className="mb-4 w-full text-start rounded-card border border-brass/40 bg-brass/5 px-4 py-3 text-sm hover:border-brass transition-colors"
                   >
-                    <span className="text-ink">Clipping the first {partialJob.processed_minutes} of {partialJob.total_minutes} minutes with your free minutes.</span>{' '}
-                    <span className="text-brass font-medium">Clip the whole video →</span>
+                    <span className="text-ink">نقص أول {partialJob.processed_minutes} من {partialJob.total_minutes} دقيقة.</span>{' '}
+                    <span className="text-brass font-medium">قص الفيديو كامل ←</span>
                   </button>
                 )}
 
@@ -2076,15 +2070,15 @@ function App() {
                   <div className="mb-4 rounded-card border border-brass/40 bg-brass/5 px-4 py-3 text-sm">
                     <p className="text-ink">
                       {queueInfo.ahead === 0
-                        ? 'You are next in line. Starting in a moment…'
-                        : <>You are <b>#{queueInfo.position}</b> in line · about <b>{Math.max(1, Math.round(queueInfo.eta_seconds / 60))} min</b></>}
+                        ? "دورك الجاي. بنبدأ بعد شوي…"
+                        : <>ترتيبك <b>#{queueInfo.position}</b> في الطابور · تقريبًا <b>{Math.max(1, Math.round(queueInfo.eta_seconds / 60))} دقيقة</b></>}
                     </p>
                     {billingEnabled && !['starter', 'creator', 'pro'].includes(plan) && queueInfo.ahead > 0 && (
                       <button
                         onClick={() => { track('QueueUpsellClick', { props: { position: String(queueInfo.position) } }); if (isManaged) openUpsell({ source: 'queue' }); else setShowPlanChoice(true); }}
                         className="mt-2 text-xs lowercase text-brass hover:underline"
                       >
-                        paid plans skip the line →
+                        تخطّى الطابور ←
                       </button>
                     )}
                   </div>
@@ -2109,7 +2103,7 @@ function App() {
                   <div className="sm:hidden mb-3 flex items-start gap-2 text-xs text-ink2 min-w-0">
                     <Loader2 size={14} className="animate-spin text-brass shrink-0 mt-px" />
                     <span className="min-w-0 leading-snug break-words">
-                      {logs.length ? logs[logs.length - 1] : 'starting up…'}
+                      {logs.length ? logs[logs.length - 1] : "جاري التشغيل…"}
                     </span>
                   </div>
                 )}
@@ -2118,7 +2112,7 @@ function App() {
                     with nothing to do, so this is where the one star ask goes. */}
                 {status === 'processing' && (
                   <div className="my-3">
-                    <StarBanner message="Got a minute while this renders?" />
+                    <StarBanner message="عندك دقيقة وهو يجهّز؟" />
                   </div>
                 )}
 
@@ -2128,10 +2122,10 @@ function App() {
                     type="button"
                     onClick={() => setLogsVisible(!logsVisible)}
                     aria-expanded={logsVisible}
-                    className="w-full px-3.5 sm:px-4 py-2.5 border-b border-rule flex items-center justify-between gap-2 bg-paper2 shrink-0 text-left"
+                    className="w-full px-3.5 sm:px-4 py-2.5 border-b border-rule flex items-center justify-between gap-2 bg-paper2 shrink-0 text-start"
                   >
                     <span className="readout flex items-center gap-2">
-                      <Terminal size={12} /> System Logs
+                      <Terminal size={12} /> سجل النظام
                     </span>
                     <span className="flex items-center gap-2 text-muted">
                       {!logsVisible && logs.length > 0 && (
@@ -2165,14 +2159,14 @@ function App() {
                     "schedule week" pill under the title on a phone. */}
                 <div className="mb-4 sm:mb-6 shrink-0 space-y-3">
                   <h2 className="font-display lowercase text-lg sm:text-xl text-ink flex flex-wrap items-center gap-2">
-                    <span className="mr-auto">Generated Shorts</span>
+                    <span className="me-auto">الشورتس الجاهزة</span>
                     {results?.clips?.length > 0 && (
                       <span className="readout bg-paper3 px-2.5 py-1 rounded-full">
-                        {results.clips.length} Clips
+                        {results.clips.length} مقاطع
                       </span>
                     )}
                     {results?.cost_analysis && !isManaged && (
-                      <span className="readout bg-paper3 px-2.5 py-1 rounded-full" title={`Input: ${results.cost_analysis.input_tokens} | Output: ${results.cost_analysis.output_tokens}`}>
+                      <span className="readout bg-paper3 px-2.5 py-1 rounded-full" title={`المدخلات: ${results.cost_analysis.input_tokens} | المخرجات: ${results.cost_analysis.output_tokens}`}>
                         GEMINI · ${results.cost_analysis.total_cost.toFixed(5)}
                       </span>
                     )}
@@ -2183,11 +2177,11 @@ function App() {
                         onClick={handleDownloadAll}
                         disabled={downloadingAll}
                         className="btn-ghost px-3 py-2 text-xs"
-                        title="Download all clips as a ZIP"
+                        title="نزّل كل المقاطع كملف ZIP"
                       >
                         {downloadingAll
-                          ? <><Loader2 size={14} className="animate-spin" />zipping…</>
-                          : <><Download size={14} />download all</>}
+                          ? <><Loader2 size={14} className="animate-spin" />جاري الضغط…</>
+                          : <><Download size={14} />نزّل الكل</>}
                       </button>
                       {results.clips.length > 1 && (
                         <button
@@ -2195,7 +2189,7 @@ function App() {
                           className="btn-primary px-4 py-2 text-xs"
                         >
                           <Calendar size={14} />
-                          schedule week
+                          جدول الأسبوع
                         </button>
                       )}
                     </div>
@@ -2209,10 +2203,10 @@ function App() {
                     {partialJob && (
                       <button
                         onClick={() => openUpsell({ source: 'partial_banner', partialJob })}
-                        className="w-full text-left px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
+                        className="w-full text-start px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
                       >
-                        <span className="text-ink">These clips come from the first {partialJob.processed_minutes} of {partialJob.total_minutes} minutes.</span>{' '}
-                        <span className="text-brass font-medium">Clip the whole video →</span>
+                        <span className="text-ink">هالمقاطع من أول {partialJob.processed_minutes} من {partialJob.total_minutes} دقيقة.</span>{' '}
+                        <span className="text-brass font-medium">قص الفيديو كامل ←</span>
                       </button>
                     )}
                     {/* Peak-moment upsell: they just SAW their clips — sell while
@@ -2220,21 +2214,21 @@ function App() {
                     {firstVideoJob && !partialJob && (
                       <button
                         onClick={() => openUpsell({ source: 'first_video_banner' })}
-                        className="w-full text-left px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
+                        className="w-full text-start px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
                       >
-                        <span className="text-ink">Your first video is on us: we clipped all of it.</span>{' '}
-                        <span className="text-muted">That used this month's free minutes.</span>{' '}
-                        <span className="text-brass font-medium">Keep clipping →</span>
+                        <span className="text-ink">قصّينا الفيديو كامل.</span>{' '}
+                        <span className="text-muted"></span>{' '}
+                        <span className="text-brass font-medium">كمّل القص ←</span>
                       </button>
                     )}
                     {plan === 'free' && !partialJob && !firstVideoJob && (
                       <button
                         onClick={() => openUpsell({ source: 'results_banner' })}
-                        className="w-full text-left px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
+                        className="w-full text-start px-3 py-2.5 rounded-input bg-paper3 border border-brass/40 hover:border-brass text-sm transition-colors"
                       >
-                        <span className="text-ink">Like these clips?</span>{' '}
-                        <span className="text-muted">Upgrade and these exact clips lose the watermark on the spot, and stay for good.</span>{' '}
-                        <span className="text-brass font-medium">Remove the watermark →</span>
+                        <span className="text-ink">عجبتك المقاطع؟</span>{' '}
+                        <span className="text-muted">نزّلها وانشرها على راحتك.</span>{' '}
+                        <span className="text-brass font-medium">كمّل ←</span>
                       </button>
                     )}
                     {/* Distribution nudge at the same peak: clips on screen,
@@ -2244,8 +2238,8 @@ function App() {
                       <div className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-3 py-2.5 rounded-input bg-paper3 border border-rule text-sm">
                         <div className="flex items-start gap-3 flex-1 min-w-0">
                           <div className="min-w-0 leading-relaxed">
-                            <span className="text-ink">Publish these clips straight from here.</span>{' '}
-                            <span className="text-muted">Connect your YouTube, TikTok or Instagram once — after that every clip is one click from posted.</span>
+                            <span className="text-ink">انشر هالمقاطع من هنا على طول.</span>{' '}
+                            <span className="text-muted">اربط يوتيوب أو تيك توك أو إنستقرام مرة وحدة — وبعدها كل مقطع ينشر بضغطة.</span>
                           </div>
                           {/* On a phone the dismiss X rides the copy, so the CTA
                               below can run the full width of the card. */}
@@ -2255,7 +2249,7 @@ function App() {
                               setSocialNudgeDismissed(true);
                               try { localStorage.setItem('os_social_nudge_dismissed', '1'); } catch (_) { /* ignore */ }
                             }}
-                            aria-label="dismiss"
+                            aria-label="إخفاء"
                             className="sm:hidden shrink-0 -m-1 p-1 text-muted hover:text-ink"
                           >
                             <X size={16} />
@@ -2265,7 +2259,7 @@ function App() {
                           onClick={() => { track('SocialNudgeConnect'); handleConnectSocials(); }}
                           className="btn-quiet shrink-0 text-xs py-1.5 px-3 lowercase w-full sm:w-auto"
                         >
-                          connect socials →
+                          اربط حساباتك ←
                         </button>
                         <button
                           onClick={() => {
@@ -2273,7 +2267,7 @@ function App() {
                             setSocialNudgeDismissed(true);
                             try { localStorage.setItem('os_social_nudge_dismissed', '1'); } catch (_) { /* ignore */ }
                           }}
-                          aria-label="dismiss"
+                          aria-label="إخفاء"
                           className="hidden sm:block shrink-0 p-1 text-muted hover:text-ink"
                         >
                           <X size={14} />
@@ -2284,8 +2278,8 @@ function App() {
                         here they really are gone once the retention sweep runs. */}
                     {!billingEnabled && jobRetentionSeconds > 0 && (
                       <div className="px-3 py-2.5 rounded-input bg-paper3 border border-paper3 text-sm">
-                        <span className="text-ink">Clips are kept for {formatRetention(jobRetentionSeconds)}, then deleted.</span>{' '}
-                        <span className="text-muted">Download what you want to keep, or raise JOB_RETENTION_SECONDS in your env.</span>
+                        <span className="text-ink">المقاطع تنحفظ لمدة {formatRetention(jobRetentionSeconds)}، وبعدها تنحذف.</span>{' '}
+                        <span className="text-muted">نزّل اللي تبي تحتفظ فيه، أو زِد قيمة JOB_RETENTION_SECONDS في إعدادات السيرفر.</span>
                       </div>
                     )}
                   </div>
@@ -2325,14 +2319,14 @@ function App() {
                     status === 'processing' ? (
                       <div className="h-full min-h-[140px] flex flex-col items-center justify-center text-muted space-y-3 text-center px-4">
                         <Loader2 size={28} className="animate-spin text-brass" />
-                        <p className="text-sm lowercase">Waiting for clips...</p>
+                        <p className="text-sm lowercase">ننتظر المقاطع...</p>
                         <p className="text-xs text-muted/80 max-w-[26ch] leading-snug">
-                          They appear here one by one as each finishes rendering.
+                          بتطلع هنا وحدة وحدة أول ما يخلص تجهيز كل مقطع.
                         </p>
                       </div>
                     ) : status === 'error' ? (
                       <div className="h-full min-h-[120px] flex flex-col items-center justify-center text-danger space-y-2">
-                        <p>Generation failed.</p>
+                        <p>فشل التوليد.</p>
                       </div>
                     ) : null
                   )}
@@ -2354,51 +2348,51 @@ function App() {
       <Modal
         isOpen={showKeyModal}
         onClose={() => setShowKeyModal(false)}
-        eyebrow="SETUP"
+        eyebrow="الإعداد"
         title={!geminiOk && !uploadPostKey
-          ? 'Required API Keys Missing'
+          ? "مفاتيح API مطلوبة ناقصة"
           : !geminiOk
-            ? 'Gemini API Key Required'
-            : 'Upload-Post API Key Required'}
+            ? "مفتاح Gemini مطلوب"
+            : "مفتاح Upload-Post مطلوب"}
         footer={
           <div className="flex gap-3">
             <button
               onClick={() => setShowKeyModal(false)}
               className="btn-ghost flex-1 px-4 py-2 text-sm"
             >
-              Cancel
+              إلغاء
             </button>
             <button
               onClick={() => { setShowKeyModal(false); goToTab('settings'); }}
               className="btn-primary flex-1 px-4 py-2 text-sm"
             >
-              Go to Settings
+              روح للإعدادات
             </button>
           </div>
         }
       >
         <div className="space-y-4">
           <p className="text-sm text-muted">
-            OpenShorts needs both a <strong className="text-ink2">Gemini</strong> API key and an <strong className="text-ink2">Upload-Post</strong> API key. Both have free tiers.
+            OpenShorts يحتاج مفتاح <strong className="text-ink2">Gemini</strong> ومفتاح <strong className="text-ink2">Upload-Post</strong> . الاثنين لهم باقة مجانية.
           </p>
 
           {/* Gemini block */}
           <div className={`rounded-input p-4 space-y-2 border ${!apiKey ? 'border-rule2' : 'border-rule opacity-70'}`}>
             <p className="text-xs font-medium text-ink flex items-center gap-2">
               {apiKey ? <Check size={12} className="text-ok" /> : <AlertTriangle size={12} className="text-warn" />}
-              Gemini API Key {apiKey && <span className="text-ok">— set</span>}
+              مفتاح Gemini API {apiKey && <span className="text-ok">— مضبوط</span>}
             </p>
             {!apiKey && (
               <>
                 <ol className="text-xs text-muted space-y-1 list-decimal list-inside">
-                  <li>Go to <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-brass underline">aistudio.google.com/app/apikey</a></li>
-                  <li>Sign in with your Google account</li>
-                  <li>Click "Create API Key"</li>
-                  <li>Copy the key and paste it below</li>
+                  <li>روح على <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-brass underline">aistudio.google.com/app/apikey</a></li>
+                  <li>سجّل دخول بحساب قوقل</li>
+                  <li>اضغط "Create API Key"</li>
+                  <li>انسخ المفتاح وحطه تحت</li>
                 </ol>
                 <input
                   type="text"
-                  placeholder="Paste your Gemini API key here..."
+                  placeholder="حط مفتاح Gemini هنا..."
                   className="input-field"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && e.target.value.trim()) {
@@ -2414,22 +2408,22 @@ function App() {
           <div className={`rounded-input p-4 space-y-2 border ${!uploadPostKey ? 'border-rule2' : 'border-rule opacity-70'}`}>
             <p className="text-xs font-medium text-ink flex items-center gap-2">
               {uploadPostKey ? <Check size={12} className="text-ok" /> : <AlertTriangle size={12} className="text-warn" />}
-              Upload-Post API Key {uploadPostKey && <span className="text-ok">— set</span>}
+              مفتاح Upload-Post API {uploadPostKey && <span className="text-ok">— مضبوط</span>}
             </p>
             {!uploadPostKey && (
               <>
                 <p className="text-xs text-muted">
-                  Required to publish your clips to TikTok, Instagram Reels, and YouTube Shorts. Free tier available, no credit card needed.
+                  تحتاجه عشان تنشر مقاطعك على تيك توك وريلز إنستقرام ويوتيوب شورتس. فيه باقة مجانية بدون بطاقة.
                 </p>
                 <ol className="text-xs text-muted space-y-1 list-decimal list-inside">
-                  <li>Register at <a href="https://app.upload-post.com/login" target="_blank" rel="noopener noreferrer" className="text-brass underline">app.upload-post.com</a></li>
-                  <li>Connect your TikTok, Instagram, or YouTube accounts</li>
-                  <li>Go to <a href="https://app.upload-post.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-brass underline">API Keys</a> and generate one</li>
-                  <li>Paste it below</li>
+                  <li>سجّل في <a href="https://app.upload-post.com/login" target="_blank" rel="noopener noreferrer" className="text-brass underline">app.upload-post.com</a></li>
+                  <li>اربط حساباتك في تيك توك أو إنستقرام أو يوتيوب</li>
+                  <li>روح على <a href="https://app.upload-post.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-brass underline">API Keys</a> وطلّع مفتاح</li>
+                  <li>حطه تحت</li>
                 </ol>
                 <input
                   type="text"
-                  placeholder="Paste your Upload-Post API key here..."
+                  placeholder="حط مفتاح Upload-Post هنا..."
                   className="input-field"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && e.target.value.trim()) {
@@ -2455,24 +2449,23 @@ function App() {
 
       {/* Pre-flight quality gate */}
       {qualityGate && (
-        <Modal isOpen={true} onClose={() => setQualityGate(null)} size="md" eyebrow="HEADS UP" title="low source quality">
+        <Modal isOpen={true} onClose={() => setQualityGate(null)} size="md" eyebrow="انتبه" title="جودة المصدر ضعيفة">
           <div className="space-y-4">
             <p className="text-sm text-ink2">
-              YouTube only offers <span className="text-brass font-semibold">{qualityGate.info.max_height}p</span> for this video
-              (below the {qualityGate.info.min_height}p we recommend). Processing anyway will produce lower-quality clips.
+              يوتيوب يعطي بس <span className="text-brass font-semibold">{qualityGate.info.max_height}p</span> لهالفيديو (أقل من {qualityGate.info.min_height}p اللي ننصح فيها). لو كمّلت بتطلع المقاطع بجودة أقل.
             </p>
             {qualityGate.info.cookies_invalid && (
               <p className="text-xs text-muted">
-                Your YouTube cookies look expired — refreshing them (export again from an incognito window) often unlocks HD.
+                كوكيز يوتيوب شكلها منتهية — حدّثها (صدّرها من جديد من نافذة تصفح خفي) وغالبًا تفتح لك جودة HD.
               </p>
             )}
             <div className="flex gap-2 justify-end pt-2">
-              <button onClick={() => setQualityGate(null)} className="btn-ghost">cancel</button>
+              <button onClick={() => setQualityGate(null)} className="btn-ghost">إلغاء</button>
               <button
                 onClick={() => { const d = qualityGate.data; setQualityGate(null); handleProcess(d, true); }}
                 className="btn-primary"
               >
-                process anyway
+                كمّل على كذا
               </button>
             </div>
           </div>

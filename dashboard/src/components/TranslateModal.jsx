@@ -3,37 +3,37 @@ import { Loader2, Languages, AlertCircle } from 'lucide-react';
 import Modal from './ui/Modal';
 
 const LANGUAGES = {
-    "es": "Spanish",
-    "fr": "French",
-    "de": "German",
-    "it": "Italian",
-    "pt": "Portuguese",
-    "pl": "Polish",
-    "hi": "Hindi",
-    "ja": "Japanese",
-    "ko": "Korean",
-    "zh": "Chinese",
-    "ar": "Arabic",
-    "ru": "Russian",
-    "tr": "Turkish",
-    "nl": "Dutch",
-    "sv": "Swedish",
-    "id": "Indonesian",
-    "fil": "Filipino",
-    "ms": "Malay",
-    "vi": "Vietnamese",
-    "th": "Thai",
-    "uk": "Ukrainian",
-    "el": "Greek",
-    "cs": "Czech",
-    "fi": "Finnish",
-    "ro": "Romanian",
-    "da": "Danish",
-    "bg": "Bulgarian",
-    "hr": "Croatian",
-    "sk": "Slovak",
-    "ta": "Tamil",
-    "en": "English",
+    "es": "الإسبانية",
+    "fr": "الفرنسية",
+    "de": "الألمانية",
+    "it": "الإيطالية",
+    "pt": "البرتغالية",
+    "pl": "البولندية",
+    "hi": "الهندية",
+    "ja": "اليابانية",
+    "ko": "الكورية",
+    "zh": "الصينية",
+    "ar": "العربية",
+    "ru": "الروسية",
+    "tr": "التركية",
+    "nl": "الهولندية",
+    "sv": "السويدية",
+    "id": "الإندونيسية",
+    "fil": "الفلبينية",
+    "ms": "الملايوية",
+    "vi": "الفيتنامية",
+    "th": "التايلندية",
+    "uk": "الأوكرانية",
+    "el": "اليونانية",
+    "cs": "التشيكية",
+    "fi": "الفنلندية",
+    "ro": "الرومانية",
+    "da": "الدنماركية",
+    "bg": "البلغارية",
+    "hr": "الكرواتية",
+    "sk": "السلوفاكية",
+    "ta": "التاميلية",
+    "en": "الإنجليزية",
 };
 
 export default function TranslateModal({ isOpen, onClose, onTranslate, isProcessing, videoUrl, hasApiKey }) {
@@ -50,8 +50,8 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
         <Modal
             isOpen={isOpen}
             onClose={isProcessing ? undefined : onClose}
-            eyebrow="DUB"
-            title="dub voice"
+            eyebrow="الدبلجة"
+            title="دبلج الصوت"
             size="md"
             footer={
                 <div className="flex gap-3">
@@ -60,7 +60,7 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
                         disabled={isProcessing}
                         className="btn-ghost flex-1"
                     >
-                        Cancel
+                        إلغاء
                     </button>
                     <button
                         onClick={handleSubmit}
@@ -70,12 +70,12 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
                         {isProcessing ? (
                             <>
                                 <Loader2 size={16} className="animate-spin" />
-                                Dubbing...
+                                جاري الدبلجة...
                             </>
                         ) : (
                             <>
                                 <Languages size={16} />
-                                Dub Voice
+                                دبلج الصوت
                             </>
                         )}
                     </button>
@@ -86,13 +86,13 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
                 <div className="w-10 h-10 rounded-input bg-paper3 flex items-center justify-center shrink-0">
                     <Languages size={18} className="text-brass" />
                 </div>
-                <p className="text-xs text-muted">AI voice translation by ElevenLabs</p>
+                <p className="text-xs text-muted">ترجمة صوتية بالذكاء الاصطناعي من ElevenLabs</p>
             </div>
 
             {!hasApiKey && (
                 <div className="mb-4 flex items-start gap-2">
-                    <span className="badge-warn shrink-0"><AlertCircle size={12} /> key missing</span>
-                    <p className="text-sm text-muted">Configure ElevenLabs API Key in Settings first.</p>
+                    <span className="badge-warn shrink-0"><AlertCircle size={12} /> المفتاح ناقص</span>
+                    <p className="text-sm text-muted">اضبط مفتاح ElevenLabs من الإعدادات أول.</p>
                 </div>
             )}
 
@@ -109,7 +109,7 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
             {/* Language Selection */}
             <div className="mb-5">
                 <label className="eyebrow block mb-2">
-                    Target Language
+                    اللغة المطلوبة
                 </label>
                 <select
                     value={targetLanguage}
@@ -127,14 +127,14 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
 
             {/* Info */}
             <p className="text-xs text-muted leading-relaxed mb-2">
-                The audio will be dubbed with AI-generated voice in the selected language, matching the original speaker's characteristics.
+                الصوت بيتدبلج بصوت مولّد بالذكاء الاصطناعي باللغة اللي اخترتها، وبنفس طابع صوت المتحدث الأصلي.
             </p>
 
             {/* AI Act art. 50: we mark the file, the person publishing it is the
                 one who owes the audience the disclosure. Saying so here is the
                 only place they will read it. */}
             <p className="text-xs text-muted leading-relaxed mb-2">
-                The dubbed file is tagged as AI-generated content. When you publish it, disclose that the voice is synthetic.
+                الملف المدبلج عليه علامة إنه محتوى مولّد بالذكاء الاصطناعي. لما تنشره، وضّح إن الصوت اصطناعي.
             </p>
 
             {/* Processing State */}
@@ -143,8 +143,8 @@ export default function TranslateModal({ isOpen, onClose, onTranslate, isProcess
                     <div className="flex items-center gap-3">
                         <Loader2 size={18} className="text-brass animate-spin" />
                         <div>
-                            <p className="text-sm text-ink font-medium lowercase">Dubbing audio...</p>
-                            <p className="text-xs text-muted lowercase">This may take a few minutes</p>
+                            <p className="text-sm text-ink font-medium lowercase">جاري دبلجة الصوت...</p>
+                            <p className="text-xs text-muted lowercase">ممكن ياخذ كم دقيقة</p>
                         </div>
                     </div>
                 </div>

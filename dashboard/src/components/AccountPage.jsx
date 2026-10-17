@@ -196,14 +196,14 @@ export default function AccountPage() {
           </div>
           <div className="flex justify-between text-sm pt-2 border-t border-rule">
             <span className="text-ink font-medium lowercase">Total remaining</span>
-            <span className="text-brass font-medium">{fmt1(m.remaining)} min</span>
+            <span className="text-brass font-medium">{fmt1(m.remaining)} دقيقة</span>
           </div>
         </div>
 
         {/* Our own cancel flow (reason + review + retention offer). The portal
             cannot cancel (turned off in Stripe), so this is the only way out. */}
         {me.has_billing_account && CANCELLABLE_STATES.includes(me.status) && !me.cancel_at_period_end && (
-          <div className="pt-4 mt-4 border-t border-rule text-right">
+          <div className="pt-4 mt-4 border-t border-rule text-end">
             <button onClick={() => { track('CancelFlowOpened', { props: { plan } }); setCancelOpen(true); }}
                     className="text-xs text-muted underline underline-offset-2 hover:text-ink">
               Cancel subscription
@@ -241,8 +241,8 @@ export default function AccountPage() {
           <div className="grid grid-cols-2 gap-3">
             {topups.map((t) => (
               <button key={t.price_id} onClick={() => buyTopup(t.price_id)} disabled={busy}
-                className="border border-rule hover:border-brass rounded-card p-4 text-left transition-colors disabled:opacity-50">
-                <div className="text-ink font-medium">+{t.minutes} min</div>
+                className="border border-rule hover:border-brass rounded-card p-4 text-start transition-colors disabled:opacity-50">
+                <div className="text-ink font-medium">+{t.minutes} دقيقة</div>
                 <div className="readout mt-1">
                   {new Intl.NumberFormat('en-US', { style: 'currency', currency: (t.currency || 'usd').toUpperCase(), maximumFractionDigits: 0 }).format((t.amount || 0) / 100)}
                 </div>

@@ -11,7 +11,7 @@ import { Check } from 'lucide-react';
  */
 export default function StepIndicator({ steps, current, onStepClick }) {
   return (
-    <ol className="flex items-center w-full" aria-label="progress">
+    <ol className="flex items-center w-full" aria-label="التقدّم">
       {steps.map((label, i) => {
         const done = i < current;
         const active = i === current;

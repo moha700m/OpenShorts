@@ -65,7 +65,7 @@ export default function ApiKeysCard() {
           <div className="flex items-center gap-2">
             <code className="readout flex-1 break-all select-all">{freshKey.key}</code>
             <button onClick={copyKey} className="btn-ghost px-3 py-1.5 shrink-0">
-              {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy'}
+              {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? "انتسخ" : "نسخ"}
             </button>
           </div>
         </div>

@@ -32,7 +32,7 @@ export default function ProfileMenu({ onUpgrade = null }) {
       </button>
 
       {open && (
-        <div className="card absolute right-0 top-full mt-2 w-56 z-30 shadow-none overflow-hidden animate-fade">
+        <div className="card absolute end-0 top-full mt-2 w-56 z-30 shadow-none overflow-hidden animate-fade">
           <div className="px-4 py-3 border-b border-rule">
             <p className="eyebrow">Signed in as</p>
             <p className="text-sm text-ink truncate mt-0.5" title={user.email}>{user.email}</p>

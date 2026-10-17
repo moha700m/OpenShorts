@@ -157,7 +157,7 @@ export default function CancelPlanModal({ plan, periodEnd, onClose, onCanceled }
           </div>
           {reason && (
             <label className="block">
-              <span className="text-sm text-muted">{DETAIL_PROMPT[reason] || 'Anything else we should know?'} (optional)</span>
+              <span className="text-sm text-muted">{DETAIL_PROMPT[reason] || 'Anything else we should know?'} (اختياري)</span>
               <textarea value={details} onChange={(e) => setDetails(e.target.value)} maxLength={2000} rows={3}
                         className="input-field w-full text-sm mt-1" />
             </label>
@@ -193,7 +193,7 @@ export default function CancelPlanModal({ plan, periodEnd, onClose, onCanceled }
             </label>
           )}
           <div className="flex items-center justify-between gap-2 pt-1">
-            <button onClick={() => setStep(0)} className="btn-quiet">Back</button>
+            <button onClick={() => setStep(0)} className="btn-quiet">رجوع</button>
             <button onClick={() => setStep(2)} disabled={!rating} className="btn-ghost px-4 py-2">Continue</button>
           </div>
         </div>

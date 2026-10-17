@@ -73,11 +73,9 @@ export default function WatermarkModal({ onClose, onContinue, onUpgrade, preview
   const src = previewSrc && !previewFailed ? previewSrc : '/demo/clip-vertical.mp4';
 
   return (
-    <Modal isOpen onClose={() => close(false)} eyebrow="FREE PLAN" title="Want the watermark off?" size="md">
+    <Modal isOpen onClose={() => close(false)} eyebrow="الباقة المجانية" title="تبي تشيل العلامة المائية؟" size="md">
       <p className="text-muted text-sm mb-4">
-        Clips on the free plan carry the OpenShorts mark and are deleted after 7 days.
-        Upgrade and <b className="text-ink font-medium">these exact clips lose the mark on the spot</b>,
-        no re-render, and stay in your library for good.
+        مقاطع الباقة المجانية عليها علامة OpenShorts وتنحذف بعد 7 أيام. رقّ باقتك و <b className="text-ink font-medium">هالمقاطع نفسها تنشال منها العلامة على طول</b>، بدون إعادة تصدير، وتبقى في مكتبتك على طول.
       </p>
 
       <div className="rounded-card border border-rule overflow-hidden bg-paper mb-5">
@@ -101,14 +99,14 @@ export default function WatermarkModal({ onClose, onContinue, onUpgrade, preview
             onChange={(e) => setDontShow(e.target.checked)}
             className="accent-brass"
           />
-          Don't show this again
+          لا تعرض هذا مرة ثانية
         </label>
         <div className="flex items-center gap-2">
           <button onClick={() => close(true)} className="btn-ghost px-4 py-2 text-sm">
-            {source === 'download' ? 'Download anyway' : 'Keep the watermark'}
+            {source === 'download' ? "نزّل على كذا" : "خلّ العلامة المائية"}
           </button>
           <button onClick={upgrade} className="btn-primary px-4 py-2 text-sm">
-            {price ? `Remove the watermark · from ${price}/mo` : 'Remove the watermark'}
+            {price ? `شيل العلامة المائية · من ${price}/شهريًا` : "شيل العلامة المائية"}
           </button>
         </div>
       </div>

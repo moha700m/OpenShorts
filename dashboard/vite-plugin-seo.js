@@ -22,6 +22,10 @@ import { legalPages } from './seo/legal.js'
 import { renderPage } from './seo/render.js'
 import { LANDING_FALLBACK } from './seo/landing-fallback.js'
 
+const EMIT_SEO = process.env.OPENSHORTS_SEO_PAGES === '1'
+// Shown for the moment before React mounts (and to clients without JS).
+const AR_FALLBACK = `<main dir="rtl" lang="ar" style="min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#9aa3b2;background:#0b0d12;padding:24px;text-align:center"><div><h1 style="color:#f1f3f7;font-size:28px;margin:0 0 12px">OpenShorts</h1><p style="margin:0">فيديو طويل يدخل، وشورتس تنتشر تطلع. جاري التحميل…</p></div></main>`
+
 const sitemapXml = (pages) => {
   // lastmod is per page, not sitewide: a page carries its own `updated` and only
   // falls back to SITE.updated when it has none. Stamping every URL with today's
@@ -135,11 +139,15 @@ export default function seoPlugin() {
       }
       return html.replace(
         '<div id="root"></div>',
-        `<div id="root">${LANDING_FALLBACK}</div>`
+        `<div id="root">${EMIT_SEO ? LANDING_FALLBACK : AR_FALLBACK}</div>`
       )
     },
 
     generateBundle(_options, bundle) {
+      // moha700m/OpenShorts: this Arabic self-hosted dashboard does not publish the
+      // upstream English marketing pages (alternatives, tools, legal, sitemap, 404).
+      // Set OPENSHORTS_SEO_PAGES=1 to emit them again.
+      if (!EMIT_SEO) return
       // Tool pages load a standalone entry (vite.config.js rollupOptions.input)
       // whose file name carries a content hash; look it up here.
       const entries = {}

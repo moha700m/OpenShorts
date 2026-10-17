@@ -19,7 +19,7 @@ const DOCS = [
     },
     {
         icon: Shield,
-        title: 'Privacy Policy',
+        title: "سياسة الخصوصية",
         desc: 'What we store, for how long, which providers touch it, and your GDPR rights. Nothing non-essential loads until you accept it.',
         href: '/privacy',
         es: '/privacidad',
@@ -57,7 +57,7 @@ export default function Legal() {
             <header className="border-b border-rule sticky top-0 bg-paper z-10">
                 <div className="max-w-[65ch] mx-auto px-6 py-3 flex items-center">
                     <button onClick={handleBack} className="btn-quiet">
-                        <ArrowLeft size={16} /> Back
+                        <ArrowLeft size={16} /> رجوع
                     </button>
                 </div>
             </header>
@@ -68,7 +68,7 @@ export default function Legal() {
 
                 <div className="text-ink2 leading-relaxed space-y-3 text-sm mb-10">
                     <p>The short version:</p>
-                    <ul className="list-disc pl-6 space-y-2">
+                    <ul className="list-disc ps-6 space-y-2">
                         <li><strong className="text-ink">Your videos and clips are yours.</strong> We never use your content to train AI models.</li>
                         <li><strong className="text-ink">You must have the rights</strong> to every video you upload or link, and you are the publisher of what you post.</li>
                         <li><strong className="text-ink">No advertising trackers.</strong> Audience measurement is first-party and stays off until you accept it; free-plan clips are deleted after 7 days.</li>

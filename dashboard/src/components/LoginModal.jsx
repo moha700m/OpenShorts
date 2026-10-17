@@ -23,7 +23,7 @@ export default function LoginModal({ onClose, queued = false }) {
       await requestMagicLink(email.trim());
       setSent(true);
     } catch (err) {
-      setError(err.message || 'Something went wrong.');
+      setError(err.message || "صار خطأ، جرّب مرة ثانية.");
     } finally {
       setBusy(false);
     }
@@ -52,13 +52,13 @@ export default function LoginModal({ onClose, queued = false }) {
         <>
           <form onSubmit={submit} className="space-y-3">
             <div className="relative">
-              <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <Mail size={18} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
-                className="input-field pl-10"
+                className="input-field ps-10"
                 autoFocus
               />
             </div>
@@ -94,8 +94,8 @@ export default function LoginModal({ onClose, queued = false }) {
           <p className="text-muted text-xs mt-5 text-center leading-relaxed">
             By signing in you agree to our{' '}
             <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors">Terms of Service</a>
-            {' '}and{' '}
-            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors">Privacy Policy</a>.
+            {' '}و{' '}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors">سياسة الخصوصية</a>.
           </p>
         </>
       )}

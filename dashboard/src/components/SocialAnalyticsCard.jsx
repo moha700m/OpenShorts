@@ -61,7 +61,7 @@ export default function SocialAnalyticsCard() {
           <div className="flex items-end gap-3 mb-3">
             <span className="readout text-2xl text-ink">{fmtNum(total)}</span>
             <span className="text-muted text-sm lowercase mb-0.5">
-              views on {data.posts_count} post{data.posts_count === 1 ? '' : 's'}
+              views on {data.posts_count} انشر{data.posts_count === 1 ? '' : 's'}
             </span>
           </div>
 
@@ -84,7 +84,7 @@ export default function SocialAnalyticsCard() {
                     {p.platform} · {fmtDay(p.published_at)}
                     {/^https?:\/\//.test(p.post_url || '') && (
                       <a href={p.post_url} target="_blank" rel="noreferrer"
-                         className="inline-flex align-middle ml-1.5 text-muted hover:text-ink">
+                         className="inline-flex align-middle ms-1.5 text-muted hover:text-ink">
                         <ExternalLink size={12} />
                       </a>
                     )}

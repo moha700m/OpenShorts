@@ -67,7 +67,7 @@ export default function InvoicesCard() {
                 <div className="text-muted text-xs mt-0.5">
                   {formatDate(inv.doc_date)} · <span className="text-ink2">{formatMoney(inv.total, inv.currency)}</span>
                   {inv.status && (
-                    <span className={`ml-2 ${STATUS_CLASS[inv.status] || 'badge-warn'}`}>{inv.status.replace(/_/g, ' ')}</span>
+                    <span className={`ms-2 ${STATUS_CLASS[inv.status] || 'badge-warn'}`}>{inv.status.replace(/_/g, ' ')}</span>
                   )}
                 </div>
               </div>

@@ -31,49 +31,49 @@ function buildClients({ cloud, url }) {
     cloud && {
       id: 'claude-ai', label: 'Claude (claude.ai)', kind: 'steps',
       steps: [
-        'Open claude.ai → Settings → Connectors → Add custom connector.',
-        `Paste this URL and save: ${url}`,
-        'Click Connect: you will land on OpenShorts to approve the access, then the 8 tools appear in every chat.',
+        "افتح claude.ai ← الإعدادات ← Connectors ← Add custom connector.",
+        `حط هالرابط واحفظ: ${url}`,
+        "اضغط Connect: بتوصل لـ OpenShorts عشان توافق على الصلاحية، وبعدها الـ 8 أدوات تطلع في كل محادثة.",
       ],
       snippet: url,
     },
     cloud && {
       id: 'chatgpt', label: 'ChatGPT', kind: 'steps',
       steps: [
-        'Open ChatGPT → Settings → Connectors → Create (developer mode).',
-        `Name it OpenShorts, paste this MCP server URL, choose OAuth: ${url}`,
-        'Approve the access on OpenShorts when asked. Done: ask ChatGPT to clip a video.',
+        "افتح ChatGPT ← الإعدادات ← Connectors ← Create (وضع المطوّر).",
+        `سمّه OpenShorts، حط رابط سيرفر MCP هذا، واختر OAuth: ${url}`,
+        "وافق على الصلاحية في OpenShorts لما ينطلب منك. خلاص: اطلب من ChatGPT يقص لك فيديو.",
       ],
       snippet: url,
     },
     {
       id: 'claude-code', label: 'Claude Code', kind: 'code', lang: 'bash',
       snippet: `claude mcp add --transport http openshorts ${url}${header}`,
-      note: cloud ? 'Create a key below and paste it in place of osk_YOUR_KEY.' : 'No key needed on a self-hosted install.',
+      note: cloud ? "سوّ مفتاح تحت وحطه مكان osk_YOUR_KEY." : "ما تحتاج مفتاح في النسخة المستضافة على سيرفرك.",
     },
     {
       id: 'claude-desktop', label: 'Claude Desktop', kind: 'code', lang: 'json',
       snippet: `{\n  "mcpServers": {\n    "openshorts": {\n      "command": "npx",\n      "args": ${desktopArgs}\n    }\n  }\n}`,
-      note: 'Settings → Developer → Edit config (claude_desktop_config.json), then restart Claude.',
+      note: "الإعدادات ← Developer ← Edit config (claude_desktop_config.json)، وبعدين أعد تشغيل Claude.",
     },
     {
       id: 'cursor', label: 'Cursor', kind: 'code', lang: 'json',
       snippet: `{\n  "mcpServers": {\n    "openshorts": {\n      "url": "${url}"${cursorHeaders}\n    }\n  }\n}`,
-      note: 'Settings → MCP → Add new global MCP server (.cursor/mcp.json).',
+      note: "الإعدادات ← MCP ← Add new global MCP server (.cursor/mcp.json).",
     },
     {
       id: 'n8n', label: 'n8n', kind: 'steps',
       steps: [
-        'Add an "MCP Client Tool" node to your AI Agent.',
-        `Endpoint: ${url}  ·  Transport: HTTP Streamable.`,
-        cloud ? 'Authentication: Bearer, with a key from below.' : 'Authentication: none.',
+        "أضف عقدة \"MCP Client Tool\" للـ AI Agent حقك.",
+        `نقطة الاتصال: ${url}  ·  النقل: HTTP Streamable.`,
+        cloud ? "المصادقة: Bearer، بمفتاح من تحت." : "المصادقة: بدون.",
       ],
       snippet: url,
     },
     {
       id: 'curl', label: 'curl', kind: 'code', lang: 'bash',
       snippet: `curl -X POST ${url} \\\n  -H "Content-Type: application/json"${key ? ` \\\n  -H "Authorization: Bearer ${key}"` : ''} \\\n  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'`,
-      note: 'Plain JSON-RPC over HTTP: the same endpoint every client above talks to.',
+      note: "JSON-RPC عادي فوق HTTP: نفس نقطة الاتصال اللي تكلمها كل البرامج اللي فوق.",
     },
   ].filter(Boolean);
 }
@@ -95,17 +95,16 @@ export default function McpConnectCard({ cloud = true, compact = false }) {
   return (
     <div className="card p-6" id="connect-agent">
       <h3 className="font-display lowercase text-lg text-ink mb-1 flex items-center gap-2">
-        <Plug size={16} className="text-brass" /> Connect an agent
+        <Plug size={16} className="text-brass" /> اربط وكيل ذكاء اصطناعي
       </h3>
       <p className="text-muted text-sm mb-4">
-        Let Claude, ChatGPT, Cursor or n8n clip and publish for you through the built-in MCP server:
-        8 tools (process a video or upload one, check a job, list clips, add subtitles, recut, publish, quota).
+        خلّ Claude أو ChatGPT أو Cursor أو n8n يقصون وينشرون عنك عن طريق سيرفر MCP المدمج: 8 أدوات (معالجة فيديو أو رفعه، متابعة مهمة، عرض المقاطع، إضافة ترجمة، إعادة قص، نشر، الرصيد).
         {cloud
-          ? ' claude.ai and ChatGPT connect with one URL and a sign-in; CLI clients use an API key.'
-          : ' This install runs without accounts, so no key is needed.'}
+          ? " claude.ai و ChatGPT يتصلون برابط واحد وتسجيل دخول؛ برامج سطر الأوامر تستخدم مفتاح API."
+          : " هالنسخة تشتغل بدون حسابات، فما تحتاج مفتاح."}
       </p>
 
-      <div className="flex flex-wrap gap-1.5 mb-4" role="tablist" aria-label="client">
+      <div className="flex flex-wrap gap-1.5 mb-4" role="tablist" aria-label="البرنامج">
         {clients.map((c) => (
           <button
             key={c.id}
@@ -121,7 +120,7 @@ export default function McpConnectCard({ cloud = true, compact = false }) {
       </div>
 
       {current.kind === 'steps' && (
-        <ol className="list-decimal pl-5 space-y-1.5 text-sm text-ink2 mb-3">
+        <ol className="list-decimal ps-5 space-y-1.5 text-sm text-ink2 mb-3">
           {current.steps.map((s) => <li key={s}>{s}</li>)}
         </ol>
       )}
@@ -130,8 +129,8 @@ export default function McpConnectCard({ cloud = true, compact = false }) {
         <pre className={`font-mono text-ink2 whitespace-pre-wrap break-all rounded-card border border-rule bg-paper p-3 pr-20 text-xs ${compact ? '' : 'leading-relaxed'}`}>
           {current.snippet}
         </pre>
-        <button onClick={copy} className="btn-ghost absolute top-2 right-2 px-2.5 py-1 text-xs" aria-label="copy">
-          {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? 'Copied' : 'Copy'}
+        <button onClick={copy} className="btn-ghost absolute top-2 right-2 px-2.5 py-1 text-xs" aria-label="نسخ">
+          {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? "انتسخ" : "نسخ"}
         </button>
       </div>
       {current.note && <p className="text-muted text-xs mt-2">{current.note}</p>}

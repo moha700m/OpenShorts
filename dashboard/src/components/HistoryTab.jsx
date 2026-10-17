@@ -15,7 +15,7 @@ export default function HistoryTab({ onReopenProject }) {
   useEffect(() => {
     apiJson('/api/history')
       .then((d) => setVideos(d.videos || []))
-      .catch(() => setError('Could not load your library.'));
+      .catch(() => setError("ما قدرنا نحمّل مكتبتك."));
     apiJson('/api/projects')
       .then((d) => {
         const map = {};
@@ -43,7 +43,7 @@ export default function HistoryTab({ onReopenProject }) {
     try {
       await onReopenProject(jobId);
     } catch (e) {
-      setReopenError('Could not reopen this project. Please try again.');
+      setReopenError("ما قدرنا نفتح المشروع من جديد. جرّب مرة ثانية.");
       setReopening(null);
     }
   };
@@ -56,10 +56,10 @@ export default function HistoryTab({ onReopenProject }) {
 
   return (
     <div className="h-full overflow-y-auto p-8 max-w-5xl mx-auto animate-fade">
-      <p className="eyebrow mb-1.5">07 · HISTORY</p>
-      <h1 className="font-display lowercase text-2xl text-ink mb-2">Your library</h1>
+      <p className="eyebrow mb-1.5">07 · السجل</p>
+      <h1 className="font-display lowercase text-2xl text-ink mb-2">مكتبتك</h1>
       <p className="text-muted text-sm mb-8 lowercase">
-        All the shorts you've generated, saved while your plan is active. Kept for 7 days after your plan ends. Reopen a project to keep editing its clips.
+        كل الشورتس اللي طلّعتها محفوظة هنا. افتح أي مشروع عشان تكمّل تعديل مقاطعه.
       </p>
 
       {error && <p className="text-danger text-sm">{error}</p>}
@@ -68,7 +68,7 @@ export default function HistoryTab({ onReopenProject }) {
       {videos && videos.length === 0 && (
         <div className="text-center py-20 text-muted">
           <Film size={40} className="mx-auto mb-4 text-muted" />
-          <p className="lowercase">No videos yet. Generate your first short from the Clip Generator.</p>
+          <p className="lowercase">ما فيه فيديوهات للحين. طلّع أول شورت لك من مولّد المقاطع.</p>
         </div>
       )}
 
@@ -80,10 +80,10 @@ export default function HistoryTab({ onReopenProject }) {
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-2 border-b border-rule">
                 <div className="min-w-0">
                   <p className="text-sm text-ink font-medium truncate" title={project?.title || vids[0]?.title}>
-                    {project?.title || vids[0]?.title || 'Project'}
+                    {project?.title || vids[0]?.title || "مشروع"}
                   </p>
                   <p className="readout mt-0.5">
-                    {fmtDate(vids[0]?.created_at)} · {vids.length} clip{vids.length === 1 ? '' : 's'}
+                    {fmtDate(vids[0]?.created_at)} · {vids.length} مقطع{vids.length === 1 ? '' : 's'}
                   </p>
                 </div>
                 {project && onReopenProject && (
@@ -91,11 +91,11 @@ export default function HistoryTab({ onReopenProject }) {
                     onClick={() => handleReopen(jobId)}
                     disabled={!!reopening}
                     className="btn-ghost px-3 py-2 text-xs shrink-0"
-                    title="Restore this project in the Clip Generator to keep editing subtitles, hooks, effects and dubbing"
+                    title="افتح هالمشروع في مولّد المقاطع عشان تكمّل تعديل الترجمة والجذب والتأثيرات والدبلجة"
                   >
                     {reopening === jobId
-                      ? <><Loader2 size={14} className="animate-spin" /> reopening…</>
-                      : <><FolderOpen size={14} /> reopen project</>}
+                      ? <><Loader2 size={14} className="animate-spin" /> جاري الفتح…</>
+                      : <><FolderOpen size={14} /> افتح المشروع</>}
                   </button>
                 )}
               </div>
@@ -106,11 +106,11 @@ export default function HistoryTab({ onReopenProject }) {
                       <video src={v.view_url} controls preload="metadata" className="w-full h-full object-contain" />
                     </div>
                     <div className="p-3">
-                      <p className="text-sm text-ink font-medium line-clamp-2 mb-1" title={v.title}>{v.title || 'Short'}</p>
+                      <p className="text-sm text-ink font-medium line-clamp-2 mb-1" title={v.title}>{v.title || "شورت"}</p>
                       <div className="flex items-center justify-between">
                         <span className="readout">{fmtDate(v.created_at)}</span>
-                        <a href={v.download_url} className="text-micro font-mono uppercase text-brass hover:text-ink flex items-center gap-1 transition-colors" title="Download">
-                          <Download size={14} /> Download
+                        <a href={v.download_url} className="text-micro font-mono uppercase text-brass hover:text-ink flex items-center gap-1 transition-colors" title="تنزيل">
+                          <Download size={14} /> تنزيل
                         </a>
                       </div>
                     </div>

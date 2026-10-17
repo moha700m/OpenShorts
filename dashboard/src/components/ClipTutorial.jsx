@@ -5,28 +5,28 @@ import Modal from './ui/Modal';
 const TOUR = [
   {
     target: '[data-tutorial="nav-clips"]',
-    title: 'Clip Generator',
-    body: 'This is the tool people come for. A long video in, vertical shorts out. The other menu items stay locked until you finish one run.',
+    title: "مولّد المقاطع",
+    body: "هذي الأداة الأساسية: فيديو طويل يدخل، وشورتس طولية تطلع. باقي القوائم تنقفل لين تخلّص أول تشغيل.",
   },
   {
     target: '[data-tutorial="source-tabs"]',
-    title: 'Upload or paste a link',
-    body: 'Drop an MP4, or switch to Video URL and paste YouTube, TikTok, Instagram…',
+    title: "ارفع ملف أو حط رابط",
+    body: "حط ملف MP4، أو حوّل لـ \"رابط فيديو\" وحط رابط يوتيوب أو تيك توك أو إنستقرام…",
   },
   {
     target: '[data-tutorial="drop-zone"]',
-    title: 'Your video',
-    body: 'Click the box or paste the link here. Keep files under 500MB.',
+    title: "فيديوك",
+    body: "اضغط على المربع أو حط الرابط هنا. خلّ الملفات أقل من 500MB.",
   },
   {
     target: '[data-tutorial="output-format"]',
-    title: 'Output format',
-    body: '9:16 is TikTok, Reels and Shorts. Leave it unless you need a square feed post or landscape.',
+    title: "مقاس الإخراج",
+    body: "9:16 هو مقاس تيك توك وريلز وشورتس. خلّه مثل ما هو إلا لو تبي مربع أو عرضي.",
   },
   {
     target: '[data-tutorial="generate"]',
-    title: 'Generate',
-    body: 'Tick that you have the rights, then generate. That is the whole first run.',
+    title: "طلّع المقاطع",
+    body: "أكّد إن عندك حقوق الفيديو، وبعدين طلّع المقاطع. وبس، هذا أول تشغيل.",
   },
 ];
 
@@ -115,25 +115,24 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
 
   if (phase === 'intro') {
     return (
-      <Modal isOpen hideClose eyebrow="FIRST CLIPS" title="Let's make your first shorts" size="md">
+      <Modal isOpen hideClose eyebrow="أول المقاطع" title="يلا نطلّع أول شورتس لك" size="md">
         <div className="flex items-start gap-3 mb-4">
           <div className="w-10 h-10 rounded-input bg-paper3 flex items-center justify-center shrink-0">
             <LayoutDashboard size={18} className="text-brass" />
           </div>
           <p className="text-sm text-ink2 leading-relaxed">
-            People come here for <b className="text-ink font-medium">Clip Generator</b>: a long video in,
-            vertical shorts out. We will walk the screen, then you run one video.
+            الأداة الأساسية هنا <b className="text-ink font-medium">مولّد المقاطع</b>: فيديو طويل يدخل، وشورتس طولية تطلع. بنوريك الشاشة، وبعدين تشغّل فيديو واحد.
           </p>
         </div>
         <button type="button" onClick={onStart} className="btn-primary w-full">
-          Show me around <ArrowRight size={16} />
+          ورّني المكان <ArrowRight size={16} />
         </button>
         <button
           type="button"
           onClick={onSkip}
           className="w-full mt-2 text-muted hover:text-ink text-sm lowercase py-2 transition-colors"
         >
-          I'll explore later
+          بستكشف بعدين
         </button>
       </Modal>
     );
@@ -142,15 +141,15 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
   if (phase === 'coach' && (jobStatus === 'processing' || jobStatus === 'error')) {
     return (
       <div
-        className="fixed z-[80] left-3 right-3 md:left-auto md:right-6 md:w-[22rem]
+        className="fixed z-[80] start-3 end-3 md:start-auto md:end-6 md:w-[22rem]
           bottom-3 md:bottom-6 card p-4"
         role="status"
       >
-        <p className="eyebrow mb-2">First clips</p>
+        <p className="eyebrow mb-2">أول المقاطع</p>
         <p className={`text-sm leading-relaxed ${jobStatus === 'error' ? 'text-danger' : 'text-muted'}`}>
           {jobStatus === 'error'
-            ? `${errorText ? `That video could not be clipped: ${errorText}` : 'That run failed.'} Try another video. Other tools unlock once one job finishes.`
-            : 'Hang on — Clip Generator is finding the moments and cutting vertical shorts.'}
+            ? `${errorText ? `ما قدرنا نقص هالفيديو: ${errorText}` : "التشغيل فشل."} جرّب فيديو ثاني. باقي الأدوات تنفتح أول ما تخلص مهمة وحدة.`
+            : "لحظات — مولّد المقاطع يدوّر على أقوى اللحظات ويقصّها شورتس طولية."}
         </p>
       </div>
     );
@@ -164,15 +163,15 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
     if (step >= TOUR.length) {
       return (
         <div
-          className="fixed z-[80] inset-x-3 bottom-3 md:inset-x-auto md:right-6 md:bottom-6 md:max-w-sm
+          className="fixed z-[80] inset-x-3 bottom-3 md:inset-x-auto md:end-6 md:bottom-6 md:max-w-sm
             card px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-1"
           role="status"
         >
           <p className="text-sm text-muted leading-snug flex-1 min-w-0">
-            Your turn — add a video and generate.
+            دورك — أضف فيديو وطلّع المقاطع.
           </p>
           <button type="button" onClick={onSkip} className="text-xs lowercase text-muted hover:text-ink shrink-0">
-            skip
+            تخطّي
           </button>
         </div>
       );
@@ -182,7 +181,7 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
     const tip = spot?.tip;
 
     return (
-      <div className="fixed inset-0 z-[80]" role="dialog" aria-modal="true" aria-label="Clip Generator tutorial">
+      <div className="fixed inset-0 z-[80]" role="dialog" aria-modal="true" aria-label="شرح مولّد المقاطع">
         {!hole && <div className="absolute inset-0 bg-black/55" />}
         {hole && (
           <div
@@ -211,19 +210,19 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
           <div className="flex flex-wrap items-center gap-2">
             {step > 0 && (
               <button type="button" onClick={() => setStep((s) => s - 1)} className="btn-ghost text-sm px-3">
-                <ArrowLeft size={14} /> Back
+                <ArrowLeft size={14} /> رجوع
               </button>
             )}
             <button
               type="button"
               onClick={last ? onLast : () => setStep((s) => s + 1)}
-              className="btn-primary text-sm px-4 ml-auto"
+              className="btn-primary text-sm px-4 ms-auto"
             >
-              {last ? 'Got it' : 'Next'} <ArrowRight size={14} />
+              {last ? "تمام" : "التالي"} <ArrowRight size={14} />
             </button>
           </div>
           <button type="button" onClick={onSkip} className="mt-3 text-xs lowercase text-muted hover:text-ink transition-colors">
-            skip — unlock the rest
+            تخطّي — افتح الباقي
           </button>
         </div>
       </div>
@@ -232,19 +231,19 @@ export default function ClipTutorial({ phase, jobStatus, errorText, onStart, onS
 
   if (phase === 'celebrate') {
     return (
-      <Modal isOpen onClose={onDismissCelebrate} hideClose eyebrow="DONE" title="You made your first clips" size="sm">
+      <Modal isOpen onClose={onDismissCelebrate} hideClose eyebrow="خلصنا" title="طلّعت أول مقاطعك" size="sm">
         <div className="text-center py-2">
           <div className="inline-flex p-3 bg-paper3 rounded-full text-ok mb-4">
             <CheckCircle2 size={28} />
           </div>
           <p className="text-sm text-ink2 leading-relaxed mb-1">
-            That is the whole product, on one video.
+            هذا المنتج كله، على فيديو واحد.
           </p>
           <p className="text-sm text-muted leading-relaxed mb-6">
-            The other tools are unlocked. Come back to Clip Generator whenever you have another long video.
+            باقي الأدوات انفتحت. ارجع لمولّد المقاطع متى ما صار عندك فيديو طويل ثاني.
           </p>
           <button type="button" onClick={onDismissCelebrate} className="btn-primary w-full">
-            <Sparkles size={16} /> See my clips
+            <Sparkles size={16} /> شوف مقاطعي
           </button>
         </div>
       </Modal>

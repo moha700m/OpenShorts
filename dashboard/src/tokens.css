@@ -34,9 +34,9 @@
   --color-warn: oklch(78% 0.14 75);
 
   /* type */
-  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-body: "Geist", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Instrument Serif", "IBM Plex Sans Arabic", ui-serif, Georgia, serif;
+  --font-body: "IBM Plex Sans Arabic", "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Sans Arabic", ui-monospace, SFMono-Regular, monospace;
   --text-display: clamp(3rem, 6vw + 1rem, 6rem);
   --tracking-display: -0.032em;
   --tracking-micro: 0.10em;
@@ -52,11 +52,36 @@
   --dur-pulse: 4s;
 }
 
-/* Arabic script: IBM Plex Sans Arabic, self-hosted, only downloaded for Arabic glyphs (moha700m/OpenShorts). */
-@font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 400; font-display: swap;
-  src: url("/fonts/IBMPlexSansArabic-Regular.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
-@font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500 700; font-display: swap;
-  src: url("/fonts/IBMPlexSansArabic-SemiBold.woff2") format("woff2");
-  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
-[dir="rtl"], :lang(ar) { font-family: "IBM Plex Sans Arabic", var(--font-body); }
+/* ---- Arabic / RTL (moha700m/OpenShorts) ----
+ * IBM Plex Sans Arabic is loaded from Google Fonts in index.html. */
+[dir="rtl"], :lang(ar) { font-family: var(--font-body); }
+/* Letter-spacing breaks Arabic cursive joining; uppercase/tracking labels are
+   a Latin convention. */
+html[dir="rtl"] body, html[dir="rtl"] body * { letter-spacing: normal !important; }
+html[dir="rtl"] body { line-height: 1.6; }
+/* Directional icons point the reading direction. `scale` composes with any
+   Tailwind rotate/translate transform already on the element. */
+html[dir="rtl"] .lucide-arrow-right, html[dir="rtl"] .lucide-arrow-left,
+html[dir="rtl"] .lucide-chevron-right, html[dir="rtl"] .lucide-chevron-left,
+html[dir="rtl"] .lucide-chevrons-right, html[dir="rtl"] .lucide-chevrons-left,
+html[dir="rtl"] .lucide-arrow-up-right, html[dir="rtl"] .lucide-external-link,
+html[dir="rtl"] .lucide-log-out, html[dir="rtl"] .lucide-undo-2, html[dir="rtl"] .lucide-redo-2,
+html[dir="rtl"] .lucide-send { scale: -1 1; }
+/* The mobile nav drawer enters from the inline-start edge. */
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+html[dir="rtl"] .animate-slide-in-left { animation-name: slideInRight; }
+/* Inputs that hold URLs, keys and code stay LTR. */
+html[dir="rtl"] input[type="url"], html[dir="rtl"] input[type="password"], html[dir="rtl"] input[type="email"],
+html[dir="rtl"] code, html[dir="rtl"] pre, html[dir="rtl"] kbd { direction: ltr; unicode-bidi: plaintext; }
+html[dir="rtl"] input[type="url"]:placeholder-shown { direction: rtl; }
+html[dir="rtl"] code, html[dir="rtl"] pre { text-align: left; }
+html[dir="rtl"] .font-display { font-family: var(--font-body); font-weight: 600; }
+html[dir="rtl"] .eyebrow, html[dir="rtl"] .readout { font-size: max(12px, 1em); }
+
+/* RTL: lowercase transform only mangles Latin brand names (Gemini API → gemini api) */
+[dir="rtl"] .lowercase { text-transform: none; }
+
+/* Keep the «الخادم» button above the mobile bottom tab bar inside the app */
+@media (max-width: 767px) {
+  body:has(nav.safe-bottom) #os-backend-btn { bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; }
+}

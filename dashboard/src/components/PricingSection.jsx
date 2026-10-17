@@ -146,7 +146,7 @@ export default function PricingSection({ onRequireLogin }) {
             <span className="readout">/mo</span>
           </div>
           <ul className="space-y-2 text-sm text-ink2 mb-6 flex-1">
-            <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>{FREE_MINUTES} min</b> of video / month</span></li>
+            <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>{FREE_MINUTES} دقيقة</b> of video / month</span></li>
             <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span>YouTube URL or upload</span></li>
             <li className="flex items-start gap-2"><Cpu size={16} className="text-ok shrink-0 mt-0.5" /> <span>Same <b>GPU rendering</b>, about 50s per 8-min video</span></li>
             <li className="flex items-start gap-2"><KeyRound size={16} className="text-ok shrink-0 mt-0.5" /> <span>Gemini key included, no setup</span></li>
@@ -183,7 +183,7 @@ export default function PricingSection({ onRequireLogin }) {
                 <span className="readout">/{interval === 'month' ? 'mo' : 'yr'}</span>
               </div>
               <ul className="space-y-2 text-sm text-ink2 mb-6 flex-1">
-                <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>{entry.minutes} min</b> of video / month</span></li>
+                <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>{entry.minutes} دقيقة</b> of video / month</span></li>
                 <li className="flex items-start gap-2"><Check size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>No watermark</b>, no 7-day clip expiry</span></li>
                 <li className="flex items-start gap-2"><Cpu size={16} className="text-ok shrink-0 mt-0.5" /> <span><b>GPU rendering</b>, about 50s per 8-min video</span></li>
                 <li className="flex items-start gap-2"><KeyRound size={16} className="text-ok shrink-0 mt-0.5" /> <span>Gemini key + auto-posting included</span></li>
@@ -214,7 +214,7 @@ export default function PricingSection({ onRequireLogin }) {
             <li className="flex items-start gap-2"><KeyRound size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>The Gemini API key is included.</b> Nothing to sign up for, nothing to paste, no per-request quota of your own to babysit.</span></li>
             <li className="flex items-start gap-2"><Send size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>Auto-posting is already wired up</b> for TikTok, Instagram Reels and YouTube Shorts.</span></li>
             <li className="flex items-start gap-2"><HardDrive size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>Clips are stored and served for you</b>, ready to re-open and re-edit from any browser.</span></li>
-            <li className="flex items-start gap-2"><Check size={15} className="text-ok shrink-0 mt-0.5" /> <span>Full <b>YouTube Studio</b>: titles, thumbnails and descriptions.</span></li>
+            <li className="flex items-start gap-2"><Check size={15} className="text-ok shrink-0 mt-0.5" /> <span>Full <b>استوديو يوتيوب</b>: titles, thumbnails and descriptions.</span></li>
             <li className="flex items-start gap-2"><Bot size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>MCP server &amp; API for agents.</b> Connect Claude, ChatGPT or n8n to an always-on endpoint and automate clipping end to end. API calls use the same minutes, nothing extra to buy. <a href="/mcp" className="underline underline-offset-2 hover:text-ink" target="_blank" rel="noopener">Guide</a>.</span></li>
           </ul>
           <p className="text-xs text-muted mt-3 pt-3 border-t border-rule">
@@ -227,8 +227,8 @@ export default function PricingSection({ onRequireLogin }) {
             <span className="badge-warn"><Zap size={12} /> Bring your own key</span>
           </div>
           <p className="text-sm text-muted mb-3 leading-relaxed">
-            <b className="text-ink2">AI Shorts</b> (AI-actor UGC videos) and <b className="text-ink2">voice dubbing</b> use premium generation from
-            <b className="text-ink2"> fal.ai</b> and <b className="text-ink2">ElevenLabs</b>. Connect your own keys for those — you're billed by those
+            <b className="text-ink2">شورتس بالذكاء الاصطناعي</b> (AI-actor UGC videos) and <b className="text-ink2">voice dubbing</b> use premium generation from
+            <b className="text-ink2"> fal.ai</b> و <b className="text-ink2">ElevenLabs</b>. Connect your own keys for those — you're billed by those
             providers directly (typically ~$0.65-2 per video). Your plan still covers the script &amp; orchestration.
           </p>
           <p className="text-xs text-muted">Managed credits for these are coming later — no keys needed.</p>

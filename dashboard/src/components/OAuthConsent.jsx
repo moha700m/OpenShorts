@@ -74,7 +74,7 @@ export default function OAuthConsent() {
         <div className="w-12 h-12 rounded-full bg-brass/10 flex items-center justify-center mx-auto mb-4">
           <Plug size={20} className="text-brass" />
         </div>
-        <h1 className="font-display lowercase text-2xl text-ink mb-2">Connect {name} to OpenShorts</h1>
+        <h1 className="font-display lowercase text-2xl text-ink mb-2">اربط {name} to OpenShorts</h1>
         {error ? (
           <p className="text-warn text-sm">{error}</p>
         ) : (
@@ -85,7 +85,7 @@ export default function OAuthConsent() {
               It will use your plan&apos;s minutes and you can disconnect it any time from
               Account → API keys.
             </p>
-            <ul className="text-left text-xs text-ink2 space-y-1.5 mb-6">
+            <ul className="text-start text-xs text-ink2 space-y-1.5 mb-6">
               <li className="flex gap-2"><ShieldCheck size={14} className="text-ok shrink-0 mt-0.5" /> Process videos and read the resulting clips</li>
               <li className="flex gap-2"><ShieldCheck size={14} className="text-ok shrink-0 mt-0.5" /> Add subtitles, recut and publish clips you own</li>
               <li className="flex gap-2"><ShieldCheck size={14} className="text-ok shrink-0 mt-0.5" /> Nothing else: no billing, no account settings, no key management</li>
@@ -94,7 +94,7 @@ export default function OAuthConsent() {
               <div className="flex justify-center py-2"><Loader2 className="animate-spin text-brass" size={18} /></div>
             ) : isSignedIn ? (
               <div className="flex gap-3">
-                <button onClick={() => decide(false)} disabled={busy} className="btn-ghost flex-1 py-2.5">Cancel</button>
+                <button onClick={() => decide(false)} disabled={busy} className="btn-ghost flex-1 py-2.5">إلغاء</button>
                 <button onClick={() => decide(true)} disabled={busy} className="btn-primary flex-1 py-2.5">
                   {busy ? <Loader2 size={16} className="animate-spin" /> : 'Allow'}
                 </button>

@@ -54,7 +54,7 @@ export default function PlanChoiceModal({ onClose }) {
             </div>
             <p className="text-muted text-xs mb-3 lowercase">try it on your own videos</p>
             <ul className="space-y-1.5 text-sm text-ink2 mb-4 flex-1">
-              <li className="flex items-start gap-2"><Check size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>{FREE_MINUTES} min</b> / month</span></li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-ok shrink-0 mt-0.5" /> <span><b>{FREE_MINUTES} دقيقة</b> / month</span></li>
               <li className="flex items-start gap-2"><Check size={15} className="text-ok shrink-0 mt-0.5" /> <span>No credit card</span></li>
               <li className="flex items-start gap-2"><Check size={15} className="text-muted shrink-0 mt-0.5" /> <span className="text-muted">Watermark · clips kept 7 days</span></li>
             </ul>
@@ -77,8 +77,8 @@ export default function PlanChoiceModal({ onClose }) {
                 if (!e) return null;
                 return (
                   <button key={p} onClick={() => checkout(e.price_id)} disabled={busy === e.price_id}
-                    className="w-full flex items-center justify-between border border-rule hover:border-brass rounded-input px-3 py-2 text-left transition-colors disabled:opacity-50">
-                    <span className="text-sm text-ink capitalize">{p} <span className="text-muted">· {e.minutes} min</span></span>
+                    className="w-full flex items-center justify-between border border-rule hover:border-brass rounded-input px-3 py-2 text-start transition-colors disabled:opacity-50">
+                    <span className="text-sm text-ink capitalize">{p} <span className="text-muted">· {e.minutes} دقيقة</span></span>
                     <span className="readout">{busy === e.price_id ? '…' : `${fmt(e.amount, e.currency)}/mo`}</span>
                   </button>
                 );

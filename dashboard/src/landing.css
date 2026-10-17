@@ -241,3 +241,7 @@
 @media (prefers-reduced-motion: reduce) {
   .showcase-in, .showcase-progress { animation: none; }
 }
+
+/* ---- RTL / Arabic (moha700m/OpenShorts) ---- */
+html[dir="rtl"] .hero-h1 { line-height: 1.35; font-family: var(--font-body); font-weight: 700; font-size: clamp(2.25rem, 4.5vw + 1rem, 4.25rem); }
+html[dir="rtl"] .hero-h1 em::after { transform-origin: right center; }

@@ -29,7 +29,7 @@ const HOSTED_VS_SELF = [
   },
   {
     icon: Server,
-    label: 'Setup',
+    label: "الإعداد",
     hosted: 'Sign in and paste a link. Nothing to install.',
     self: 'Docker, 8GB+ RAM and a few GB of model downloads on the first run.',
   },
@@ -75,7 +75,7 @@ const FAQS = [
 
 const TRUST_CARDS = [
   {
-    eyebrow: 'open source',
+    eyebrow: "مفتوح المصدر",
     body: (
       <>
         The full code is public on{' '}
@@ -116,9 +116,9 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
   <div>
     <button
       onClick={onClick}
-      className="w-full flex items-center justify-between px-1 py-5 text-left"
+      className="w-full flex items-center justify-between px-1 py-5 text-start"
     >
-      <span className="text-ink font-medium pr-4">{question}</span>
+      <span className="text-ink font-medium pe-4">{question}</span>
       <ChevronDown
         size={18}
         className={`text-muted flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -229,7 +229,7 @@ export default function PricingPage({ onRequireLogin }) {
                 <div>
                   <span className="eyebrow block mb-1 md:hidden">Hosted on this site</span>
                   <p className="text-sm text-ink2 leading-relaxed">
-                    <Check size={14} className="text-ok inline-block mr-1.5 -mt-0.5" />
+                    <Check size={14} className="text-ok inline-block me-1.5 -mt-0.5" />
                     {hosted}
                   </p>
                 </div>

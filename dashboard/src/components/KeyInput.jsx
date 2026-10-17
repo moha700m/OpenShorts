@@ -23,7 +23,7 @@ export default function KeyInput({ onKeySet, savedKey }) {
                 <div className="p-2 bg-paper3 rounded-input text-brass">
                     <Key size={18} />
                 </div>
-                <h2 className="font-display lowercase text-lg text-ink">Gemini API Key</h2>
+                <h2 className="font-display lowercase text-lg text-ink">مفتاح Gemini API</h2>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -36,11 +36,11 @@ export default function KeyInput({ onKeySet, savedKey }) {
                             setIsSaved(false);
                         }}
                         placeholder="AIzaSy..."
-                        className="input-field pr-12 font-mono"
+                        className="input-field pe-12 font-mono"
                     />
                     <button
                         onClick={() => setIsVisible(!isVisible)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink transition-colors"
+                        className="absolute end-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink transition-colors"
                     >
                         {isVisible ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -50,11 +50,11 @@ export default function KeyInput({ onKeySet, savedKey }) {
                     disabled={!key || isSaved}
                     className={isSaved ? 'badge-ok px-4 cursor-default' : 'btn-primary'}
                 >
-                    {isSaved ? <><Check size={14} /> Ready</> : 'Set Key'}
+                    {isSaved ? <><Check size={14} /> جاهز</> : "احفظ المفتاح"}
                 </button>
             </div>
             <p className="mt-3 text-xs text-muted">
-                Your key is stored locally in your browser for convenience.
+                مفتاحك محفوظ في متصفحك عشان راحتك.
                 <br />
                 <a
                     href="https://aistudio.google.com/app/apikey"
@@ -62,7 +62,7 @@ export default function KeyInput({ onKeySet, savedKey }) {
                     rel="noopener noreferrer"
                     className="text-brass hover:underline mt-1 inline-block"
                 >
-                    Get your free Gemini API Key here →
+                    خذ مفتاح Gemini المجاني من هنا ←
                 </a>
             </p>
         </div>

@@ -14,7 +14,7 @@ export const ShortVideo: React.FC<Record<string, unknown>> = (rawProps) => {
   const { videoUrl, subtitles, hook, effects } =
     rawProps as unknown as ShortVideoProps;
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000" }}>
+    <AbsoluteFill style={{ backgroundColor: "#000", direction: "ltr" }}>
       {/* Layer 1: Base video with optional zoom/color effects */}
       <VideoEffects config={effects}>
         <Video

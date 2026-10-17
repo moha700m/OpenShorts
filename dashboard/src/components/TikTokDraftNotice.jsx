@@ -24,11 +24,7 @@ export default function TikTokDraftNotice() {
         <div className="mb-4 px-3 py-2 rounded-input text-xs text-ink2 bg-paper3 flex items-start gap-2">
             <AlertCircle size={14} className="mt-0.5 shrink-0 text-brass" />
             <div className="lowercase">
-                tiktok arrives as a <b className="text-ink">draft</b>, not a live post — you'll
-                get a notification in the app. its api won't carry the title or description
-                onto a draft, so you write those there too, along with trending sounds,
-                effects and hashtags — which reaches more people than posting straight
-                from an api.
+                تيك توك يوصل <b className="text-ink">كمسودة</b>، مو منشور مباشر — بيجيك تنبيه في التطبيق. الـ API حقه ما ينقل العنوان ولا الوصف للمسودة، فتكتبها هناك، مع الأصوات الترند والتأثيرات والهاشتاقات — وهذا يوصل لناس أكثر من النشر المباشر من API.
             </div>
         </div>
     );

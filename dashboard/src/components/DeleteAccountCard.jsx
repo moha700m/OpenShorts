@@ -90,7 +90,7 @@ export default function DeleteAccountCard() {
               <b>This is permanent. There is no recovery.</b>
             </p>
             <p className="mt-2">Deleted immediately:</p>
-            <ul className="list-disc pl-5 mt-1 space-y-0.5">
+            <ul className="list-disc ps-5 mt-1 space-y-0.5">
               <li>your account and sign-in</li>
               <li>every project, clip and transcript, here and in our storage</li>
               <li>your API keys, so anything using them stops working</li>
@@ -140,7 +140,7 @@ export default function DeleteAccountCard() {
             </button>
             <button onClick={() => { setOpen(false); setConfirm(''); setError(''); }}
                     disabled={busy} className="btn-quiet">
-              Cancel
+              إلغاء
             </button>
           </div>
         </div>

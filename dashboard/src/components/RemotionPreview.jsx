@@ -40,7 +40,7 @@ export default function RemotionPreview({
     );
 
     return (
-        <div className={`w-full h-full ${className}`}>
+        <div dir="ltr" className={`w-full h-full ${className}`}>
             <Player
                 component={ShortVideo}
                 inputProps={inputProps}

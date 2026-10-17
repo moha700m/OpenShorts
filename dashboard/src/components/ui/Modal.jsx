@@ -44,8 +44,8 @@ export default function Modal({ isOpen, onClose, title, eyebrow, size = 'md', ch
         {!hideClose && onClose && (
           <button
             onClick={onClose}
-            aria-label="close"
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 p-2 rounded-full text-muted hover:text-ink hover:bg-paper3 transition-colors"
+            aria-label="سكّر"
+            className="absolute top-3 end-3 sm:top-4 sm:end-4 z-10 p-2 rounded-full text-muted hover:text-ink hover:bg-paper3 transition-colors"
           >
             <X size={18} />
           </button>
@@ -53,7 +53,7 @@ export default function Modal({ isOpen, onClose, title, eyebrow, size = 'md', ch
         {(title || eyebrow) && (
           <div className="px-4 sm:px-6 pt-3 sm:pt-6 pb-4 border-b border-rule shrink-0">
             {eyebrow && <p className="eyebrow mb-1.5">{eyebrow}</p>}
-            {title && <h2 className="font-display lowercase text-xl sm:text-2xl text-ink leading-tight break-words pr-10">{title}</h2>}
+            {title && <h2 className="font-display lowercase text-xl sm:text-2xl text-ink leading-tight break-words pe-10">{title}</h2>}
           </div>
         )}
         <div className="px-4 sm:px-6 py-5 overflow-y-auto overscroll-contain custom-scrollbar grow">

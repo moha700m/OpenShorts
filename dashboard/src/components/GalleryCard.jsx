@@ -48,7 +48,7 @@ export default function GalleryCard({ clip }) {
         e.preventDefault();
         try {
             const response = await fetch(clip.url);
-            if (!response.ok) throw new Error('Download failed');
+            if (!response.ok) throw new Error("فشل التنزيل");
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -85,11 +85,11 @@ export default function GalleryCard({ clip }) {
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-paper">
                         <div className="w-12 h-12 rounded-full bg-paper3 flex items-center justify-center">
-                            <Play size={24} className="text-muted ml-1" />
+                            <Play size={24} className="text-muted ms-1" />
                         </div>
                     </div>
                 )}
-                <div className="absolute top-2 left-2">
+                <div className="absolute top-2 start-2">
                     <span className="readout bg-black/70 px-2 py-1 rounded-full">
                         {new Date(clip.created_at).toLocaleDateString()}
                     </span>
@@ -104,19 +104,19 @@ export default function GalleryCard({ clip }) {
                     </h3>
                     <div className="flex flex-wrap gap-2">
                         <span className="readout bg-paper3 px-1.5 py-0.5 rounded-full">{clip.duration.toFixed(1)}s</span>
-                        <span className="readout bg-paper3 px-1.5 py-0.5 rounded-full truncate max-w-[150px]" title={clip.job_id}>ID: {clip.job_id.substring(0, 8)}</span>
+                        <span className="readout bg-paper3 px-1.5 py-0.5 rounded-full truncate max-w-[150px]" title={clip.job_id}>المعرّف: {clip.job_id.substring(0, 8)}</span>
                     </div>
                 </div>
 
-                <div className="space-y-2 flex-1 overflow-y-auto custom-scrollbar max-h-[150px] pr-1 mb-3">
+                <div className="space-y-2 flex-1 overflow-y-auto custom-scrollbar max-h-[150px] pe-1 mb-3">
                     {/* YouTube Title */}
                     <div className="bg-paper rounded-input p-2 relative group/item">
-                        <p className="eyebrow mb-1">YouTube Title</p>
+                        <p className="eyebrow mb-1">عنوان يوتيوب</p>
                         <p className="text-xs text-ink2 select-all line-clamp-2 hover:line-clamp-none transition-all">{clip.title}</p>
                         <button
                             onClick={() => handleCopy(clip.title, 'yt')}
-                            className="absolute top-2 right-2 p-1 text-muted hover:text-brass transition-colors opacity-0 group-hover/item:opacity-100"
-                            title="Copy Title"
+                            className="absolute top-2 end-2 p-1 text-muted hover:text-brass transition-colors opacity-0 group-hover/item:opacity-100"
+                            title="انسخ العنوان"
                         >
                             {copied === 'yt' ? <Check size={12} className="text-ok" /> : <Copy size={12} />}
                         </button>
@@ -124,14 +124,14 @@ export default function GalleryCard({ clip }) {
 
                     {/* TikTok / IG Caption */}
                     <div className="bg-paper rounded-input p-2 relative group/item">
-                        <p className="eyebrow mb-1">TikTok · IG Caption</p>
+                        <p className="eyebrow mb-1">وصف تيك توك · إنستقرام</p>
                         <p className="text-xs text-ink2 select-all line-clamp-3 hover:line-clamp-none transition-all cursor-pointer">
                             {clip.tiktok_desc || clip.insta_desc}
                         </p>
                         <button
                             onClick={() => handleCopy(clip.tiktok_desc || clip.insta_desc, 'caption')}
-                            className="absolute top-2 right-2 p-1 text-muted hover:text-brass transition-colors opacity-0 group-hover/item:opacity-100"
-                            title="Copy Caption"
+                            className="absolute top-2 end-2 p-1 text-muted hover:text-brass transition-colors opacity-0 group-hover/item:opacity-100"
+                            title="انسخ الوصف"
                         >
                             {copied === 'caption' ? <Check size={12} className="text-ok" /> : <Copy size={12} />}
                         </button>
@@ -143,7 +143,7 @@ export default function GalleryCard({ clip }) {
                     onClick={handleDownload}
                     className="btn-quiet w-full"
                 >
-                    <Download size={14} className="shrink-0" /> Download Clip
+                    <Download size={14} className="shrink-0" /> نزّل المقطع
                 </button>
             </div>
         </div>

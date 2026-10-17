@@ -19,20 +19,20 @@ import {
 const CATEGORY_COPY = [
   {
     key: 'necessary',
-    label: 'Strictly necessary',
-    body: 'Your sign-in session, the token that lets your browser fetch your own clips, and your interface preferences. Stored in this browser only. Cannot be switched off — without them you cannot sign in.',
+    label: "ضروري",
+    body: "جلسة تسجيل دخولك، والرمز اللي يخلّي متصفحك يجيب مقاطعك، وتفضيلات الواجهة. محفوظة في هالمتصفح بس. ما ينفع تطفيها — بدونها ما تقدر تسجل دخول.",
     locked: true,
   },
   {
     key: 'analytics',
-    label: 'Audience measurement',
-    body: 'Anonymous page and feature counters through OpenPanel, a self-hosted instance run by us. First-party only: no advertising network, no data sold, no profile shared with anyone, no cross-site tracking. Exempt from prior consent, always on.',
+    label: "قياس الزيارات",
+    body: "عدّادات مجهولة للصفحات والميزات. بدون شبكات إعلانات، بدون بيع بيانات، وبدون تتبّع بين المواقع.",
     locked: true,
   },
   {
     key: 'marketing',
-    label: 'Marketing',
-    body: 'Advertising and remarketing trackers. We do not use any today; this switch exists so that if we ever add one, it starts off.',
+    label: "التسويق",
+    body: "متتبّعات الإعلانات وإعادة الاستهداف. ما نستخدم أي شي منها اليوم؛ هالخيار موجود عشان لو أضفنا شي يكون مطفي من البداية.",
   },
 ];
 
@@ -55,17 +55,15 @@ export default function CookieBanner() {
     <div
       role="dialog"
       aria-modal="false"
-      aria-label="Cookie and tracker preferences"
+      aria-label="تفضيلات الكوكيز والتتبّع"
       className="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
     >
       <div className="card mx-auto max-w-3xl p-4 sm:p-5 space-y-4 shadow-2xl">
         <div className="space-y-2">
-          <h2 className="font-display lowercase text-lg text-ink">Before we count anything</h2>
+          <h2 className="font-display lowercase text-lg text-ink">قبل ما نحسب أي شي</h2>
           <p className="text-sm text-ink2">
-            We only store what the app needs to work unless you tell us otherwise.
-            Audience measurement stays off until you say yes, and you can change
-            this at any time from the “cookies” link in the footer.{' '}
-            <a href="#legal" className="underline hover:text-ink">Privacy policy</a>.
+            ما نحفظ إلا اللي يحتاجه التطبيق عشان يشتغل إلا لو قلت غير كذا. قياس الزيارات مطفي لين توافق، وتقدر تغيّر هذا أي وقت.{' '}
+            <a href="#legal" className="underline hover:text-ink">سياسة الخصوصية</a>.
           </p>
         </div>
 
@@ -83,7 +81,7 @@ export default function CookieBanner() {
                 />
                 <label htmlFor={`consent-${cat.key}`} className="text-sm">
                   <span className="text-ink">{cat.label}</span>
-                  {cat.locked && <span className="text-muted"> · always on</span>}
+                  {cat.locked && <span className="text-muted"> · شغّال دايم</span>}
                   <span className="block text-muted">{cat.body}</span>
                 </label>
               </li>
@@ -98,14 +96,14 @@ export default function CookieBanner() {
             className="btn-ghost flex-1"
             onClick={() => { rejectAll(); close(); }}
           >
-            Reject all
+            ارفض الكل
           </button>
           <button
             type="button"
             className="btn-ghost flex-1"
             onClick={() => { acceptAll(); close(); }}
           >
-            Accept all
+            اقبل الكل
           </button>
           {details ? (
             <button
@@ -113,7 +111,7 @@ export default function CookieBanner() {
               className="btn-quiet sm:w-auto"
               onClick={() => { setConsent(draft); close(); }}
             >
-              Save my choice
+              احفظ اختياري
             </button>
           ) : (
             <button
@@ -121,7 +119,7 @@ export default function CookieBanner() {
               className="btn-quiet sm:w-auto"
               onClick={() => setDetails(true)}
             >
-              Choose
+              اختر
             </button>
           )}
         </div>

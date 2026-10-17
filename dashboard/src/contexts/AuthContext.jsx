@@ -124,8 +124,8 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
-    if (res.status === 429) throw new Error('Too many attempts. Try again in a few minutes.');
-    if (!res.ok) throw new Error('Could not send sign-in link.');
+    if (res.status === 429) throw new Error("محاولات كثيرة. جرّب بعد كم دقيقة.");
+    if (!res.ok) throw new Error("ما قدرنا نرسل رابط الدخول.");
     return true;
   }, []);
 

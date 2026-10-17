@@ -22,7 +22,7 @@ function PageShell({ title, children }) {
     <div className="min-h-screen bg-paper text-ink2">
       <header className="h-14 sm:h-16 border-b border-rule bg-paper flex items-center justify-between gap-3 px-4 sm:px-6 sticky top-0 z-20">
         <a href="#app" className="font-display lowercase text-lg text-ink truncate">OpenShorts</a>
-        <a href="#app" className="text-sm lowercase text-muted hover:text-ink transition-colors shrink-0">← <span className="hidden sm:inline">Back to app</span><span className="sm:hidden">back</span></a>
+        <a href="#app" className="text-sm lowercase text-muted hover:text-ink transition-colors shrink-0">← <span className="hidden sm:inline">ارجع للتطبيق</span><span className="sm:hidden">رجوع</span></a>
       </header>
       <main className="p-4 sm:p-6 md:p-8 pb-[max(2rem,env(safe-area-inset-bottom))]">
         {title && <h1 className="font-display lowercase text-2xl sm:text-3xl text-ink text-center mb-6 sm:mb-10">{title}</h1>}
@@ -64,17 +64,14 @@ function DeletedView() {
   return (
     <div className="min-h-screen bg-paper text-ink2 flex items-center justify-center p-6">
       <div className="max-w-md text-center space-y-4">
-        <h1 className="font-display lowercase text-2xl sm:text-3xl text-ink">Your account is deleted</h1>
+        <h1 className="font-display lowercase text-2xl sm:text-3xl text-ink">انحذف حسابك</h1>
         <p className="text-sm">
-          Your projects, clips and transcripts are gone, any subscription is
-          cancelled, and your API keys no longer work. We've emailed you a
-          confirmation with the details.
+          مشاريعك ومقاطعك وتفريغاتك انحذفت، وأي اشتراك انلغى، ومفاتيح الـ API ما عادت تشتغل.
         </p>
         <p className="text-sm text-muted">
-          You're welcome back any time — signing up again with the same address
-          starts a brand-new, empty account.
+          حيّاك أي وقت.
         </p>
-        <a href="#landing" className="btn-ghost px-4 py-2 inline-flex">Back to openshorts.app</a>
+        <a href="#landing" className="btn-ghost px-4 py-2 inline-flex">ارجع للرئيسية</a>
       </div>
     </div>
   );
@@ -115,7 +112,7 @@ function Root() {
   if (view === 'oauth') return <OAuthConsent />;
   if (view === 'deleted') return <DeletedView />;
   if (view === 'auth') {
-    return <div className="min-h-screen flex items-center justify-center bg-background text-zinc-400">Signing you in…</div>;
+    return <div className="min-h-screen flex items-center justify-center bg-background text-zinc-400">جاري تسجيل الدخول…</div>;
   }
   if (view === 'app') return <App />;
   return <Landing onLaunchApp={handleLaunchApp} />;
@@ -132,7 +129,7 @@ applyConsent();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <Suspense fallback={<div className="min-h-screen bg-paper flex items-center justify-center text-muted text-sm lowercase">loading…</div>}>
+      <Suspense fallback={<div className="min-h-screen bg-paper flex items-center justify-center text-muted text-sm lowercase">جاري التحميل…</div>}>
         <Root />
       </Suspense>
       <CookieBanner />

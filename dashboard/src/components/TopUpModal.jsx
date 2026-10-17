@@ -135,7 +135,7 @@ export default function TopUpModal({ onClose, required, remaining, partialMinute
       <p className="text-muted text-sm mb-5">
         {isUpsell
           ? (partialJob
-            ? <>These clips come from the first <b className="text-ink font-medium">{partialJob.processed_minutes} min</b>{' '}
+            ? <>هالمقاطع من أول <b className="text-ink font-medium">{partialJob.processed_minutes} دقيقة</b>{' '}
                 of a {partialJob.total_minutes}-min video. A plan gives you the minutes to clip{' '}
                 <b className="text-ink font-medium">all of it</b>, with no watermark, and the clips you already
                 made lose the mark on the spot.</>
@@ -143,8 +143,8 @@ export default function TopUpModal({ onClose, required, remaining, partialMinute
                 library for good. On the free plan they carry a watermark and are deleted after 7 days;
                 upgrade now and the clips you already made <b className="text-ink font-medium">lose the mark on the spot</b>.</>)
           : blockedByLength
-            ? <>This video is <b className="text-ink font-medium">{required} min</b> long and you have{' '}
-                <b className="text-ink font-medium">{remainingShown} min</b> left this month. Pick a plan and
+            ? <>هالفيديو طوله <b className="text-ink font-medium">{required} دقيقة</b> long and you have{' '}
+                <b className="text-ink font-medium">{remainingShown} دقيقة</b> left this month. Pick a plan and
                 clip the whole video.</>
             : <>Your minutes renew next month. Pick a plan to keep clipping now.</>}
       </p>
@@ -153,12 +153,12 @@ export default function TopUpModal({ onClose, required, remaining, partialMinute
         <div className="mb-5 card p-4 flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex-1 text-sm text-ink2">
             <b className="text-ink font-medium">Or see it first:</b> clip the first{' '}
-            <b className="text-ink font-medium">{partialMinutes} min</b> now with the minutes you have,
+            <b className="text-ink font-medium">{partialMinutes} دقيقة</b> now with the minutes you have,
             and decide with the clips in front of you.
           </div>
           <button onClick={onPartial} disabled={busyPrice !== null}
                   className="btn-ghost whitespace-nowrap">
-            Clip the first {partialMinutes} min
+            Clip the first {partialMinutes} دقيقة
           </button>
         </div>
       )}
@@ -183,15 +183,15 @@ export default function TopUpModal({ onClose, required, remaining, partialMinute
               <ul className="space-y-1.5 text-sm text-ink2 mb-4 flex-1">
                 <li className="flex items-start gap-2">
                   <Check size={15} className="text-ok shrink-0 mt-0.5" />
-                  <span><b>{entry.minutes} min</b> every month ({Math.round(entry.minutes / 20)}× your free quota)</span>
+                  <span><b>{entry.minutes} دقيقة</b> every month ({Math.round(entry.minutes / 20)}× your free quota)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check size={15} className="text-ok shrink-0 mt-0.5" />
-                  <span>Clips <b>ready to post</b>, with no watermark</span>
+                  <span>مقاطع <b>ready to post</b>, with no watermark</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check size={15} className="text-ok shrink-0 mt-0.5" />
-                  <span>Your library <b>stays</b> (free clips delete after 7 days)</span>
+                  <span>مكتبتك <b>stays</b> (free clips delete after 7 days)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Zap size={15} className="text-brass shrink-0 mt-0.5" />
@@ -226,9 +226,9 @@ export default function TopUpModal({ onClose, required, remaining, partialMinute
           <div className="grid grid-cols-2 gap-3 mt-2">
             {topups.map((t) => (
               <button key={t.price_id} onClick={() => buy(t, 'topup')} disabled={busyPrice !== null}
-                      className="border border-rule hover:border-brass rounded-card p-3 text-left transition-colors disabled:opacity-50">
+                      className="border border-rule hover:border-brass rounded-card p-3 text-start transition-colors disabled:opacity-50">
                 <div className="text-ink text-sm font-medium flex items-center gap-1.5">
-                  <Clock size={14} className="text-muted" />+{t.minutes} min
+                  <Clock size={14} className="text-muted" />+{t.minutes} دقيقة
                 </div>
                 <div className="readout mt-0.5">{fmt(t.amount, t.currency)} · one-time</div>
               </button>

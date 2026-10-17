@@ -47,11 +47,11 @@ export default function UGCGallery() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="eyebrow mb-1">05 · UGC GALLERY</p>
-        <h2 className="font-display lowercase text-2xl md:text-3xl text-ink">ugc gallery</h2>
+        <p className="eyebrow mb-1">05 · معرض UGC</p>
+        <h2 className="font-display lowercase text-2xl md:text-3xl text-ink">معرض UGC</h2>
         <p className="readout mt-2">
-          {loadingVideos ? '…' : videos.length} videos
-          {avatarsLoaded ? ` · ${avatars.length} avatars` : ''}
+          {loadingVideos ? '…' : videos.length} فيديوهات
+          {avatarsLoaded ? ` · ${avatars.length} أفاتار` : ''}
         </p>
       </div>
 
@@ -61,8 +61,8 @@ export default function UGCGallery() {
           value={tab}
           onChange={setTab}
           options={[
-            { value: 'videos', label: `Videos (${loadingVideos ? '…' : videos.length})`, icon: <Film size={14} /> },
-            { value: 'avatars', label: `Avatars (${avatarsLoaded ? avatars.length : '…'})`, icon: <User size={14} /> },
+            { value: 'videos', label: `الفيديوهات (${loadingVideos ? '…' : videos.length})`, icon: <Film size={14} /> },
+            { value: 'avatars', label: `الأفاتارات (${avatarsLoaded ? avatars.length : '…'})`, icon: <User size={14} /> },
           ]}
         />
       </div>
@@ -70,13 +70,13 @@ export default function UGCGallery() {
       {loading ? (
         <div className="flex items-center justify-center h-64">
           <Loader2 size={24} className="animate-spin text-brass" />
-          <span className="ml-2 text-muted lowercase">Loading gallery...</span>
+          <span className="ms-2 text-muted lowercase">جاري تحميل المعرض...</span>
         </div>
       ) : tab === 'videos' ? (
         videos.length === 0 ? (
           <div className="text-center py-16">
             <Film size={40} className="mx-auto text-muted opacity-40 mb-3" />
-            <p className="text-sm text-muted lowercase">No videos yet. Generate one from AI Shorts.</p>
+            <p className="text-sm text-muted lowercase">ما فيه فيديوهات للحين. ولّد واحد من شورتس AI.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
@@ -94,7 +94,7 @@ export default function UGCGallery() {
       ) : avatars.length === 0 ? (
         <div className="text-center py-16">
           <User size={40} className="mx-auto text-muted opacity-40 mb-3" />
-          <p className="text-sm text-muted lowercase">No avatars yet. Generate actors from AI Shorts.</p>
+          <p className="text-sm text-muted lowercase">ما فيه أفاتارات للحين. ولّد ممثلين من شورتس AI.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -109,8 +109,8 @@ export default function UGCGallery() {
           isOpen
           onClose={() => setSelected(null)}
           size="sm"
-          eyebrow={selected.video_mode === 'lowcost' ? 'LOW COST' : 'PREMIUM'}
-          title={selected.title || 'Untitled'}
+          eyebrow={selected.video_mode === 'lowcost' ? "اقتصادي" : 'بريميوم'}
+          title={selected.title || "بدون عنوان"}
         >
           <video
             src={selected.video_url}
@@ -132,7 +132,7 @@ export default function UGCGallery() {
             download
             className="btn-ghost w-full mt-4 justify-center text-sm"
           >
-            <Download size={14} /> Download
+            <Download size={14} /> تنزيل
           </a>
         </Modal>
       )}
@@ -144,30 +144,30 @@ function AvatarCard({ avatar, copied, onCopy }) {
   return (
     <div className="group card overflow-hidden transition-colors hover:border-rule2">
       <div className="aspect-[3/4] bg-black">
-        <img src={avatar.url} alt="Avatar" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+        <img src={avatar.url} alt="أفاتار" loading="lazy" decoding="async" className="w-full h-full object-cover" />
       </div>
       <div className="p-2 space-y-1">
         {avatar.description ? (
-          <div className="relative pr-4">
+          <div className="relative pe-4">
             <p className="text-micro text-muted line-clamp-2">{avatar.description}</p>
             <button
               type="button"
               onClick={() => onCopy(avatar.description, `avatar-${avatar.key}`)}
-              className="absolute top-0 right-0 p-0.5 text-muted hover:text-brass transition-colors"
-              title="Copy prompt"
+              className="absolute top-0 end-0 p-0.5 text-muted hover:text-brass transition-colors"
+              title="انسخ البرومبت"
             >
               {copied === `avatar-${avatar.key}` ? <Check size={10} className="text-ok" /> : <Copy size={10} />}
             </button>
           </div>
         ) : (
-          <p className="text-micro text-muted opacity-60 lowercase">No description</p>
+          <p className="text-micro text-muted opacity-60 lowercase">بدون وصف</p>
         )}
         <a
           href={avatar.url}
           download
           className="block text-center text-micro lowercase bg-paper3 hover:brightness-110 text-muted hover:text-ink2 py-1 rounded-full transition-all"
         >
-          <Download size={10} className="inline mr-0.5" />Download
+          <Download size={10} className="inline me-0.5" />تنزيل
         </a>
       </div>
     </div>
@@ -200,26 +200,26 @@ function VideoCard({ video, copied, onCopy, onOpen }) {
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
           <Play size={20} className="text-white/80" />
         </div>
-        <div className="absolute top-1.5 right-1.5">
+        <div className="absolute top-1.5 end-1.5">
           <span className={`${mode === 'lowcost' ? 'badge-ok' : 'badge-brass'} bg-black/70`}>
-            {mode === 'lowcost' ? 'LOW COST' : 'PREMIUM'}
+            {mode === 'lowcost' ? "اقتصادي" : 'بريميوم'}
           </span>
         </div>
       </button>
 
       <div className="p-2 space-y-1">
-        <h3 className="text-xs font-semibold text-ink truncate">{video.title || 'Untitled'}</h3>
+        <h3 className="text-xs font-semibold text-ink truncate">{video.title || "بدون عنوان"}</h3>
         <p className="readout">
           {video.duration?.toFixed(0)}s · ${video.cost_estimate?.total?.toFixed(2) || '?'}
         </p>
         {caption && (
-          <div className="relative pr-4">
+          <div className="relative pe-4">
             <p className="text-micro text-muted line-clamp-2">{caption}</p>
             <button
               type="button"
               onClick={() => onCopy(`${caption}\n${hashtags}`, `caption-${video.video_id}`)}
-              className="absolute top-0 right-0 p-0.5 text-muted hover:text-brass transition-colors"
-              title="Copy caption"
+              className="absolute top-0 end-0 p-0.5 text-muted hover:text-brass transition-colors"
+              title="انسخ الوصف"
             >
               {copied === `caption-${video.video_id}` ? <Check size={10} className="text-ok" /> : <Copy size={10} />}
             </button>
@@ -230,7 +230,7 @@ function VideoCard({ video, copied, onCopy, onOpen }) {
           download
           className="block text-center text-micro lowercase bg-paper3 hover:brightness-110 text-muted hover:text-ink2 py-1 rounded-full transition-all"
         >
-          <Download size={10} className="inline mr-0.5" />Download
+          <Download size={10} className="inline me-0.5" />تنزيل
         </a>
       </div>
     </div>

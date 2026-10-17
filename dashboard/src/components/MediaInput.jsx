@@ -156,7 +156,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                         }`}
                 >
                     <Upload size={16} className={`hidden sm:block ${mode === 'file' ? 'text-brass' : ''}`} />
-                    Upload File
+                    ارفع ملف
                 </button>
                 {youtubeUrlEnabled && (
                     <button
@@ -167,7 +167,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                             }`}
                     >
                         <Link2 size={16} className={`hidden sm:block ${mode === 'url' ? 'text-brass' : ''}`} />
-                        Video URL
+                        رابط فيديو
                     </button>
                 )}
             </div>
@@ -181,21 +181,21 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
                                 placeholder="https://... paste a video link"
-                                className="input-field pr-11"
+                                className="input-field pe-11"
                                 required
                             />
-                            <div className="absolute inset-y-0 right-2 flex items-center" ref={infoRef}>
+                            <div className="absolute inset-y-0 end-2 flex items-center" ref={infoRef}>
                                 <button
                                     type="button"
                                     onClick={() => setShowInfo((v) => !v)}
-                                    aria-label="Supported platforms"
+                                    aria-label="المنصات المدعومة"
                                     className="p-1.5 text-muted hover:text-brass transition-colors"
                                 >
                                     <Info size={16} />
                                 </button>
                                 {showInfo && (
-                                    <div className="absolute right-0 top-full mt-2 w-64 z-20 card p-4 text-left animate-fade">
-                                        <p className="eyebrow mb-2">Paste a link from</p>
+                                    <div className="absolute end-0 top-full mt-2 w-64 z-20 card p-4 text-start animate-fade">
+                                        <p className="eyebrow mb-2">حط رابط من</p>
                                         <div className="flex flex-wrap gap-1.5">
                                             {SUPPORTED_PLATFORMS.map((p) => (
                                                 <span key={p} className="text-xs px-2 py-0.5 rounded-full bg-paper3 text-ink2">
@@ -204,7 +204,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                             ))}
                                         </div>
                                         <p className="text-xs text-muted mt-2.5 leading-relaxed">
-                                            …and 1,000+ more sites. If a link has a public video, we can usually fetch it.
+                                            …وأكثر من 1,000 موقع ثاني. لو الرابط فيه فيديو عام، غالبًا نقدر نجيبه.
                                         </p>
                                     </div>
                                 )}
@@ -234,8 +234,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                         ) : null}
                         {file && fileTooShort ? (
                             <p className="text-danger text-sm mt-3" role="alert">
-                                This video is {Math.round(fileSeconds)}s long. Clip generation needs at least {MIN_SOURCE_SECONDS}s
-                                of footage to cut from: it already is a short. Pick a longer video.
+                                هالفيديو طوله {Math.round(fileSeconds)}ث. توليد المقاطع يحتاج على الأقل {MIN_SOURCE_SECONDS}ث عشان يقص منه: هو أصلًا شورت. اختر فيديو أطول.
                             </p>
                         ) : null}
                         {!file && (
@@ -247,8 +246,8 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                     className="hidden"
                                 />
                                 <Upload className="mx-auto mb-3 text-muted" size={18} />
-                                <p className="text-ink2 lowercase">Click to upload or drag and drop</p>
-                                <p className="readout mt-2">MP4, MOV up to 500MB · at least {MIN_SOURCE_SECONDS}s long</p>
+                                <p className="text-ink2 lowercase">اضغط عشان ترفع أو اسحب الملف هنا</p>
+                                <p className="readout mt-2">MP4 أو MOV لين 500MB · على الأقل {MIN_SOURCE_SECONDS}ث</p>
                             </label>
                         )}
                     </div>
@@ -256,12 +255,12 @@ export default function MediaInput({ onProcess, isProcessing }) {
 
                 {/* Output format selector */}
                 <div className="mt-5" data-tutorial="output-format">
-                    <p className="eyebrow mb-2">Output format</p>
+                    <p className="eyebrow mb-2">مقاس الإخراج</p>
                     <div className="grid grid-cols-3 gap-2">
                         {[
-                            { value: 'vertical', label: '9:16', hint: 'Shorts · Reels · TikTok', w: 18, h: 32 },
-                            { value: 'square', label: '1:1', hint: 'Feed posts', w: 28, h: 28 },
-                            { value: 'horizontal', label: '16:9', hint: 'Keep landscape · YouTube', w: 36, h: 20 },
+                            { value: 'vertical', label: '9:16', hint: "شورتس · ريلز · تيك توك", w: 18, h: 32 },
+                            { value: 'square', label: '1:1', hint: "منشورات الفيد", w: 28, h: 28 },
+                            { value: 'horizontal', label: '16:9', hint: "خلّه عرضي · يوتيوب", w: 36, h: 20 },
                         ].map((f) => {
                             const active = outputFormat === f.value;
                             return (
@@ -298,7 +297,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                         className="flex items-center gap-1.5 text-xs text-muted hover:text-ink2 lowercase transition-colors"
                     >
                         <ChevronDown size={14} className={`transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
-                        advanced options
+                        خيارات متقدمة
                         {(targetClips || clipMinSeconds || clipMaxSeconds || !autoHook) && (
                             <span className="text-brass">·</span>
                         )}
@@ -308,17 +307,17 @@ export default function MediaInput({ onProcess, isProcessing }) {
                            ~100px each, which crushes both label and value. */
                         <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 animate-fade">
                             <div>
-                                <p className="eyebrow mb-1.5">clips to aim for</p>
+                                <p className="eyebrow mb-1.5">عدد المقاطع المطلوب</p>
                                 <input
                                     type="number" min="1" max="15" step="1"
                                     value={targetClips}
                                     onChange={(e) => setTargetClips(e.target.value)}
-                                    placeholder="auto"
+                                    placeholder="تلقائي"
                                     className="input-field"
                                 />
                             </div>
                             <div>
-                                <p className="eyebrow mb-1.5">min length (s)</p>
+                                <p className="eyebrow mb-1.5">أقل طول (ث)</p>
                                 <input
                                     type="number" min="5" max="175" step="1"
                                     value={clipMinSeconds}
@@ -328,7 +327,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                 />
                             </div>
                             <div>
-                                <p className="eyebrow mb-1.5">max length (s)</p>
+                                <p className="eyebrow mb-1.5">أقصى طول (ث)</p>
                                 <input
                                     type="number" min="10" max="180" step="1"
                                     value={clipMaxSeconds}
@@ -338,21 +337,20 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                 />
                             </div>
                             <p className="col-span-1 sm:col-span-3 text-[11px] leading-relaxed text-muted">
-                                Targets, not guarantees: the AI returns fewer clips when the
-                                material doesn't hold them. Leave blank to let it decide.
+                                أرقام تقريبية مو مضمونة: الذكاء الاصطناعي يطلّع مقاطع أقل لو المحتوى ما يكفي. خلّها فاضية وهو يقرر.
                             </p>
                             <div className="col-span-1 sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-3 sm:pt-1 border-t border-rule">
-                                <span className="text-xs text-ink2">vertical layout</span>
+                                <span className="text-xs text-ink2">التخطيط الطولي</span>
                                 <select
                                     value={layout}
                                     onChange={(e) => setLayout(e.target.value)}
                                     className="input-field !w-auto text-xs py-1.5"
-                                    aria-label="vertical layout"
+                                    aria-label="التخطيط الطولي"
                                 >
-                                    <option value="auto">Auto (AI picks per video)</option>
-                                    <option value="split">Two speakers stacked</option>
-                                    <option value="screencast">Screen over presenter</option>
-                                    <option value="none">Single crop only</option>
+                                    <option value="auto">تلقائي (الذكاء الاصطناعي يختار لكل فيديو)</option>
+                                    <option value="split">متحدثين فوق بعض</option>
+                                    <option value="screencast">الشاشة فوق المقدّم</option>
+                                    <option value="none">قص واحد بس</option>
                                 </select>
                             </div>
                             <div className="col-span-1 sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-3 sm:pt-1 border-t border-rule">
@@ -363,7 +361,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                         onChange={(e) => setAutoHook(e.target.checked)}
                                         className="w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
                                     />
-                                    auto hook titles on clips
+                                    عناوين جذب تلقائية على المقاطع
                                 </label>
                                 {autoHook && (
                                     <select
@@ -371,19 +369,18 @@ export default function MediaInput({ onProcess, isProcessing }) {
                                         onChange={(e) => setAutoHookStyle(e.target.value)}
                                         className="input-field !w-auto text-xs py-1.5"
                                     >
-                                        <option value="pill">Pills</option>
-                                        <option value="classic">Classic</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="yellow">Yellow</option>
-                                        <option value="red">Red</option>
-                                        <option value="outline">Outline</option>
-                                        <option value="outline_yellow">Outline+</option>
+                                        <option value="pill">كبسولة</option>
+                                        <option value="classic">كلاسيكي</option>
+                                        <option value="dark">داكن</option>
+                                        <option value="yellow">أصفر</option>
+                                        <option value="red">أحمر</option>
+                                        <option value="outline">إطار</option>
+                                        <option value="outline_yellow">إطار+</option>
                                     </select>
                                 )}
                                 {autoHook && (
                                     <p className="w-full text-[11px] leading-relaxed text-muted">
-                                        You can change each clip&apos;s hook text, style, position and size
-                                        afterwards with its hook button.
+                                        تقدر تغيّر نص الجذب لكل مقطع وستايله ومكانه وحجمه بعدين من زر الجذب.
                                     </p>
                                 )}
                             </div>
@@ -391,7 +388,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                     )}
                 </div>
 
-                <label className="flex items-start gap-2.5 mt-5 text-left text-[13px] sm:text-xs leading-relaxed text-muted cursor-pointer select-none">
+                <label className="flex items-start gap-2.5 mt-5 text-start text-[13px] sm:text-xs leading-relaxed text-muted cursor-pointer select-none">
                     <input
                         type="checkbox"
                         checked={acknowledged}
@@ -399,7 +396,7 @@ export default function MediaInput({ onProcess, isProcessing }) {
                         className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
                     />
                     <span>
-                        I confirm I own this content or have the rights to process it. I am responsible for any content I submit. See our <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors" onClick={(e) => e.stopPropagation()}>Terms</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors" onClick={(e) => e.stopPropagation()}>Privacy Policy</a>.
+                        أأكد إني مالك هالمحتوى أو عندي حق معالجته، وأنا مسؤول عن أي محتوى أرفعه. شوف <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors" onClick={(e) => e.stopPropagation()}>الشروط</a> و <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-ink2 underline underline-offset-2 hover:text-brass transition-colors" onClick={(e) => e.stopPropagation()}>سياسة الخصوصية</a>.
                     </span>
                 </label>
 
@@ -412,11 +409,11 @@ export default function MediaInput({ onProcess, isProcessing }) {
                     {isProcessing ? (
                         <>
                             <Loader2 size={16} className="animate-spin" />
-                            Processing Video...
+                            جاري معالجة الفيديو...
                         </>
                     ) : (
                         <>
-                            Generate Clips
+                            طلّع المقاطع
                         </>
                     )}
                 </button>

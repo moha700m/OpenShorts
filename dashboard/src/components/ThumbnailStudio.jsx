@@ -5,7 +5,7 @@ import { apiFetch, QuotaError, openQuotaWall } from '../lib/api';
 import StepIndicator from './ui/StepIndicator';
 import SegmentedControl from './ui/SegmentedControl';
 
-const STEPS = ['Input', 'Titles', 'Generate', 'Description', 'Publish'];
+const STEPS = ["المدخلات", "العناوين", "التوليد", "الوصف", "النشر"];
 
 function DragDropZone({ label, accept, onFile, file, onClear, icon }) {
   const Icon = icon;
@@ -58,7 +58,7 @@ function DragDropZone({ label, accept, onFile, file, onClear, icon }) {
     >
       <Icon size={18} className="mx-auto text-muted mb-2" />
       <p className="text-sm text-ink2 lowercase">{label}</p>
-      <p className="text-xs text-muted mt-1 lowercase">Drop or click to upload</p>
+      <p className="text-xs text-muted mt-1 lowercase">اسحب الملف هنا أو اضغط عشان ترفع</p>
       <input
         ref={inputRef}
         type="file"
@@ -152,7 +152,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
   // --- Step 1: Analyze Video ---
   const handleAnalyze = async () => {
-    if (needsKey) return alert('Please set your Gemini API key in Settings first.');
+    if (needsKey) return alert("حط مفتاح Gemini من الإعدادات أول.");
     setIsAnalyzing(true);
 
     try {
@@ -164,7 +164,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
       } else if (videoFile) {
         formData.append('file', videoFile);
       } else {
-        return alert('Please upload a video file.');
+        return alert("ارفع ملف فيديو.");
       }
 
       const res = await apiFetch('/api/thumbnail/analyze', {
@@ -185,11 +185,11 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
       setRecommended(data.recommended || []);
       setChatHistory([{
         role: 'assistant',
-        content: `Here are 10 viral title suggestions based on your video. Titles marked TOP PICK are my top picks. Click one to select it, or tell me how to refine them.`
+        content: `هذي 10 عناوين مقترحة تنتشر مبنية على فيديوك. العناوين اللي عليها "الأفضل" هي أقوى اختياراتي. اضغط على واحد عشان تختاره، أو قول لي كيف أعدّلها.`
       }]);
       setStep(1);
     } catch (e) {
-      alert(`Analysis failed: ${e.message}`);
+      alert(`فشل التحليل: ${e.message}`);
     } finally {
       setIsAnalyzing(false);
     }
@@ -250,13 +250,13 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
       setRecommended([]);
       setChatHistory(prev => [...prev, {
         role: 'assistant',
-        content: `Here are refined titles based on your feedback. Click one to select it.`
+        content: `هذي عناوين معدّلة على حسب ملاحظاتك. اضغط على واحد عشان تختاره.`
       }]);
       setTimeout(scrollToBottom, 100);
     } catch (e) {
       setChatHistory(prev => [...prev, {
         role: 'assistant',
-        content: `Failed to refine: ${e.message}`
+        content: `ما قدرنا نعدّلها: ${e.message}`
       }]);
     } finally {
       setIsRefining(false);
@@ -265,9 +265,9 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
   // --- Step 3: Generate Thumbnails ---
   const handleGenerate = async () => {
-    if (needsKey) return alert('Please set your Gemini API key in Settings first.');
+    if (needsKey) return alert("حط مفتاح Gemini من الإعدادات أول.");
     const finalTitle = selectedTitle || manualTitle;
-    if (!finalTitle) return alert('Please select or enter a title first.');
+    if (!finalTitle) return alert("اختر عنوان أو اكتبه أول.");
 
     setIsGenerating(true);
     setGeneratedThumbnails([]);
@@ -291,17 +291,17 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
       if (!res.ok) {
         const errData = await res.json().catch(() => null);
-        throw new Error(errData?.detail || `Server error ${res.status}`);
+        throw new Error(errData?.detail || `خطأ في السيرفر ${res.status}`);
       }
 
       const data = await res.json();
       if (!data.thumbnails || data.thumbnails.length === 0) {
-        throw new Error('No thumbnails were generated. Your Gemini API key may not have access to image generation.');
+        throw new Error("ما انولّدت أي صورة مصغّرة. ممكن مفتاح Gemini حقك ما عنده صلاحية توليد الصور.");
       }
       setGeneratedThumbnails(data.thumbnails);
     } catch (e) {
       if (e instanceof QuotaError) { openQuotaWall(e, 'thumbnails'); return; }
-      alert(`Generation failed: ${e.message}`);
+      alert(`فشل التوليد: ${e.message}`);
     } finally {
       setIsGenerating(false);
     }
@@ -345,10 +345,10 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
   // --- Description Generation ---
   const handleGenerateDescription = async () => {
-    if (needsKey) return alert('Please set your Gemini API key in Settings first.');
+    if (needsKey) return alert("حط مفتاح Gemini من الإعدادات أول.");
     const finalTitle = selectedTitle || manualTitle;
-    if (!finalTitle) return alert('Please select a title first.');
-    if (!sessionId) return alert('No session available.');
+    if (!finalTitle) return alert("اختر عنوان أول.");
+    if (!sessionId) return alert("ما فيه جلسة متاحة.");
 
     setIsDescribing(true);
     try {
@@ -369,7 +369,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
       const data = await res.json();
       setDescription(data.description || '');
     } catch (e) {
-      alert(`Description generation failed: ${e.message}`);
+      alert(`فشل توليد الوصف: ${e.message}`);
     } finally {
       setIsDescribing(false);
     }
@@ -377,11 +377,11 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
   // --- Publish to YouTube ---
   const handlePublish = async () => {
-    if (!managed && (!uploadPostKey || !uploadUserId)) return alert('Please configure your Upload-Post API key and user in Settings first.');
+    if (!managed && (!uploadPostKey || !uploadUserId)) return alert("اضبط مفتاح Upload-Post والمستخدم من الإعدادات أول.");
     const finalTitle = selectedTitle || manualTitle;
-    if (!finalTitle) return alert('No title selected.');
-    if (!selectedThumbnail) return alert('Please select a thumbnail first.');
-    if (!description) return alert('Please generate or write a description first.');
+    if (!finalTitle) return alert("ما اخترت عنوان.");
+    if (!selectedThumbnail) return alert("اختر صورة مصغّرة أول.");
+    if (!description) return alert("ولّد وصف أو اكتبه أول.");
 
     setIsPublishing(true);
     setPublishResult(null);
@@ -412,7 +412,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
         const interval = setInterval(async () => {
           try {
             const statusRes = await apiFetch(`/api/thumbnail/publish/status/${publish_id}`);
-            if (!statusRes.ok) { clearInterval(interval); reject(new Error('Status check failed')); return; }
+            if (!statusRes.ok) { clearInterval(interval); reject(new Error("فشل فحص الحالة")); return; }
             const statusData = await statusRes.json();
 
             if (statusData.status === 'done') {
@@ -421,7 +421,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               resolve();
             } else if (statusData.status === 'failed') {
               clearInterval(interval);
-              reject(new Error(statusData.error || 'Upload failed'));
+              reject(new Error(statusData.error || "فشل الرفع"));
             }
             // 'uploading' → keep polling
           } catch (e) {
@@ -472,21 +472,21 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
         {/* Header */}
         <div className="flex items-end justify-between mb-2">
           <div>
-            <p className="eyebrow mb-2">06 · YOUTUBE STUDIO</p>
+            <p className="eyebrow mb-2">06 · استوديو يوتيوب</p>
             <h1 className="font-display lowercase text-2xl text-ink flex items-center gap-3">
               <span className="w-10 h-10 rounded-card bg-paper3 flex items-center justify-center">
                 <Image size={18} className="text-brass" />
               </span>
-              YouTube Studio
+              استوديو يوتيوب
             </h1>
           </div>
           {step > 0 && (
             <button onClick={handleReset} className="text-xs lowercase text-muted hover:text-ink transition-colors flex items-center gap-1">
-              <Plus size={12} /> New Project
+              <Plus size={12} /> مشروع جديد
             </button>
           )}
         </div>
-        <p className="text-sm lowercase text-muted mb-6">Generate viral titles, AI thumbnails, descriptions and publish directly to YouTube</p>
+        <p className="text-sm lowercase text-muted mb-6">ولّد عناوين تنتشر، وصور مصغّرة بالذكاء الاصطناعي، وأوصاف، وانشر على يوتيوب مباشرة</p>
 
         <div className="mb-8">
           <StepIndicator steps={STEPS} current={step} />
@@ -497,8 +497,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
           <div className="mb-6 p-5 bg-warn/10 rounded-card flex items-start gap-3">
             <AlertCircle size={18} className="text-warn shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-warn lowercase">Gemini API Key Required</p>
-              <p className="text-xs text-muted mt-1">YouTube Studio requires a Google Gemini API key to function. Please configure it in the <strong>Settings</strong> tab before using this feature. Gemini's free tier includes 1,500 requests per day.</p>
+              <p className="text-sm font-medium text-warn lowercase">مفتاح Gemini مطلوب</p>
+              <p className="text-xs text-muted mt-1">استوديو يوتيوب يحتاج مفتاح Google Gemini عشان يشتغل. اضبطه من تبويب <strong>الإعدادات</strong> قبل ما تستخدم هالميزة. باقة Gemini المجانية فيها 1,500 طلب باليوم.</p>
             </div>
           </div>
         )}
@@ -513,13 +513,13 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   <Video size={16} className="text-brass" />
                 </div>
                 <div>
-                  <p className="eyebrow">A · ANALYZE VIDEO</p>
-                  <p className="text-xs text-muted mt-0.5">AI suggests viral titles from your content</p>
+                  <p className="eyebrow">أ · حلّل الفيديو</p>
+                  <p className="text-xs text-muted mt-0.5">الذكاء الاصطناعي يقترح عناوين تنتشر من محتواك</p>
                 </div>
               </div>
 
               <DragDropZone
-                label="Upload video file"
+                label="ارفع ملف فيديو"
                 accept="video/*"
                 onFile={(f) => { setVideoFile(f); setMode('video'); handlePreUpload(f); }}
                 file={videoFile}
@@ -530,13 +530,13 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               {isPreprocessing && (
                 <div className="flex items-center gap-2 text-xs lowercase text-muted bg-paper3 rounded-input px-3 py-2">
                   <Loader2 size={12} className="animate-spin text-brass" />
-                  Pre-processing video (Whisper transcription starting)...
+                  نجهّز الفيديو (بدأ تفريغ Whisper)...
                 </div>
               )}
               {preprocessSessionId && !isPreprocessing && (
                 <div className="flex items-center gap-2 text-xs lowercase text-ok bg-ok/10 rounded-input px-3 py-2">
                   <Check size={12} />
-                  Video uploaded — transcription running in background
+                  انرفع الفيديو — التفريغ شغّال بالخلفية
                 </div>
               )}
 
@@ -548,12 +548,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 {isAnalyzing ? (
                   <>
                     <Loader2 size={16} className="animate-spin" />
-                    Analyzing video...
+                    جاري تحليل الفيديو...
                   </>
                 ) : (
                   <>
                     <Sparkles size={16} className="hidden sm:block" />
-                    <span className="whitespace-nowrap">Analyze & Get Titles</span>
+                    <span className="whitespace-nowrap">حلّل وطلّع عناوين</span>
                   </>
                 )}
               </button>
@@ -566,8 +566,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   <Type size={16} className="text-brass" />
                 </div>
                 <div>
-                  <p className="eyebrow">B · WRITE YOUR OWN</p>
-                  <p className="text-xs text-muted mt-0.5">Skip analysis, enter your title directly</p>
+                  <p className="eyebrow">ب · اكتب عنوانك</p>
+                  <p className="text-xs text-muted mt-0.5">تخطّى التحليل، واكتب عنوانك مباشرة</p>
                 </div>
               </div>
 
@@ -576,7 +576,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   type="text"
                   value={manualTitle}
                   onChange={(e) => setManualTitle(e.target.value)}
-                  placeholder="Enter your YouTube title..."
+                  placeholder="اكتب عنوان يوتيوب..."
                   className="input-field text-sm mb-4"
                   maxLength={70}
                 />
@@ -589,7 +589,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 className="w-full btn-ghost disabled:opacity-45 disabled:cursor-not-allowed"
               >
                 <ArrowRight size={16} />
-                Use This Title
+                استخدم هالعنوان
               </button>
             </div>
           </div>
@@ -602,7 +602,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
             <div className="md:col-span-2 flex flex-col gap-4">
               {mode === 'manual' ? (
                 <div className="card p-6 space-y-4">
-                  <p className="eyebrow">YOUR TITLE</p>
+                  <p className="eyebrow">عنوانك</p>
                   <input
                     type="text"
                     value={manualTitle}
@@ -617,14 +617,14 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                     className="w-full btn-primary"
                   >
                     <ArrowRight size={16} />
-                    Continue to Thumbnails
+                    كمّل للصور المصغّرة
                   </button>
                 </div>
               ) : (
                 <div className="card p-4 flex flex-col h-[500px]">
                   <div className="flex items-center gap-2 mb-3 pb-3 border-b border-rule">
                     <MessageSquare size={14} className="text-brass" />
-                    <span className="eyebrow">TITLE REFINEMENT CHAT</span>
+                    <span className="eyebrow">محادثة تعديل العناوين</span>
                   </div>
 
                   {/* Chat messages */}
@@ -649,7 +649,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleRefine()}
-                      placeholder="Make them more clickbait..."
+                      placeholder="خلّها تشد أكثر..."
                       className="input-field text-xs flex-1"
                       disabled={isRefining}
                     />
@@ -670,7 +670,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   className="w-full btn-primary"
                 >
                   <ArrowRight size={16} />
-                  Use Selected Title
+                  استخدم العنوان المحدد
                 </button>
               )}
             </div>
@@ -680,7 +680,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               {selectedTitle && (
                 <div className="p-3 bg-ok/10 rounded-card flex items-center gap-2 text-sm">
                   <Check size={14} className="text-ok shrink-0" />
-                  <span className="text-ok font-medium truncate">Selected: {selectedTitle}</span>
+                  <span className="text-ok font-medium truncate">المحدد: {selectedTitle}</span>
                 </div>
               )}
 
@@ -693,7 +693,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                       <button
                         key={i}
                         onClick={() => handleSelectTitle(title)}
-                        className={`w-full text-left p-4 rounded-card border transition-colors duration-200 text-sm ${selectedTitle === title
+                        className={`w-full text-start p-4 rounded-card border transition-colors duration-200 text-sm ${selectedTitle === title
                           ? 'bg-paper3 border-brass text-ink'
                           : 'border-rule text-ink2 hover:bg-paper3 hover:border-rule2'
                           }`}
@@ -710,7 +710,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                               <span className="leading-relaxed">{title}</span>
                               {rec && (
                                 <span className="badge-brass shrink-0">
-                                  {recRank === 0 ? 'TOP PICK' : '2ND PICK'}
+                                  {recRank === 0 ? "الأفضل" : "الثاني"}
                                 </span>
                               )}
                             </div>
@@ -718,7 +718,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                               <p className="text-xs text-muted mt-1.5 leading-relaxed">{rec.reason}</p>
                             )}
                             {thumbnailTexts[i] && (
-                              <p className="readout mt-1.5">thumbnail: {thumbnailTexts[i]}</p>
+                              <p className="readout mt-1.5">الصورة المصغّرة: {thumbnailTexts[i]}</p>
                             )}
                           </div>
                         </div>
@@ -730,8 +730,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
               {isRefining && (
                 <div className="flex items-center justify-center py-8 text-muted">
-                  <Loader2 size={18} className="animate-spin mr-2 text-brass" />
-                  <span className="text-sm lowercase">Refining titles...</span>
+                  <Loader2 size={18} className="animate-spin me-2 text-brass" />
+                  <span className="text-sm lowercase">جاري تعديل العناوين...</span>
                 </div>
               )}
             </div>
@@ -744,7 +744,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
             {/* Left: Controls */}
             <div className="md:col-span-2 space-y-4">
               <div className="card p-6 space-y-4">
-                <p className="eyebrow mb-1">TITLE</p>
+                <p className="eyebrow mb-1">العنوان</p>
                 <div className="p-3 bg-paper3 border border-rule rounded-input text-sm text-ink">
                   {selectedTitle || manualTitle}
                 </div>
@@ -753,15 +753,15 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   onClick={() => setStep(1)}
                   className="text-xs lowercase text-muted hover:text-ink transition-colors flex items-center gap-1"
                 >
-                  <ArrowLeft size={12} /> Change title
+                  <ArrowLeft size={12} /> غيّر العنوان
                 </button>
               </div>
 
               {mode === 'video' && frames !== null && (
                 <div className="card p-6 space-y-3">
-                  <p className="eyebrow">YOUR FACE FROM THE VIDEO</p>
+                  <p className="eyebrow">وجهك من الفيديو</p>
                   {frames.length === 0 ? (
-                    <p className="text-xs text-muted lowercase">{framesLoading ? 'Looking for sharp frames with a face...' : 'No usable face found in the video.'}</p>
+                    <p className="text-xs text-muted lowercase">{framesLoading ? "ندوّر على لقطات واضحة فيها وجه..." : "ما لقينا وجه واضح في الفيديو."}</p>
                   ) : (
                     <>
                       <div className="grid grid-cols-3 gap-2">
@@ -773,14 +773,14 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                             className={`relative rounded-input overflow-hidden border-2 transition-colors ${selectedFrame === f.url ? 'border-brass' : 'border-transparent hover:border-rule2'}`}
                           >
                             <img src={getApiUrl(f.url)} alt="" className="w-full aspect-video object-cover" />
-                            <span className="absolute bottom-1 right-1 readout bg-black/60 text-white px-1 rounded">
+                            <span className="absolute bottom-1 end-1 readout bg-black/60 text-white px-1 rounded">
                               {Math.floor(f.time / 60)}:{String(Math.floor(f.time % 60)).padStart(2, '0')}
                             </span>
                           </button>
                         ))}
                       </div>
                       <p className="text-xs text-muted lowercase">
-                        {selectedFrame ? 'This frame is the person reference (a photo upload below overrides it).' : 'Pick a frame so the thumbnail shows you, not a stranger.'}
+                        {selectedFrame ? "هاللقطة هي مرجع الشخص (لو رفعت صورة تحت بتاخذ مكانها)." : "اختر لقطة عشان الصورة المصغّرة تطلع فيها أنت، مو شخص غريب."}
                       </p>
                     </>
                   )}
@@ -788,9 +788,9 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               )}
 
               <div className="card p-6 space-y-4">
-                <p className="eyebrow">FACE IMAGE · OPTIONAL</p>
+                <p className="eyebrow">صورة الوجه · اختياري</p>
                 <DragDropZone
-                  label="Upload face / person photo"
+                  label="ارفع صورة وجه / شخص"
                   accept="image/*"
                   onFile={setFaceImage}
                   file={faceImage}
@@ -800,9 +800,9 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               </div>
 
               <div className="card p-6 space-y-4">
-                <p className="eyebrow">BACKGROUND · OPTIONAL</p>
+                <p className="eyebrow">الخلفية · اختياري</p>
                 <DragDropZone
-                  label="Upload background image"
+                  label="ارفع صورة خلفية"
                   accept="image/*"
                   onFile={setBgImage}
                   file={bgImage}
@@ -812,30 +812,30 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               </div>
 
               <div className="card p-6 space-y-4">
-                <p className="eyebrow">INSTRUCTIONS · OPTIONAL</p>
+                <p className="eyebrow">تعليمات · اختياري</p>
                 <textarea
                   value={extraPrompt}
                   onChange={(e) => setExtraPrompt(e.target.value)}
-                  placeholder="e.g. Use red and black colors, dramatic lighting, include money emojis..."
+                  placeholder="مثلًا: استخدم أحمر وأسود، إضاءة درامية، حط إيموجي فلوس..."
                   className="input-field text-sm resize-none h-20"
                 />
               </div>
 
               <div className="card p-6 space-y-4">
-                <p className="eyebrow">TEXT ON THUMBNAIL</p>
+                <p className="eyebrow">النص على الصورة</p>
                 <SegmentedControl
-                  options={[{ value: true, label: 'Crisp' }, { value: false, label: 'AI painted' }]}
+                  options={[{ value: true, label: "واضح" }, { value: false, label: "مرسوم بالـ AI" }]}
                   value={burnText}
                   onChange={setBurnText}
                   size="sm"
                 />
                 <p className="text-xs text-muted lowercase">
-                  {burnText ? 'Text is set in a bold font after the image is painted: always spelled right.' : 'The image model paints the text itself: more integrated, sometimes misspelled.'}
+                  {burnText ? "النص ينكتب بخط عريض بعد ما تنرسم الصورة: دايم مكتوب صح." : "نموذج الصور يرسم النص بنفسه: مندمج أكثر، بس أحيانًا فيه أخطاء إملائية."}
                 </p>
               </div>
 
               <div className="card p-6 space-y-4">
-                <p className="eyebrow">COUNT</p>
+                <p className="eyebrow">العدد</p>
                 <SegmentedControl
                   options={[1, 2, 3, 4].map(n => ({ value: n, label: String(n) }))}
                   value={thumbnailCount}
@@ -852,12 +852,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 {isGenerating ? (
                   <>
                     <Loader2 size={16} className="animate-spin" />
-                    Generating thumbnails...
+                    جاري توليد الصور المصغّرة...
                   </>
                 ) : (
                   <>
                     <Sparkles size={16} />
-                    Generate Thumbnails
+                    ولّد الصور المصغّرة
                   </>
                 )}
               </button>
@@ -868,7 +868,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
             <div className="md:col-span-3">
               {generatedThumbnails.length > 0 ? (
                 <div className="space-y-4">
-                  <p className="text-sm lowercase text-muted">Generated Thumbnails — click to select for publishing</p>
+                  <p className="text-sm lowercase text-muted">الصور المصغّرة الجاهزة — اضغط عشان تختار وحدة للنشر</p>
                   <div className="grid gap-4">
                     {generatedThumbnails.map((thumb, i) => {
                       const url = thumb.url;
@@ -881,7 +881,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                       >
                         <img
                           src={getApiUrl(url)}
-                          alt={`Thumbnail ${i + 1}`}
+                          alt={`صورة مصغّرة ${i + 1}`}
                           className="w-full aspect-video object-cover"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
@@ -890,25 +890,25 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                             className="btn-quiet"
                           >
                             <Download size={14} />
-                            Download
+                            تنزيل
                           </button>
                         </div>
                         <div className="p-3 flex items-center justify-between gap-3">
                           <div className="min-w-0">
                             <span className="text-xs lowercase text-muted flex items-center gap-2">
-                              Thumbnail {i + 1}{thumb.text ? ` · "${thumb.text}"` : ''}
+                              صورة مصغّرة {i + 1}{thumb.text ? ` · "${thumb.text}"` : ''}
                               {selectedThumbnail === url && (
-                                <span className="text-brass flex items-center gap-1"><Check size={10} /> Selected</span>
+                                <span className="text-brass flex items-center gap-1"><Check size={10} /> محددة</span>
                               )}
                             </span>
                             {thumb.why && <p className="text-xs text-muted mt-1 truncate">{thumb.why}</p>}
-                            {thumb.fallback && <p className="text-xs text-warn mt-1">Gemini refused to draw this person (public figures are blocked), so it was rendered without them.</p>}
+                            {thumb.fallback && <p className="text-xs text-warn mt-1">Gemini رفض يرسم هالشخص (الشخصيات العامة ممنوعة)، فطلعت الصورة بدونه.</p>}
                           </div>
                           <button
                             onClick={(e) => { e.stopPropagation(); handleDownload(url); }}
                             className="text-xs lowercase text-muted hover:text-ink transition-colors flex items-center gap-1 shrink-0"
                           >
-                            <Download size={12} /> Save
+                            <Download size={12} /> حفظ
                           </button>
                         </div>
                       </div>
@@ -918,14 +918,14 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
 
                   {/* How it reads in the feed on a phone, where the click is decided */}
                   <div className="card p-4 space-y-3">
-                    <p className="eyebrow">PHONE PREVIEW</p>
+                    <p className="eyebrow">معاينة الجوال</p>
                     <div className="space-y-3">
                       {generatedThumbnails.map((thumb) => (
                         <div key={thumb.url} className="flex gap-3 items-start">
                           <img src={getApiUrl(thumb.url)} alt="" className="w-[168px] h-[94px] object-cover rounded-input shrink-0" />
                           <div className="min-w-0">
                             <p className="text-sm text-ink leading-snug line-clamp-2">{selectedTitle || manualTitle}</p>
-                            <p className="text-xs text-muted mt-1">Your channel · 1.2K views · 2 hours ago</p>
+                            <p className="text-xs text-muted mt-1">قناتك · 1.2 ألف مشاهدة · قبل ساعتين</p>
                           </div>
                         </div>
                       ))}
@@ -941,12 +941,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                     {isGenerating ? (
                       <>
                         <Loader2 size={14} className="animate-spin text-brass" />
-                        Regenerating...
+                        جاري التوليد من جديد...
                       </>
                     ) : (
                       <>
                         <Sparkles size={14} />
-                        Regenerate
+                        ولّد من جديد
                       </>
                     )}
                   </button>
@@ -958,7 +958,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                       className="w-full btn-primary"
                     >
                       <ArrowRight size={16} />
-                      Next: Description
+                      التالي: الوصف
                     </button>
                   )}
                 </div>
@@ -966,8 +966,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="h-full flex flex-col items-center justify-center text-muted space-y-4 min-h-[400px]">
                   <div className="w-16 h-16 rounded-full border-2 border-rule2 border-t-brass animate-spin" />
                   <div className="text-center">
-                    <p className="text-sm lowercase font-medium text-ink2">Generating thumbnails...</p>
-                    <p className="text-xs lowercase text-muted mt-1">This may take a minute per thumbnail</p>
+                    <p className="text-sm lowercase font-medium text-ink2">جاري توليد الصور المصغّرة...</p>
+                    <p className="text-xs lowercase text-muted mt-1">ممكن تاخذ دقيقة لكل صورة</p>
                   </div>
                 </div>
               ) : (
@@ -976,8 +976,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                     <Image size={28} className="text-muted" />
                   </div>
                   <div className="text-center">
-                    <p className="text-sm lowercase text-ink2">Your thumbnails will appear here</p>
-                    <p className="text-xs lowercase text-muted mt-1">Configure options and click Generate</p>
+                    <p className="text-sm lowercase text-ink2">صورك المصغّرة بتطلع هنا</p>
+                    <p className="text-xs lowercase text-muted mt-1">اضبط الخيارات واضغط "ولّد"</p>
                   </div>
                 </div>
               )}
@@ -994,7 +994,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 onClick={() => setStep(2)}
                 className="text-xs lowercase text-muted hover:text-ink transition-colors flex items-center gap-1 mb-2"
               >
-                <ArrowLeft size={12} /> Back to Generate
+                <ArrowLeft size={12} /> ارجع للتوليد
               </button>
 
               {/* Selected Thumbnail Preview */}
@@ -1002,18 +1002,18 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="glass-panel overflow-hidden">
                   <img
                     src={getApiUrl(selectedThumbnail)}
-                    alt="Selected thumbnail"
+                    alt="الصورة المصغّرة المحددة"
                     className="w-full aspect-video object-cover"
                   />
                   <div className="p-3">
-                    <span className="text-xs lowercase text-brass flex items-center gap-1"><Check size={10} /> Selected Thumbnail</span>
+                    <span className="text-xs lowercase text-brass flex items-center gap-1"><Check size={10} /> الصورة المصغّرة المحددة</span>
                   </div>
                 </div>
               )}
 
               {/* Title */}
               <div className="glass-panel p-6 space-y-3">
-                <p className="eyebrow">TITLE</p>
+                <p className="eyebrow">العنوان</p>
                 <div className="p-3 bg-paper3 border border-rule rounded-input text-sm text-ink">
                   {selectedTitle || manualTitle}
                 </div>
@@ -1025,12 +1025,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   <div className="flex items-center justify-between">
                     <p className="eyebrow flex items-center gap-2">
                       <Sparkles size={14} className="text-brass" />
-                      AI DESCRIPTION
+                      وصف بالذكاء الاصطناعي
                     </p>
-                    <span className="readout">WITH CHAPTERS</span>
+                    <span className="readout">مع الفصول</span>
                   </div>
                   <p className="text-xs text-muted">
-                    Generate a YouTube description with chapter timestamps from your video transcript.
+                    ولّد وصف يوتيوب فيه توقيت الفصول من تفريغ فيديوك.
                   </p>
                   <button
                     onClick={handleGenerateDescription}
@@ -1040,12 +1040,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                     {isDescribing ? (
                       <>
                         <Loader2 size={14} className="animate-spin text-brass" />
-                        Generating description...
+                        جاري توليد الوصف...
                       </>
                     ) : (
                       <>
                         <FileText size={14} />
-                        {description ? 'Regenerate Description' : 'Generate Description'}
+                        {description ? "ولّد الوصف من جديد" : "ولّد الوصف"}
                       </>
                     )}
                   </button>
@@ -1059,7 +1059,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   className="w-full btn-primary"
                 >
                   <ArrowRight size={16} />
-                  Next: Publish
+                  التالي: النشر
                 </button>
               )}
             </div>
@@ -1070,7 +1070,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="flex items-center justify-between">
                   <p className="eyebrow flex items-center gap-2">
                     <FileText size={14} className="text-muted" />
-                    YOUTUBE DESCRIPTION
+                    وصف يوتيوب
                   </p>
                   <span className="readout">{description.length} / 5000</span>
                 </div>
@@ -1079,8 +1079,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={mode === 'video'
-                    ? "Click 'Generate Description' to auto-generate with chapters, or write your own..."
-                    : "Write your YouTube video description here..."
+                    ? "اضغط \"ولّد الوصف\" عشان يتولّد مع الفصول، أو اكتبه بنفسك..."
+                    : "اكتب وصف فيديو يوتيوب هنا..."
                   }
                   className="input-field text-sm resize-none flex-1 min-h-[500px] font-mono custom-scrollbar"
                   maxLength={5000}
@@ -1089,8 +1089,8 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 {!description && (
                   <p className="text-xs text-muted">
                     {mode === 'video'
-                      ? "AI will generate a compelling description with chapter timestamps from your video's Whisper transcript."
-                      : "Write a description for your YouTube video. You can proceed to publish once you have a description."}
+                      ? "الذكاء الاصطناعي بيكتب وصف يشد مع توقيت الفصول من تفريغ Whisper لفيديوك."
+                      : "اكتب وصف لفيديو يوتيوب. تقدر تكمّل للنشر أول ما يكون عندك وصف."}
                   </p>
                 )}
               </div>
@@ -1107,7 +1107,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 onClick={() => setStep(3)}
                 className="text-xs lowercase text-muted hover:text-ink transition-colors flex items-center gap-1 mb-2"
               >
-                <ArrowLeft size={12} /> Back to Description
+                <ArrowLeft size={12} /> ارجع للوصف
               </button>
 
               {/* Selected Thumbnail Preview */}
@@ -1115,18 +1115,18 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="glass-panel overflow-hidden">
                   <img
                     src={getApiUrl(selectedThumbnail)}
-                    alt="Selected thumbnail"
+                    alt="الصورة المصغّرة المحددة"
                     className="w-full aspect-video object-cover"
                   />
                   <div className="p-3">
-                    <span className="text-xs lowercase text-brass flex items-center gap-1"><Check size={10} /> Selected Thumbnail</span>
+                    <span className="text-xs lowercase text-brass flex items-center gap-1"><Check size={10} /> الصورة المصغّرة المحددة</span>
                   </div>
                 </div>
               )}
 
               {/* Editable Title */}
               <div className="glass-panel p-6 space-y-3">
-                <p className="eyebrow">TITLE</p>
+                <p className="eyebrow">العنوان</p>
                 <input
                   type="text"
                   value={selectedTitle || manualTitle}
@@ -1141,16 +1141,16 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="glass-panel p-6 space-y-3">
                   <div className="flex items-center gap-2 text-warn">
                     <AlertCircle size={16} />
-                    <span className="text-sm font-medium lowercase">Upload-Post Not Configured</span>
+                    <span className="text-sm font-medium lowercase">Upload-Post مو مضبوط</span>
                   </div>
                   <p className="text-xs text-muted">
-                    To publish directly to YouTube, configure your Upload-Post API key and connect a profile in Settings.
+                    عشان تنشر على يوتيوب مباشرة، اضبط مفتاح Upload-Post واربط حساب من الإعدادات.
                   </p>
                   <button
                     onClick={() => { }}
                     className="text-xs lowercase text-brass hover:underline flex items-center gap-1"
                   >
-                    <Settings size={12} /> Go to Settings
+                    <Settings size={12} /> روح للإعدادات
                   </button>
                 </div>
               ) : (
@@ -1162,12 +1162,12 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                   {isPublishing ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      Publishing to YouTube...
+                      جاري النشر على يوتيوب...
                     </>
                   ) : (
                     <>
                       <Youtube size={16} />
-                      Publish to YouTube
+                      انشر على يوتيوب
                     </>
                   )}
                 </button>
@@ -1177,7 +1177,7 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
               {isPublishing && (
                 <div className="readout flex items-center gap-2">
                   <Loader2 size={12} className="animate-spin text-brass" />
-                  UPLOADING — POLLING STATUS EVERY 2S
+                  جاري الرفع — نتابع الحالة كل ثانيتين
                 </div>
               )}
 
@@ -1186,24 +1186,24 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="glass-panel p-4">
                   {publishResult.success ? (
                     <div className="space-y-2">
-                      <span className="badge-ok">PUBLISHED</span>
-                      <p className="text-sm lowercase font-medium text-ink">Published successfully!</p>
-                      <p className="text-xs text-muted">Your video is being uploaded to YouTube asynchronously.</p>
+                      <span className="badge-ok">انتشر</span>
+                      <p className="text-sm lowercase font-medium text-ink">انتشر بنجاح!</p>
+                      <p className="text-xs text-muted">فيديوك ينرفع على يوتيوب بالخلفية.</p>
                       {onCreateClips && sessionId && (
                         <button
                           onClick={() => onCreateClips(sessionId)}
                           className="btn-primary px-4 py-2 text-xs mt-1"
-                          title="Send this video and its transcript to the clip generator"
+                          title="أرسل هالفيديو وتفريغه لمولّد المقاطع"
                         >
                           <Video size={14} />
-                          create clips from this video
+                          طلّع مقاطع من هالفيديو
                         </button>
                       )}
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <span className="badge-danger">FAILED</span>
-                      <p className="text-sm lowercase font-medium text-danger">Publish failed</p>
+                      <span className="badge-danger">فشل</span>
+                      <p className="text-sm lowercase font-medium text-danger">فشل النشر</p>
                       <p className="text-xs text-muted">{publishResult.error}</p>
                     </div>
                   )}
@@ -1217,13 +1217,13 @@ export default function ThumbnailStudio({ geminiApiKey, uploadPostKey, uploadUse
                 <div className="flex items-center justify-between">
                   <p className="eyebrow flex items-center gap-2">
                     <FileText size={14} className="text-muted" />
-                    YOUTUBE DESCRIPTION
+                    وصف يوتيوب
                   </p>
                   <button
                     onClick={() => setStep(3)}
                     className="text-xs lowercase text-muted hover:text-ink flex items-center gap-1 transition-colors"
                   >
-                    <ArrowLeft size={10} /> Edit
+                    <ArrowLeft size={10} /> تعديل
                   </button>
                 </div>
 

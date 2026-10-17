@@ -7,7 +7,7 @@ export const REPO_URL = 'https://github.com/mutonby/openshorts';
 // asks for the same job, and the old "free while it renders" wording put the
 // word free next to the product name for anyone who missed the pun — the one
 // thing our copy must never do. No incentive attached.
-export default function StarBanner({ message = 'Enjoying OpenShorts?' }) {
+export default function StarBanner({ message = "عاجبك OpenShorts؟" }) {
   return (
     <a
       href={REPO_URL}
@@ -16,7 +16,7 @@ export default function StarBanner({ message = 'Enjoying OpenShorts?' }) {
       className="flex items-center gap-2 px-3 py-2 rounded-input bg-paper3 border border-rule text-sm text-muted hover:text-ink transition-colors"
     >
       <Github size={14} className="shrink-0" />
-      <span>{message} <span className="text-brass">Star us on GitHub ⭐</span></span>
+      <span>{message} <span className="text-brass">عطنا نجمة على GitHub ⭐</span></span>
     </a>
   );
 }
