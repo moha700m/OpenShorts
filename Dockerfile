@@ -35,7 +35,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install FFmpeg, OpenCV deps, Node.js + npm + git (for yt-dlp JS + bgutil build).
+# Install FFmpeg, OpenCV deps, git (for yt-dlp JS + bgutil build). Node.js comes
+# from the official node:22 image below: Debian's nodejs (20.x) is too old for
+# bgutil's script mode ("Node.js version too low (got 20.19.2, need 22)").
 # fontconfig + fonts-liberation back the subtitle font choices: without real
 # fonts libass falls back to DejaVu for every UI option (issue #57).
 # fonts-noto-core (~42 MB) is the glyph fallback for every other script:
@@ -49,14 +51,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsm6 \
     libxext6 \
     libxrender1 \
-    nodejs \
-    npm \
     git \
     fontconfig \
     fonts-liberation \
     fonts-noto-core \
     fonts-noto-color-emoji \
     && rm -rf /var/lib/apt/lists/*
+
+# Node.js 22 LTS (multi-arch: amd64/arm64) copied from the official image; node
+# binaries only need glibc + libstdc++, both present in python:3.11-slim.
+COPY --from=node:22-bookworm-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:22-bookworm-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -sf ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && node --version && npm --version
 
 # Deno JS runtime — required by yt-dlp for some extractor challenges.
 COPY --from=denoland/deno:bin /deno /usr/local/bin/deno
